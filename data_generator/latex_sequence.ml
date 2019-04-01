@@ -1,4 +1,5 @@
-let bound = 200;;
+let bound_int = 200;;
+let bound_frac = 3;;
 
 let generate_symbol =
     if Random.bool() 
@@ -13,6 +14,7 @@ let generate_symbol =
 ;;
 
 let generate_frac nest len =
+    Random.self_init();
     let rec gen output itr len end_line_code = 
         if itr = len
         then
@@ -20,7 +22,7 @@ let generate_frac nest len =
         else
             let element = if itr mod 2 = 0
                             then
-                                (Random.int bound) |> string_of_int
+                                (Random.int bound_int) |> string_of_int
                             else
                                 generate_symbol
             in
@@ -32,10 +34,40 @@ let generate_frac nest len =
 ;;
 
 let nesting_seq length nest =
-    []
+    let rec gen itr output =
+        if itr = length
+        then
+            output |> List.rev
+        else
+            gen 
+                (itr+1) 
+                (if itr mod 2 = 0 
+                then
+                    begin
+                        if Random.bool()
+                        then
+                            (generate_frac nest (Random.int bound_frac))@output
+                        else
+                            ((Random.int bound_int) |> string_of_int)::output
+                    end
+                else generate_symbol::output
+                )
+    in gen 0 []
 ;;
 
 
 let flat_seq length =
     nesting_seq length 0
 ;;
+
+let rec stringList l =
+  match l with
+  | [] -> "\n"
+  | h::t -> (h)^" "^(stringList t)
+;;
+
+let printList l =
+  Printf.printf "%s" (stringList l)
+;;
+
+printList (nesting_seq 10 2);;
