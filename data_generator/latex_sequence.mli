@@ -1,21 +1,13 @@
-(**********************************************)
-(*                 KakaiNet                   *)
-(* Script for generating semi latex sequences *) 
-(* let place_holder_i = phi                   *)
-(* @f ph1 @f@ ph2 f@ <=> \frac{ph1}{ph2}      *)
-(**********************************************)
+(*                 KakaiNet                     *)
+(* Module for generating sequences of           *)
+(* basic integer arithmetic expressions         *)
+(* with nested fractions in pseudo-latex syntax *)
+(* @f exp1 @f@ exp2 f@ <=> \frac{exp1}{exp2}    *)
 
-(*
-@brief generates random semi latex sequence with nesting
-@param length of output
-@param nest - degree of nesting (at most)
-@return semi latex sequence
-*)
-val nesting_seq : int -> int -> string list
+type sequence
 
-(*
-@brief generates random semi latex sequence
-@param length of output
-@return semi latex sequence
-*)
-val flat_seq : int -> string list
+val sequence : (int * int * bool * float) list -> sequence
+
+val to_string_list : sequence -> string list
+
+val to_string : sequence -> string
