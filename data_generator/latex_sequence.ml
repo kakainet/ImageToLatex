@@ -54,4 +54,4 @@ let to_string sequence =
 
 
 let () = Random.self_init ()
-let () = print_endline (sequence [(1, 300, true, 56.0); (4, 100, false, 10.0); (2, 150, false, 100.0)] |> to_string)
+let () = print_endline (sequence [(1, 300, true, 56.0); (5, 100, false, 10.0); (2, 150, false, 100.0)] |> to_string)
