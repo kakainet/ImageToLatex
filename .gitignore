@@ -102,5 +102,10 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-latex/.DS_Store
+
+# macos
 .DS_Store
+
+# ocaml
+*.byte
+_build
