@@ -11,7 +11,7 @@ module Unary = struct
     let unary = plural
 
     let negate ?(brackets=round) expr =
-        unary (sprintf "-%s" (to_string (apply_to_plural brackets expr)))
+        brackets (unary (sprintf "-%s" (to_string expr)))
 
 end
 
