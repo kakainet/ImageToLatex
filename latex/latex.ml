@@ -23,5 +23,5 @@ let rec generate_L1 props =
     | _ -> assert false
 
 let () = Random.self_init ()
-let () = print_endline (to_string (generate_L1 [(61, 256, 80.0); (5, 512, 20.0); (11, 128, 70.0)]))
+let () = print_endline (to_string (generate_L1 [(3, 256, 80.0); (5, 512, 20.0); (5, 128, 70.0)]))
 
