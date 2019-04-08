@@ -6,7 +6,7 @@
 #include <chrono>
 #include <ctime>
 
-namespace mv
+namespace itl
 {
     /**
     * @brief Tool for sending messages
@@ -35,8 +35,6 @@ namespace mv
             WARNING,
             ERROR
         };
-    protected:
-    private:
         /* ===Methods=== */
     public:
         /**
@@ -50,7 +48,6 @@ namespace mv
         static void Log(const std::string&,
                 const Logger::STREAM& = Logger::STREAM::CONSOLE,
                 const Logger::TYPE& = Logger::TYPE::ERROR) noexcept;
-    protected:
     private:
 
         /**

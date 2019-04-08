@@ -1,6 +1,6 @@
 #include "logger.hpp"
 
-namespace mv
+namespace itl
 {
     void Logger::Log(const std::string& message, const Logger::STREAM& stream, const Logger::TYPE& type) noexcept
     {
