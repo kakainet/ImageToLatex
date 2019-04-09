@@ -1,4 +1,4 @@
-#include "system.hpp"
+#include "state.hpp"
 
 namespace itl
 {
@@ -19,7 +19,7 @@ namespace itl
 
     bool System::load_textures()
     {
-        return false;
+        
     }
 
     bool System::generate_latex_seq()

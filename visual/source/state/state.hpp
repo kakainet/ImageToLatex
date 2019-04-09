@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Texture.hpp>
 
 #include "../config/config.hpp"
+#include "../manager/manager.hpp"
 
 #pragma once
 
@@ -13,9 +14,6 @@ namespace itl
 {
     class System
     {
-        std::shared_ptr<std::vector<sf::Font>> fonts;
-        std::shared_ptr<std::map<std::string,sf::Texture>> texture_atlas;
-
     public:
         /**
          * @brief runs main state of program

@@ -4,6 +4,7 @@
 
 #include "../logger/logger.hpp"
 #include "../config/config.hpp"
+#include "../math/math.hpp"
 
 template <class T, class C>
 class Manager
