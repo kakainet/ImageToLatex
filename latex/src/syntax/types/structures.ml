@@ -14,7 +14,7 @@ module Brackets = struct
 
     let square = brackets "[" "]"
 
-    let curl = brackets "\\{" "\\}"
+    let curly = brackets "\\{" "\\}"
 
 end
 

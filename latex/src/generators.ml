@@ -8,6 +8,7 @@ open Operators
 open Structures
 open Functions
 
+
 let rec generate_L1 props =
     match props with
     | (len, bnd, chc) :: [] -> assert (len mod 2 <> 0);
@@ -21,7 +22,3 @@ let rec generate_L1 props =
                 else Constant.Int.random bnd
             end else Binary.random ()))
     | _ -> assert false
-
-let () = Random.self_init ()
-let () = print_endline (to_string (generate_L1 [(3, 256, 80.0); (5, 512, 20.0); (5, 128, 70.0)]))
-
