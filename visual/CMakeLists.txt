@@ -1,3 +1,4 @@
+#visual
 cmake_minimum_required(VERSION 3.1)
 project(Visual)
 set(SFML_DIR "external/sfml/lib/cmake/SFML")
@@ -8,6 +9,13 @@ add_executable(Visual
         source/logger/logger.cpp
         source/logger/logger.hpp
         source/config/config.hpp
-        source/cache/cache.hpp)
+        source/cache/cache.hpp
+        gtest/cache_test.cc)
 
-target_link_libraries(Visual sfml-graphics sfml-audio)
+target_link_libraries(Visual sfml-window sfml-graphics sfml-audio)
+
+#gtest
+add_subdirectory(gtest/lib/googletest-master)
+include_directories(gtest/lib/googletest-master/googletest/include)
+include_directories(gtest/lib/googletest-master/googlemock/include)
+target_link_libraries(Visual gtest gtest_main)
