@@ -2,6 +2,8 @@ open Syntax
 
 open Generators
 
+let () = Random.self_init ()
+
 let rec random_odd_incl bnd =
     let x = Random.int (bnd + 1) in
     if x mod 2 <> 0 then x else random_odd_incl bnd
