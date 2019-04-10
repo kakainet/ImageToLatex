@@ -2,4 +2,4 @@
 
 # [NOTE]: consider using _tags instead
 
-ocamlbuild -Is syntax,syntax/types,generators scripts/"$1".byte
+ocamlbuild -use-ocamlfind -Is syntax,syntax/types  -tag thread -pkg core scripts/"$1"/"$1".native

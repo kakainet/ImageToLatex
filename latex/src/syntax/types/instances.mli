@@ -20,13 +20,13 @@ module Constant : (sig
 
     module Int : (sig
 
-        val random : ?sign:bool -> int -> t
+        val random : int -> int -> t
 
     end)
 
     module Float : (sig
         
-        val random : ?sign:bool -> int -> float -> t
+        val random : float -> float -> int -> t
 
     end)
 

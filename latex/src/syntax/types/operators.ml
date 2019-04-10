@@ -1,7 +1,7 @@
 (* [NOTE]: consider a function Array.random_choice [array] *)
 (* [NOTE]: consider refactoring binary operators as plural *)
 
-open Printf
+open Core
 
 open Syntax
 open Structures.Brackets

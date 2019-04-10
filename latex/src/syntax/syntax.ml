@@ -1,3 +1,5 @@
+open Core
+
 type t =
     | Singular of string Lazy.t
     | Plural of string Lazy.t

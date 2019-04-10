@@ -1,4 +1,4 @@
-open Printf
+open Core
 
 open Syntax
 open Structures.Brackets

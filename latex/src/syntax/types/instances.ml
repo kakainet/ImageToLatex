@@ -1,6 +1,6 @@
 (* [NOTE]: we assume that repr is positive and uppercase by default *)
 
-open Printf
+open Core
 
 open Syntax
 open Operators.Unary
@@ -13,10 +13,10 @@ module Variable = struct
 
     let variable ?sign ?(case=true) repr =
         if case then instance ?sign repr
-        else instance ?sign (String.lowercase_ascii repr)
+        else instance ?sign (String.lowercase repr)
 
     let random ?(sign=Random.bool ()) ?(case=Random.bool ()) () = 
-        variable ~sign ~case (Random.int 26 + 65 |> Char.chr |> String.make 1)
+        variable ~sign ~case (Random.int_incl 65 90 |> Char.of_int_exn |> String.of_char)
 
     let lowercase ?sign () =
         random ?sign ~case:false ()
@@ -32,15 +32,17 @@ module Constant = struct
 
     module Int = struct
 
-        let random ?(sign=Random.bool ()) bnd =
-            constant ~sign (Random.int bnd |> string_of_int)
+        let random lbnd ubnd =
+            let c = Random.int_incl lbnd ubnd in
+            constant ~sign:(c >= 0) (sprintf "%d" (Int.abs c))
 
     end
 
     module Float = struct
 
-        let random ?(sign=Random.bool ()) prs bnd =
-            constant ~sign (Random.float bnd |> sprintf "%.*f" prs)
+        let random lbnd ubnd prs =
+            let c = Random.float_range lbnd ubnd in
+            constant ~sign:(c >= 0.0) (sprintf "%.*f" prs (Float.abs c))
 
     end
 
