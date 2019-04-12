@@ -33,17 +33,16 @@ module L1 = struct
                 end else Binary.random ()))
         | _ -> assert false
 
-    let read_in ~path =
-        In_channel.read_lines path |>
+    let read_in lns =
         List.map ~f:(fun ln -> String.split ~on:';' ln |>
             List.map ~f:(fun nst ->
                 match String.split ~on:',' nst |> List.map ~f:String.strip with
                 | len :: bnd :: chc :: [] ->
                     (Int.of_string len, Int.of_string bnd, Float.of_string chc)
-                | _ -> assert false))
+                | _ -> assert false)) lns
 
-    let write_out ~path exprs =
-        Out_channel.write_lines path (List.map ~f:to_string exprs)
+    let write_out exprs =
+        List.iter ~f:(fun expr -> to_string expr |> print_endline) exprs
 
 end
 
