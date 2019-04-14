@@ -5,10 +5,10 @@
 
 namespace itl
 {
-    class FontManager : public Manager<sf::Font>
+    class TextureManager : public Manager<sf::Texture>
     {
     public:
         virtual bool load_data() override;
-        virtual sf::Font& get_random_element() override;
+        virtual sf::Texture& get_random_element() override;
     };
 }
