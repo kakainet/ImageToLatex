@@ -2,7 +2,13 @@
 
 namespace itl
 {
-    int System::run()
+    State::State()
+    {
+        this->font_manager = std::make_shared<FontManager>();
+        this->texture_manager = std::make_shared<TextureManager>();
+    }
+
+    int State::run()
     {
         return
                 this->load_fonts()
@@ -12,22 +18,22 @@ namespace itl
                 ? 1 : 0;
     }
 
-    bool System::load_fonts()
+    bool State::load_fonts()
     {
-        return false;
+        return this->font_manager->load_data();
     }
 
-    bool System::load_textures()
+    bool State::load_textures()
     {
-        
+        return this->texture_manager->load_data();
     }
 
-    bool System::generate_latex_seq()
+    bool State::generate_latex_seq()
     {
         return static_cast<bool>(system(constants::system::latex_path));
     }
 
-    bool System::generate_images()
+    bool State::generate_images()
     {
         return false;
     }

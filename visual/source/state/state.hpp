@@ -6,26 +6,29 @@
 #include <SFML/Graphics/Texture.hpp>
 
 #include "../config/config.hpp"
-#include "../manager/manager.hpp"
-
+#include "../manager/texture_manager.hpp"
+#include "../manager/font_manager.hpp"
 #pragma once
 
 namespace itl
 {
-    class System
+    class State
     {
     public:
-        /**
-         * @brief runs main state of program
-         * @return 0 if program finished without any problems 1 otherwise
-         */
+
         int run();
+
+        State();
+
 
     private:
         bool load_fonts();
         bool load_textures();
         bool generate_latex_seq();
         bool generate_images();
+
+        std::shared_ptr<TextureManager> texture_manager;
+        std::shared_ptr<FontManager> font_manager;
     };
 }
 

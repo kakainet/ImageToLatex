@@ -11,13 +11,13 @@ namespace itl
 
         for(auto& path : textures)
         {
-            sf::Font next_font;
-            if(!next_font.loadFromFile(path))
+            sf::Texture next_texture;
+            if(!next_texture.loadFromFile(path))
             {
                 Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
                 continue;
             }
-            this->storage->emplace_back(next_font);
+            this->storage->emplace_back(next_texture);
         }
     }
 
