@@ -18,24 +18,39 @@ namespace itl
                 ? 1 : 0;
     }
 
-    bool State::load_fonts()
+    bool State::load_fonts() noexcept
     {
         return this->font_manager->load_data();
     }
 
-    bool State::load_textures()
+    bool State::load_textures() noexcept
     {
         return this->texture_manager->load_data();
     }
 
-    bool State::generate_latex_seq()
+    bool State::generate_latex_seq() noexcept
     {
         return static_cast<bool>(system(constants::system::latex_path));
     }
 
     bool State::generate_images()
     {
-        return false;
+        std::ifstream input( "filename.ext" );
+        for(std::string line; getline(input, line);)
+        {
+            if(!this->process_line(line))
+            {
+                Logger::Log(constants::system::line_processing_error);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    bool State::process_line(const std::string& string) noexcept
+    {
+        return true;
     }
 }
 

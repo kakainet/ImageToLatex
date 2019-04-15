@@ -22,10 +22,11 @@ namespace itl
 
 
     private:
-        bool load_fonts();
-        bool load_textures();
-        bool generate_latex_seq();
+        bool load_fonts() noexcept;
+        bool load_textures() noexcept;
+        bool generate_latex_seq() noexcept;
         bool generate_images();
+        bool process_line(const std::string& line) noexcept;
 
         std::shared_ptr<TextureManager> texture_manager;
         std::shared_ptr<FontManager> font_manager;
