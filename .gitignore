@@ -109,3 +109,11 @@ venv.bak/
 # ocaml
 *.byte
 _build
+
+# cpp
+visual/cmake-build-debug/
+visual/.idea/
+visual/external/
+.idea/
+visual/gtest/lib/
+unit_test_machine/cmake-build-debug/
