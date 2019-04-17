@@ -1,6 +1,9 @@
-#visual
+#general project rules
 cmake_minimum_required(VERSION 3.1)
 project(Visual)
+
+#cpp
+set_target_properties(PROPERTIES CXX_STANDARD 17)
 
 #sources
 add_executable(Visual
@@ -19,19 +22,17 @@ add_executable(Visual
         source/perlin_noise/perlin_noise.cpp
         source/math/math.hpp)
 
-
 #sfml
 set(SFML_DIR "external/sfml/lib/cmake/SFML")
-set_target_properties(PROPERTIES CXX_STANDARD 17)
 find_package(SFML 2.5.1 COMPONENTS graphics audio REQUIRED)
 target_link_libraries(Visual sfml-graphics sfml-audio)
 
 #boost
-set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.65.1.0 COMPONENTS filesystem)
-
+find_package(Boost 1.65.1 REQUIRED COMPONENTS filesystem)
+target_link_libraries(Visual Boost::filesystem)
 
 #gtest
 add_subdirectory(gtest/lib/googletest-master)

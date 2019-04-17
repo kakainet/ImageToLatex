@@ -18,4 +18,9 @@ namespace constants
         constexpr auto line_processing_error = "Error occured during line processing";
         constexpr auto latex_path = "../../../latex/latex.sh";
     }
+
+    namespace perlin_noise
+    {
+        constexpr auto noises_num = 200;
+    }
 }
