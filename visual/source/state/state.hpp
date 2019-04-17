@@ -24,7 +24,6 @@ namespace itl
     private:
         bool load_fonts() noexcept;
         bool load_textures() noexcept;
-        bool generate_latex_seq() noexcept;
         bool generate_images();
         bool process_line(const std::string& line) noexcept;
 

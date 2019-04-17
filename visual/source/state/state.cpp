@@ -13,7 +13,6 @@ namespace itl
         return
                 this->load_fonts()
                 ||this->load_textures()
-                ||this->generate_latex_seq()
                 ||this->generate_images()
                 ? 1 : 0;
     }
@@ -26,11 +25,6 @@ namespace itl
     bool State::load_textures() noexcept
     {
         return this->texture_manager->load_data();
-    }
-
-    bool State::generate_latex_seq() noexcept
-    {
-        return static_cast<bool>(system(constants::system::latex_path));
     }
 
     bool State::generate_images()
