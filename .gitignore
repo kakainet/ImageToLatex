@@ -110,6 +110,7 @@ venv.bak/
 *.byte
 *.native
 _build
+latex_expressions_generator/src/out/
 
 # cpp
 visual/cmake-build-debug/
