@@ -19,7 +19,7 @@ module Brackets = struct
 end
 
 let fraction expr1 expr2 =
-    plural (print_endline "LAZY"; sprintf "\\frac{%s}{%s}" (to_string expr1) (to_string expr2))
+    plural (sprintf "\\frac{%s}{%s}" (to_string expr1) (to_string expr2))
 
 let sequence exprs =
     plural (String.concat ~sep:" " (List.map ~f:to_string exprs))

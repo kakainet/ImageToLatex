@@ -108,6 +108,7 @@ venv.bak/
 
 # ocaml
 *.byte
+*.native
 _build
 
 # cpp
