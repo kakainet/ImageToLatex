@@ -28,7 +28,7 @@ find_package(SFML 2.5.1 COMPONENTS graphics audio REQUIRED)
 target_link_libraries(Visual sfml-graphics sfml-audio)
 
 #boost
-set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.65.1 REQUIRED COMPONENTS filesystem)
