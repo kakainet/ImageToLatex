@@ -8,12 +8,12 @@ namespace itl
         this->texture_manager = std::make_shared<TextureManager>();
     }
 
-    int State::run()
+    int State::run(const std::string& name, const sf::Vector2i& interval)
     {
         return
                 this->load_fonts()
                 ||this->load_textures()
-                ||this->generate_images()
+                ||this->generate_images(name, interval)
                 ? 1 : 0;
     }
 
@@ -27,11 +27,11 @@ namespace itl
         return this->texture_manager->load_data();
     }
 
-    bool State::generate_images()
+    bool State::generate_images(const std::string& name, const sf::Vector2i& interval)
     {
-        std::ifstream input( "filename.ext" );
-        for(std::string line; getline(input, line);)
+        for(int i = interval.x; i <= interval.y; i++)
         {
+            std::string line = name+std::to_string(i);
             if(!this->process_line(line))
             {
                 Logger::Log(constants::system::line_processing_error);
@@ -42,8 +42,10 @@ namespace itl
         return true;
     }
 
-    bool State::process_line(const std::string& string) noexcept
+    bool State::process_line(const std::string& path_to_raw) noexcept
     {
+        sf::Texture& current_texture = this->texture_manager->get_random_element();
+
         return true;
     }
 }

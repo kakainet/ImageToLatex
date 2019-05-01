@@ -13,6 +13,8 @@ namespace constants
 
     namespace system
     {
+        constexpr auto command_args_size = 4;
+        constexpr auto wrong_args_size = "Wrong number of arguments";
         constexpr auto empty_path = "Cache can't find resource in empty path.";
         constexpr auto not_found = "Cache can't find resource in this path.";
         constexpr auto line_processing_error = "Error occured during line processing";

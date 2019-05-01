@@ -16,7 +16,7 @@ namespace itl
     {
     public:
 
-        int run();
+        int run(const std::string& name, const sf::Vector2i& interval);
 
         State();
 
@@ -24,8 +24,8 @@ namespace itl
     private:
         bool load_fonts() noexcept;
         bool load_textures() noexcept;
-        bool generate_images();
-        bool process_line(const std::string& line) noexcept;
+        bool generate_images(const std::string& name, const sf::Vector2i& interval);
+        bool process_line(const std::string& path_to_raw) noexcept;
 
         std::shared_ptr<TextureManager> texture_manager;
         std::shared_ptr<FontManager> font_manager;
