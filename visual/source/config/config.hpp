@@ -8,7 +8,7 @@ namespace constants
 {
     namespace window
     {
-        const auto size = sf::Vector2f{800,800};
+        const auto size = sf::Vector2u{800,800};
     }
 
     namespace system

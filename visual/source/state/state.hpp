@@ -15,6 +15,8 @@ namespace itl
     class State
     {
     public:
+        std::shared_ptr<sf::RenderWindow> window;
+        std::unique_ptr<sf::Sprite> background;
 
         int run(const std::string& name, const sf::Vector2i& interval);
 
