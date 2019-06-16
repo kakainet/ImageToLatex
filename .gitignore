@@ -1,5 +1,9 @@
 .DS_Store
+
+# dune
 _build
+.*objs
+.merlin
 
 # cpp
 visual/cmake-build-debug/

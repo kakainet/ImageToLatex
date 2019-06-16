@@ -1,1 +1,0 @@
-lib/latex/syntax.mli:
