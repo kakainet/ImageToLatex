@@ -1,0 +1,3 @@
+(library
+  (name latex)
+  (libraries core))

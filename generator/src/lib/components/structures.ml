@@ -3,6 +3,7 @@
 
 open Core
 
+open Latex
 open Syntax
 
 module Brackets = struct

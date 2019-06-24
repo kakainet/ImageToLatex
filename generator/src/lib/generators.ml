@@ -2,26 +2,41 @@
 
 open Core
 
+open Latex
 open Syntax
 
+open Components
 open Instances
 open Operators
 
 open Structures
-open Functions
+(*open Functions*)
 
 let odd x = assert (x > 0);
     if x % 2 = 0 then x - 1 else x
 
+module type L = sig
+    type conspect
+    type properties
+    val generate_in : conspect -> properties
+    val generate_out : properties -> t
+end
+
 module L1 = struct
 
-    let generate_in nst len bnd chc =
+    type conspect = int * int * int * float
+    type properties = (int * int * float) list
+
+    let create_conspect (a : int * int * int * float) = (a : conspect)
+
+    let generate_in consp =
+        let (nst, len, bnd, chc) = consp in
         List.init (Random.int_incl 1 nst)
-            (fun i -> (Random.int_incl 1 len, Random.int_incl 0 bnd, Random.float chc))
+            ~f:(fun _ -> (Random.int_incl 1 len, Random.int_incl 0 bnd, Random.float chc))
 
     let rec generate_out props =
         match props with
-        | (len, bnd, chc) :: [] ->
+        | (len, bnd, _) :: [] ->
             sequence (List.init (odd len) ~f:(fun i ->
                 if i % 2 = 0 then Constant.Int.random (-bnd) bnd else Binary.random ()))
         | (len, bnd, chc) :: t ->
