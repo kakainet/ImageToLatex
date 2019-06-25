@@ -24,7 +24,7 @@ add_executable(Visual
 
 #sfml
 set(SFML_DIR "external/sfml/lib/cmake/SFML")
-find_package(SFML 2.5.1 COMPONENTS graphics audio REQUIRED)
+find_package(SFML 2.ta5.1 COMPONENTS graphics audio REQUIRED)
 target_link_libraries(Visual sfml-graphics sfml-audio)
 
 #boost
