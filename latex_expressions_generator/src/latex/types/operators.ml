@@ -19,7 +19,7 @@ module Binary = struct
 
     let binary = singular
 
-    let random ?(pool=[|"+"; "-"; "\cdot"; "/"|]) () =
+    let random ?(pool=[|"+"; "-"; "\\cdot"; "\\mathbin{/}"|]) () =
         binary (pool.(Random.int (Array.length pool)))
 
 end
