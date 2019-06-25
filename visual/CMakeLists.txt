@@ -20,11 +20,11 @@ add_executable(Visual
         source/manager/texture_manager.hpp
         source/perlin_noise/perlin_noise.hpp
         source/perlin_noise/perlin_noise.cpp
-        source/math/math.hpp)
+        source/math/math.hpp source/effect/EffectManager.cpp source/effect/EffectManager.hpp)
 
 #sfml
 set(SFML_DIR "external/sfml/lib/cmake/SFML")
-find_package(SFML 2.ta5.1 COMPONENTS graphics audio REQUIRED)
+find_package(SFML 2.5.1 COMPONENTS graphics audio REQUIRED)
 target_link_libraries(Visual sfml-graphics sfml-audio)
 
 #boost

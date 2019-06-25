@@ -2,14 +2,11 @@
 
 namespace itl
 {
-    State::State()
+    State::State(const std::string& title)
     {
         this->font_manager = std::make_shared<FontManager>();
         this->texture_manager = std::make_shared<TextureManager>();
-        this->window = std::make_shared<sf::RenderWindow>(
-                new sf::RenderWindow(
-                        sf::VideoMode( constants::window::size.x, constants::window::size.y ),
-                        title) );
+        this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title);
         this->background = std::make_unique<sf::Sprite>();
     }
 
@@ -50,23 +47,7 @@ namespace itl
     bool State::process_line(const std::string& path_to_raw) noexcept
     {
         window->clear();
-        sf::Texture& current_texture = this->texture_manager->get_random_element();
-        sf::Texture raw_tex;
-        sf::Sprite raw_tex_sprite;
-        if(!raw_tex.loadFromFile(path_to_raw))
-        {
-            //logger
-        }
-        this->background->setTexture(current_texture);
-        //this->background->setGlobalBounds(center) //temporary removed
-        this->background->setPosition(constants::window::size/2.f);
-        this->raw_tex_sprite.setTexture(raw_tex);
-        sf::Vector2f pos = {random(raw_tex_sprite.getGlobalBounds().width,
-                            constants::window::size.x-raw_tex_sprite.getGlobalBounds().width),
-                            random(raw_tex_sprite.getGlobalBounds().height,
-                                   constants::window::size.y-raw_tex_sprite.getGlobalBounds().height),
-                            };
-        this->raw_tex_sprite.setPosition(pos);
+
         window->display();
         //copy screen
         return true;

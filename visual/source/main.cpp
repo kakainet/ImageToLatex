@@ -1,8 +1,9 @@
 #include <SFML/Graphics.hpp>
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
 #include "state/state.hpp"
-#include "config/config.hpp"
 #include "logger/logger.hpp"
 
 int main(int argc, char* argv[])
@@ -14,7 +15,12 @@ int main(int argc, char* argv[])
     }
 
     testing::InitGoogleTest(&argc, argv);
-    (void)RUN_ALL_TESTS();
-    itl::State state;
+
+    if(RUN_ALL_TESTS() != constants::gtest::tests_passed)
+    {
+        itl::Logger::Log(constants::gtest::fail_msg, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::WARNING);
+    }
+
+    itl::State state("ImageToLatex");
     return state.run(argv[0], sf::Vector2i{atoi(argv[1]), atoi(argv[2])});
 }

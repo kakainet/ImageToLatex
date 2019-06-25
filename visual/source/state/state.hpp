@@ -3,7 +3,8 @@
 #include <memory>
 
 #include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 #include "../config/config.hpp"
 #include "../manager/texture_manager.hpp"
@@ -17,10 +18,9 @@ namespace itl
     public:
         std::shared_ptr<sf::RenderWindow> window;
         std::unique_ptr<sf::Sprite> background;
-
         int run(const std::string& name, const sf::Vector2i& interval);
 
-        State();
+        State(const std::string& title);
 
 
     private:

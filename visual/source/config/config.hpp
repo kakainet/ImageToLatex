@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "../../external/sfml/include/SFML/System/Vector2.hpp"
 
 namespace constants
@@ -24,5 +22,20 @@ namespace constants
     namespace perlin_noise
     {
         constexpr auto noises_num = 200;
+    }
+
+    namespace info
+    {
+        constexpr auto init_module_msg_start = "Initializing module: ";
+        constexpr auto init_module_msg_end = "Initialized module: ";
+        constexpr auto init_effect_msg_start = "Initializing effect: ";
+        constexpr auto init_effect_msg_end = "Initialized effect: ";
+    }
+
+    namespace gtest
+    {
+        constexpr auto tests_passed = 0;
+        constexpr auto tests_failed = 1;
+        constexpr auto fail_msg = "Some unit tests failed. Program may not work correctly.";
     }
 }
