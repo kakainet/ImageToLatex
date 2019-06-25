@@ -2,6 +2,15 @@
 
 namespace itl
 {
+    FontManager::FontManager()
+    {
+        itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+                         Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+
+        itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+                         Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+    }
+
     bool FontManager::load_data()
     {
         const std::vector<std::string> fonts =

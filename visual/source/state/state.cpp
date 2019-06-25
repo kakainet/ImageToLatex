@@ -4,10 +4,16 @@ namespace itl
 {
     State::State(const std::string& title)
     {
+        itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+                         Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+
         this->font_manager = std::make_shared<FontManager>();
         this->texture_manager = std::make_shared<TextureManager>();
         this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title);
         this->background = std::make_unique<sf::Sprite>();
+
+        itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+                         Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
     }
 
     int State::run(const std::string& name, const sf::Vector2i& interval)

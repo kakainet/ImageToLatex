@@ -28,8 +28,6 @@ namespace constants
     {
         constexpr auto init_module_msg_start = "Initializing module: ";
         constexpr auto init_module_msg_end = "Initialized module: ";
-        constexpr auto init_effect_msg_start = "Initializing effect: ";
-        constexpr auto init_effect_msg_end = "Initialized effect: ";
     }
 
     namespace gtest
@@ -37,5 +35,12 @@ namespace constants
         constexpr auto tests_passed = 0;
         constexpr auto tests_failed = 1;
         constexpr auto fail_msg = "Some unit tests failed. Program may not work correctly.";
+    }
+
+    namespace effect
+    {
+        const sf::Vector2f scale_incr_bounds = {1.05f, 2.f};
+        const sf::Vector2f scale_decr_bounds = {0.5f, 0.95f};
+        constexpr auto accuracy = 100;
     }
 }

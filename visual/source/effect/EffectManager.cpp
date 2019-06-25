@@ -17,12 +17,51 @@ std::function<void(sf::Sprite &)> itl::EffectManager::getFunction(const std::str
     return this->functions[name];
 }
 
-void itl::EffectManager::loadFunctions()
-{
 
+std::map<std::string, std::function<void(sf::Sprite&)>> itl::EffectManager::getFunctions(const std::string &name)
+{
+    return this->functions;
 }
 
-std::vector<std::function<void(sf::Sprite &)>> itl::EffectManager::getFunctions(const std::string &name)
+void itl::EffectManager::loadFunctions()
 {
-    return std::vector<std::function<void(sf::Sprite &)>>();
+    this->functions.emplace("scale_random_increase_symetric",
+                            [](sf::Sprite& sprite)
+                            {
+                                auto val = Math::random_float(
+                                        constants::effect::scale_incr_bounds.x,
+                                        constants::effect::scale_incr_bounds.y,
+                                        constants::effect::accuracy);
+                                sprite.setScale({val, val});
+                            });
+
+    this->functions.emplace("scale_random_increase_non_symetric",
+                            [](sf::Sprite& sprite)
+                            {
+                                auto rand = [](){return Math::random_float(
+                                        constants::effect::scale_incr_bounds.x,
+                                        constants::effect::scale_incr_bounds.y,
+                                        constants::effect::accuracy);};
+                                sprite.setScale({rand(), rand()});
+                            });
+
+    this->functions.emplace("scale_random_decrease_symetric",
+                            [](sf::Sprite& sprite)
+                            {
+                                auto val = Math::random_float(
+                                        constants::effect::scale_decr_bounds.x,
+                                        constants::effect::scale_decr_bounds.y,
+                                        constants::effect::accuracy);
+                                sprite.setScale({val, val});
+                            });
+
+    this->functions.emplace("scale_random_decrease_non_symetric",
+                            [](sf::Sprite& sprite)
+                            {
+                                auto rand = [](){return Math::random_float(
+                                        constants::effect::scale_decr_bounds.x,
+                                        constants::effect::scale_decr_bounds.y,
+                                        constants::effect::accuracy);};
+                                sprite.setScale({rand(), rand()});
+                            });
 }

@@ -6,17 +6,21 @@
 #include <boost/filesystem.hpp>
 
 #include "../config/config.hpp"
+#include "../logger/logger.hpp"
 
-class PerlinNoise
+namespace itl
 {
-public:
-    PerlinNoise();
+    class PerlinNoise
+    {
+    public:
+        PerlinNoise();
 
-    using AlfaMap = std::vector<std::vector<float>>;
-private:
-    std::vector<AlfaMap> noises;
+        using AlfaMap = std::vector<std::vector<float>>;
+    private:
+        std::vector<AlfaMap> noises;
 
-    void generate(const std::string& dir) const noexcept;
-    void save_to_file(const AlfaMap& map, const std::string& dir) const;
-    void read_from_file(const std::string& dir);
-};
+        void generate(const std::string& dir) const noexcept;
+        void save_to_file(const AlfaMap& map, const std::string& dir) const;
+        void read_from_file(const std::string& dir);
+    };
+}

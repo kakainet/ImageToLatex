@@ -4,6 +4,7 @@
 
 #include "../logger/logger.hpp"
 #include "../config/config.hpp"
+#include "../math/math.hpp"
 
 #include <memory>
 #include <vector>
@@ -20,7 +21,7 @@ namespace itl
         EffectManager();
 
         std::function<void(sf::Sprite&)> getFunction(const std::string& name);
-        std::vector<std::function<void(sf::Sprite&)>> getFunctions(const std::string& name);
+        std::map<std::string, std::function<void(sf::Sprite&)>> getFunctions(const std::string& name);
 
     private:
         std::map<std::string, std::function<void(sf::Sprite&)>> functions;
