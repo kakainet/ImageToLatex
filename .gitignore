@@ -10,3 +10,6 @@ visual/cmake-build-debug/
 visual/.idea/
 .idea/
 unit_test_machine/cmake-build-debug/
+
+#graphic
+*.png
