@@ -11,8 +11,8 @@ namespace constants
 
     namespace system
     {
-        constexpr auto usage = "Usage: DIR_TO_SOURCE_PICTURES EXTENSION_OF_PICTURES DIR_TO_DATA";
-        constexpr auto command_args_size = 4;
+        constexpr auto usage = "Usage: DIR_TO_SOURCE_PICTURES | EXTENSION_OF_PICTURES | DIR_TO_DATA | <optional> flags";
+        constexpr auto required_command_args_size = 4;
         constexpr auto wrong_args_size = "Wrong number of arguments";
         constexpr auto empty_path = "Cache can't find resource in empty path.";
         constexpr auto not_found = "Cache can't find resource in this path.";
@@ -45,5 +45,13 @@ namespace constants
         const sf::Vector2f scale_incr_bounds = {1.05f, 2.f};
         const sf::Vector2f scale_decr_bounds = {0.5f, 0.95f};
         constexpr auto accuracy = 100;
+    }
+
+    namespace flags
+    {
+        constexpr auto testing = "-t";
+        constexpr auto printing_steps = "-p";
+        constexpr auto logging_erros = "-le";
+        constexpr auto logging_all = "-la";
     }
 }
