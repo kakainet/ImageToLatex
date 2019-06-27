@@ -10,7 +10,8 @@ int main(int argc, char* argv[])
 {
     if(argc != constants::system::command_args_size)
     {
-        itl::Logger::Log(constants::system::wrong_args_size);
+        itl::Logger::Log(constants::system::wrong_args_size, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
+        itl::Logger::Log(constants::system::usage, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE::INFO);
         return 0;
     }
 
@@ -22,5 +23,5 @@ int main(int argc, char* argv[])
     }
 
     itl::State state("ImageToLatex");
-    return state.run(argv[0], sf::Vector2i{atoi(argv[1]), atoi(argv[2])});
+    return state.run(argv[1], argv[2], argv[3]);
 }

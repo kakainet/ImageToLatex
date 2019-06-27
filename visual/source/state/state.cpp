@@ -16,46 +16,51 @@ namespace itl
                          Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
     }
 
-    int State::run(const std::string& name, const sf::Vector2i& interval)
+    int State::run(const std::string& path_to_pictures, const std::string& extension, const std::string& path_to_data)
     {
         return
-                this->load_fonts()
-                ||this->load_textures()
-                ||this->generate_images(name, interval)
-                ? 1 : 0;
+                this->load_textures(path_to_data)
+                ||this->generate_images(path_to_pictures, extension)
+                ? constants::system::error_code : constants::system::pass_code;
     }
 
-    bool State::load_fonts() noexcept
+    bool State::load_fonts(const std::string& path_to_data) noexcept
     {
-        return this->font_manager->load_data();
+        return this->font_manager->load_data(path_to_data);
     }
 
-    bool State::load_textures() noexcept
+    bool State::load_textures(const std::string& path_to_data) noexcept
     {
-        return this->texture_manager->load_data();
+        return this->texture_manager->load_data(path_to_data);
     }
 
-    bool State::generate_images(const std::string& name, const sf::Vector2i& interval)
+    bool State::generate_images(const std::string& dir, const std::string& extension)
     {
-        for(int i = interval.x; i <= interval.y; i++)
+        std::vector<cv::String> fn;
+        std::vector<std::string> paths;
+        glob(dir + "/*" + extension, fn, false);
+        paths.resize(fn.size());
+
+        auto convert_cvstr_to_str = [](cv::String str)
+                {
+                    return str.operator std::string();
+                };
+
+        std::transform(fn.begin(), fn.end(), paths.begin(), convert_cvstr_to_str);
+
+        for(auto& var: paths)
         {
-            std::string line = name+std::to_string(i)+".png";
-            if(!this->process_line(line))
-            {
-                Logger::Log(constants::system::line_processing_error);
-                return false;
-            }
+            this->process_line(var);
         }
-
-        return true;
     }
 
     bool State::process_line(const std::string& path_to_raw) noexcept
     {
-        window->clear();
-
-        window->display();
+        //window->clear();
+        //window->display();
         //copy screen
+
+        itl::Logger::Log(path_to_raw, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE ::INFO);
         return true;
     }
 }

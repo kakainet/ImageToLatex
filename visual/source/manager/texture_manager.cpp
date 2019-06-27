@@ -12,11 +12,13 @@ namespace itl
                          Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
     }
 
-    bool TextureManager::load_data()
+    bool TextureManager::load_data(const std::string& path_to_data)
     {
+        bool failed = false;
+
         const std::vector<std::string> textures =
                 {
-                        "../../../data/fonts/white.png"
+                        path_to_data + "/textures/white.png"
                 };
 
         for(auto& path : textures)
@@ -24,11 +26,14 @@ namespace itl
             sf::Texture next_texture;
             if(!next_texture.loadFromFile(path))
             {
+                failed = true;
                 Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
-                continue;
+                break;
             }
             this->storage->emplace_back(next_texture);
         }
+
+        return failed;
     }
 
     sf::Texture& TextureManager::get_random_element()

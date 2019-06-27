@@ -11,12 +11,15 @@ namespace constants
 
     namespace system
     {
+        constexpr auto usage = "Usage: DIR_TO_SOURCE_PICTURES EXTENSION_OF_PICTURES DIR_TO_DATA";
         constexpr auto command_args_size = 4;
         constexpr auto wrong_args_size = "Wrong number of arguments";
         constexpr auto empty_path = "Cache can't find resource in empty path.";
         constexpr auto not_found = "Cache can't find resource in this path.";
         constexpr auto line_processing_error = "Error occured during line processing";
         constexpr auto latex_path = "../../../latex/latex.sh";
+        constexpr auto error_code = 1;
+        constexpr auto pass_code = 0;
     }
 
     namespace perlin_noise

@@ -39,3 +39,8 @@ add_subdirectory(gtest/lib/googletest-master)
 include_directories(gtest/lib/googletest-master/googletest/include)
 include_directories(gtest/lib/googletest-master/googlemock/include)
 target_link_libraries(Visual gtest gtest_main)
+
+#opencv
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+target_link_libraries( Visual ${OpenCV_LIBS} )

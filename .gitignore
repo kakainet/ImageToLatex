@@ -8,6 +8,10 @@ _build
 # cpp
 visual/cmake-build-debug/
 visual/.idea/
+visual/release/
+visual/debug/
+visual/Visual
+visual/visual
 .idea/
 unit_test_machine/cmake-build-debug/
 

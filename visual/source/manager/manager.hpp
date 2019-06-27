@@ -15,7 +15,7 @@ namespace itl
         std::unique_ptr<std::vector<T>> storage;
     public:
         Manager();
-        virtual bool load_data() = 0;
+        virtual bool load_data(const std::string& path_to_data) = 0;
         virtual T& get_random_element() = 0;
     };
 
