@@ -24,7 +24,8 @@ add_executable(Visual
         source/effect/EffectManager.cpp
         source/effect/EffectManager.hpp
         source/flag_manager/flag_manager.cpp
-        source/flag_manager/flag_manager.hpp source/utils/utils.hpp)
+        source/flag_manager/flag_manager.hpp
+        source/utils/utils.hpp)
 
 #sfml
 set(SFML_DIR "external/sfml/lib/cmake/SFML")
@@ -45,6 +46,6 @@ include_directories(gtest/lib/googletest-master/googlemock/include)
 target_link_libraries(Visual gtest gtest_main)
 
 #opencv
-find_package( OpenCV REQUIRED )
-include_directories( ${OpenCV_INCLUDE_DIRS} )
-target_link_libraries( Visual ${OpenCV_LIBS} )
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries(Visual ${OpenCV_LIBS})

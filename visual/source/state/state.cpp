@@ -10,7 +10,7 @@ namespace itl
         this->font_manager = std::make_shared<FontManager>();
         this->texture_manager = std::make_shared<TextureManager>();
         this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title);
-        this->background = std::make_unique<sf::Sprite>();
+        this->effect_manager = std::make_unique<EffectManager>();
 
         itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
@@ -57,8 +57,15 @@ namespace itl
 
     bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save) noexcept
     {
+        for(int i = 0; i < this->texture_manager->size(); i++)
+        {
+            this->background.setTexture(this->texture_manager->get(i));
+
+
+        }
+
+
         this->prepare_sprite(path_to_raw);
-        window->clear();
         window->display();
 
         itl::Logger::Log(path_to_raw, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE ::INFO);
@@ -72,10 +79,5 @@ namespace itl
         {
             itl::Logger::Log(constants::texture::failed_load_texture ,itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
         }
-
-        sf::Sprite sprite;
-        sprite.setTexture(texture);
-        sprite.setPosition({static_cast<float>(constants::window::size.x)/2,
-                            static_cast<float>(constants::window::size.y)/2});
     }
 }

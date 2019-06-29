@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../external/sfml/include/SFML/System/Vector2.hpp"
+#include <vector>
 
 namespace constants
 {
