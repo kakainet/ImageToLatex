@@ -95,7 +95,7 @@ void itl::EffectManager::generate_all_effect_packs(std::map<std::string, std::ve
     {
         std::vector<int> copy = currentPack;
         copy.emplace_back(idx);
-        this->generate_all_effect_packs(++itr--,copy);
+        this->generate_all_effect_packs(++itr--, copy);
     }
 }
 

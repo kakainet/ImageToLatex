@@ -36,6 +36,6 @@ namespace itl
     template<class T>
     T &Manager<T>::get(int idx)
     {
-        return this->storage[idx];
+        return (*this->storage)[idx];
     }
 }

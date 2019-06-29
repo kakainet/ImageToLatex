@@ -49,35 +49,45 @@ namespace itl
         std::transform(fn.begin(), fn.end(), paths.begin(), convert_cvstr_to_str);
 
         std::string output = dir + "../output";
-        for(auto& var: paths)
+
+        for(int i = 0; i < this->texture_manager->size(); i++)
         {
-            this->process_line(var, output);
+            this->background.setTexture(this->texture_manager->get(i));
+            for(auto& var: paths)
+            {
+                this->process_line(var, output);
+            }
         }
     }
 
     bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save) noexcept
     {
-        for(int i = 0; i < this->texture_manager->size(); i++)
+        sf::Texture sprite_texture;
+
+        if(!sprite_texture.loadFromFile(path_to_raw))
         {
-            this->background.setTexture(this->texture_manager->get(i));
-
-
+            Logger::Log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            return false;
         }
 
+        sf::Sprite base;
+        base.setTexture(sprite_texture);
 
-        this->prepare_sprite(path_to_raw);
-        window->display();
+        auto sprites = this->effect_manager->generateSprites(base);
 
-        itl::Logger::Log(path_to_raw, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE ::INFO);
+        for(auto& spr : sprites)
+        {
+            this->window->clear();
+            this->window->draw(this->background);
+            this->window->draw(spr);
+            this->window->display();
+            sf::Texture ss_texture;
+            ss_texture.create(constants::window::size.x, constants::window::size.y);
+            ss_texture.update(*this->window);
+            sf::Image screen = ss_texture.copyToImage();
+            screen.saveToFile(dir_to_save+"/temp.png");
+        }
+
         return true;
-    }
-
-    void State::prepare_sprite(const std::string& path_to_raw)
-    {
-        sf::Texture texture;
-        if (!texture.loadFromFile(path_to_raw))
-        {
-            itl::Logger::Log(constants::texture::failed_load_texture ,itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
-        }
     }
 }
