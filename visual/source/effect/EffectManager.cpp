@@ -12,56 +12,73 @@ itl::EffectManager::EffectManager()
             Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
 }
 
-std::function<void(sf::Sprite &)> itl::EffectManager::getFunction(const std::string &name)
-{
-    return this->functions[name];
-}
 
-
-std::map<std::string, std::function<void(sf::Sprite&)>> itl::EffectManager::getFunctions(const std::string &name)
-{
-    return this->functions;
-}
 
 void itl::EffectManager::loadFunctions()
 {
-    this->functions.emplace("scale_random_increase_symetric",
-                            [](sf::Sprite& sprite)
-                            {
-                                auto val = Math::random_float(
-                                        constants::effect::scale_incr_bounds.x,
-                                        constants::effect::scale_incr_bounds.y,
-                                        constants::effect::accuracy);
-                                sprite.setScale({val, val});
-                            });
+    this->functions["scale"] = std::vector<std::function<void(sf::Sprite&)>>();
+    this->functions["scale"].emplace_back( [](sf::Sprite& sprite)
+                                           {
+                                               auto val = Math::random_float(
+                                                       constants::effect::scale_incr_bounds.x,
+                                                       constants::effect::scale_incr_bounds.y,
+                                                       constants::effect::accuracy);
+                                               sprite.setScale({val, val});
+                                           });
 
-    this->functions.emplace("scale_random_increase_non_symetric",
-                            [](sf::Sprite& sprite)
-                            {
-                                auto rand = [](){return Math::random_float(
-                                        constants::effect::scale_incr_bounds.x,
-                                        constants::effect::scale_incr_bounds.y,
-                                        constants::effect::accuracy);};
-                                sprite.setScale({rand(), rand()});
-                            });
+    this->functions["scale"].emplace_back([](sf::Sprite& sprite)
+                                          {
+                                              auto rand = [](){return Math::random_float(
+                                                      constants::effect::scale_incr_bounds.x,
+                                                      constants::effect::scale_incr_bounds.y,
+                                                      constants::effect::accuracy);};
+                                              sprite.setScale({rand(), rand()});
+                                          });
 
-    this->functions.emplace("scale_random_decrease_symetric",
-                            [](sf::Sprite& sprite)
-                            {
-                                auto val = Math::random_float(
-                                        constants::effect::scale_decr_bounds.x,
-                                        constants::effect::scale_decr_bounds.y,
-                                        constants::effect::accuracy);
-                                sprite.setScale({val, val});
-                            });
+    this->functions["scale"].emplace_back([](sf::Sprite& sprite)
+                                          {
+                                              auto val = Math::random_float(
+                                                      constants::effect::scale_decr_bounds.x,
+                                                      constants::effect::scale_decr_bounds.y,
+                                                      constants::effect::accuracy);
+                                              sprite.setScale({val, val});
+                                          });
 
-    this->functions.emplace("scale_random_decrease_non_symetric",
-                            [](sf::Sprite& sprite)
-                            {
-                                auto rand = [](){return Math::random_float(
-                                        constants::effect::scale_decr_bounds.x,
-                                        constants::effect::scale_decr_bounds.y,
-                                        constants::effect::accuracy);};
-                                sprite.setScale({rand(), rand()});
-                            });
+    this->functions["scale"].emplace_back([](sf::Sprite& sprite)
+                                          {
+                                              auto rand = [](){return Math::random_float(
+                                                      constants::effect::scale_decr_bounds.x,
+                                                      constants::effect::scale_decr_bounds.y,
+                                                      constants::effect::accuracy);};
+                                              sprite.setScale({rand(), rand()});
+                                          });
+
+    this->functions["rotate"] = std::vector<std::function<void(sf::Sprite&)>>();
+    this->functions["rotate"].emplace_back( [](sf::Sprite& sprite)
+                                           {
+                                               auto val = Math::random_float(
+                                                       0,
+                                                       constants::effect::max_degree,
+                                                       constants::effect::accuracy);
+                                               sprite.setRotation(val);
+                                           });
+
+    this->functions["rotate"].emplace_back( [](sf::Sprite& sprite)
+                                            {
+                                                auto val = Math::random_float(
+                                                        -constants::effect::max_degree,
+                                                        0,
+                                                        constants::effect::accuracy);
+                                                sprite.setRotation(val);
+                                            });
+}
+
+std::vector<std::function<void(sf::Sprite &)>> itl::EffectManager::generateEffectPack()
+{
+    auto vec = std::vector<std::function<void(sf::Sprite &)>>();
+
+    for(auto& var: this->functions)
+    {
+       // vec.emplace_back(var.second)
+    }
 }

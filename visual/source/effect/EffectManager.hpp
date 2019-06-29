@@ -19,12 +19,10 @@ namespace itl
     {
     public:
         EffectManager();
-
-        std::function<void(sf::Sprite&)> getFunction(const std::string& name);
-        std::map<std::string, std::function<void(sf::Sprite&)>> getFunctions(const std::string& name);
+        std::vector<std::function<void(sf::Sprite&)>> generateEffectPack();
 
     private:
-        std::map<std::string, std::function<void(sf::Sprite&)>> functions;
+        std::map<std::string, std::vector<std::function<void(sf::Sprite&)>>> functions;
 
         void loadFunctions();
     };

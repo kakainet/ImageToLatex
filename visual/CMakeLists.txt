@@ -20,7 +20,11 @@ add_executable(Visual
         source/manager/texture_manager.hpp
         source/perlin_noise/perlin_noise.hpp
         source/perlin_noise/perlin_noise.cpp
-        source/math/math.hpp source/effect/EffectManager.cpp source/effect/EffectManager.hpp source/flag_manager/flag_manager.cpp source/flag_manager/flag_manager.hpp)
+        source/math/math.hpp
+        source/effect/EffectManager.cpp
+        source/effect/EffectManager.hpp
+        source/flag_manager/flag_manager.cpp
+        source/flag_manager/flag_manager.hpp source/utils/utils.hpp)
 
 #sfml
 set(SFML_DIR "external/sfml/lib/cmake/SFML")

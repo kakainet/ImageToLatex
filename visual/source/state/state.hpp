@@ -28,7 +28,8 @@ namespace itl
         bool load_fonts(const std::string& path_to_data) noexcept;
         bool load_textures(const std::string& path_to_data) noexcept;
         bool generate_images(const std::string& dir, const std::string& extension);
-        bool process_line(const std::string& path_to_raw) noexcept;
+        bool process_line(const std::string& path_to_raw, const std::string& dir_to_save) noexcept;
+        void prepare_sprite(const std::string& path_to_raw);
 
         std::shared_ptr<TextureManager> texture_manager;
         std::shared_ptr<FontManager> font_manager;

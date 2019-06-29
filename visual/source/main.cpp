@@ -29,5 +29,7 @@ int main(int argc, char* argv[])
     }
 
     itl::State state("ImageToLatex");
-    return state.run(argv[1], argv[2], argv[3]);
+    return state.run(argv[constants::system::dir_to_pics_idx],
+                     argv[constants::system::extension_idx],
+                     argv[constants::system::dir_to_data_idx]);
 }

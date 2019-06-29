@@ -48,20 +48,34 @@ namespace itl
 
         std::transform(fn.begin(), fn.end(), paths.begin(), convert_cvstr_to_str);
 
+        std::string output = dir + "../output";
         for(auto& var: paths)
         {
-            this->process_line(var);
+            this->process_line(var, output);
         }
     }
 
-    bool State::process_line(const std::string& path_to_raw) noexcept
+    bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save) noexcept
     {
-        //window->clear();
-        //window->display();
-        //copy screen
+        this->prepare_sprite(path_to_raw);
+        window->clear();
+        window->display();
 
         itl::Logger::Log(path_to_raw, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE ::INFO);
         return true;
     }
-}
 
+    void State::prepare_sprite(const std::string& path_to_raw)
+    {
+        sf::Texture texture;
+        if (!texture.loadFromFile(path_to_raw))
+        {
+            itl::Logger::Log(constants::texture::failed_load_texture ,itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
+        }
+
+        sf::Sprite sprite;
+        sprite.setTexture(texture);
+        sprite.setPosition({static_cast<float>(constants::window::size.x)/2,
+                            static_cast<float>(constants::window::size.y)/2});
+    }
+}
