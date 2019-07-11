@@ -23,7 +23,15 @@ namespace itl
         std::vector<sf::Sprite> generateSprites(sf::Sprite& sprite);
 
     private:
-        std::map<std::string, std::vector<std::function<void(sf::Sprite&)>>> functions;
+
+        enum class FUNCTION_T
+        {
+            SCALE,
+            ROTATE,
+            POSITION
+        };
+
+        std::map<FUNCTION_T, std::vector<std::function<void(sf::Sprite&)>>> functions;
 
         /**
          * @brief packIndexes[i][j] is index of j'th effect from i'th pack.
@@ -32,7 +40,7 @@ namespace itl
 
         void load_functions();
 
-        void generate_all_effect_packs(std::map<std::string, std::vector<std::function<void(sf::Sprite&)>>>::iterator itr,
+        void generate_all_effect_packs(std::map<FUNCTION_T, std::vector<std::function<void(sf::Sprite&)>>>::iterator itr,
                                        std::vector<int> currentPack);
 
     };

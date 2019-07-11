@@ -17,8 +17,8 @@ itl::EffectManager::EffectManager()
 
 void itl::EffectManager::load_functions()
 {
-    this->functions["scale"] = std::vector<std::function<void(sf::Sprite&)>>();
-    this->functions["scale"].emplace_back([](sf::Sprite& sprite)
+    this->functions[FUNCTION_T::SCALE] = std::vector<std::function<void(sf::Sprite&)>>();
+    this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
                                            {
                                                auto val = Math::random_float(
                                                        constants::effect::scale_incr_bounds.x,
@@ -27,7 +27,7 @@ void itl::EffectManager::load_functions()
                                                sprite.setScale({val, val});
                                            });
 
-    this->functions["scale"].emplace_back([](sf::Sprite& sprite)
+    this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
                                           {
                                               auto rand = [](){return Math::random_float(
                                                       constants::effect::scale_incr_bounds.x,
@@ -36,7 +36,7 @@ void itl::EffectManager::load_functions()
                                               sprite.setScale({rand(), rand()});
                                           });
 
-    this->functions["scale"].emplace_back([](sf::Sprite& sprite)
+    this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
                                           {
                                               auto val = Math::random_float(
                                                       constants::effect::scale_decr_bounds.x,
@@ -45,7 +45,7 @@ void itl::EffectManager::load_functions()
                                               sprite.setScale({val, val});
                                           });
 
-    this->functions["scale"].emplace_back([](sf::Sprite& sprite)
+    this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
                                           {
                                               auto rand = [](){return Math::random_float(
                                                       constants::effect::scale_decr_bounds.x,
@@ -54,8 +54,8 @@ void itl::EffectManager::load_functions()
                                               sprite.setScale({rand(), rand()});
                                           });
 
-    this->functions["rotate"] = std::vector<std::function<void(sf::Sprite&)>>();
-    this->functions["rotate"].emplace_back([](sf::Sprite& sprite)
+    this->functions[FUNCTION_T::ROTATE] = std::vector<std::function<void(sf::Sprite&)>>();
+    this->functions[FUNCTION_T::ROTATE].emplace_back([](sf::Sprite& sprite)
                                            {
                                                auto val = Math::random_float(
                                                        0,
@@ -64,7 +64,7 @@ void itl::EffectManager::load_functions()
                                                sprite.setRotation(val);
                                            });
 
-    this->functions["rotate"].emplace_back([](sf::Sprite& sprite)
+    this->functions[FUNCTION_T::ROTATE].emplace_back([](sf::Sprite& sprite)
                                             {
                                                 auto val = Math::random_float(
                                                         -constants::effect::max_degree,
@@ -73,7 +73,7 @@ void itl::EffectManager::load_functions()
                                                 sprite.setRotation(val);
                                             });
 
-    this->functions["position"].emplace_back([](sf::Sprite& sprite)
+    this->functions[FUNCTION_T::POSITION].emplace_back([](sf::Sprite& sprite)
                                             {
                                                 auto val = sf::Vector2f(
                                                         Math::random(0, constants::window::size.x),
@@ -82,7 +82,7 @@ void itl::EffectManager::load_functions()
                                             });
 }
 
-void itl::EffectManager::generate_all_effect_packs(std::map<std::string, std::vector<std::function<void(sf::Sprite&)>>>::iterator itr,
+void itl::EffectManager::generate_all_effect_packs(std::map<FUNCTION_T, std::vector<std::function<void(sf::Sprite&)>>>::iterator itr,
         std::vector<int> currentPack)
 {
     if(itr == this->functions.end())
@@ -101,5 +101,17 @@ void itl::EffectManager::generate_all_effect_packs(std::map<std::string, std::ve
 
 std::vector<sf::Sprite> itl::EffectManager::generateSprites(sf::Sprite &sprite)
 {
-    return std::vector<sf::Sprite>();
+    auto result = std::vector<sf::Sprite>();
+
+    for(int i = 0; i < this->packIndexes.size(); i++)
+    {
+        sf::Sprite new_sprite;
+        for(int j = 0; j < this->packIndexes[i].size(); j++)
+        {
+            this->functions[static_cast<FUNCTION_T>(i)][j](new_sprite);
+        }
+        result.emplace_back(sprite);
+    }
+
+    return result;
 }

@@ -55,13 +55,15 @@ namespace itl
             this->background.setTexture(this->texture_manager->get(i));
             for(auto& var: paths)
             {
-                this->process_line(var, output);
+                this->process_line(var, output, std::to_string(i), extension);
             }
         }
     }
 
-    bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save) noexcept
+    bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save,
+            const std::string& background_number, const std::string& extension) noexcept
     {
+        int itr = 0;
         sf::Texture sprite_texture;
 
         if(!sprite_texture.loadFromFile(path_to_raw))
@@ -85,7 +87,7 @@ namespace itl
             ss_texture.create(constants::window::size.x, constants::window::size.y);
             ss_texture.update(*this->window);
             sf::Image screen = ss_texture.copyToImage();
-            screen.saveToFile(dir_to_save+"/temp.png");
+            screen.saveToFile(dir_to_save+ "/" + background_number + "_" + std::to_string(itr) + extension);
         }
 
         return true;
