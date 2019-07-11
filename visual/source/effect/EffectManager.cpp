@@ -7,7 +7,7 @@ itl::EffectManager::EffectManager()
                      Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
 
     this->load_functions();
-    this->generate_all_effect_packs(this->functions.begin(), {});
+    this->generate_all_effect_packs();
 
     itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
             Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
@@ -82,20 +82,44 @@ void itl::EffectManager::load_functions()
                                             });
 }
 
-void itl::EffectManager::generate_all_effect_packs(std::map<FUNCTION_T, std::vector<std::function<void(sf::Sprite&)>>>::iterator itr,
-        std::vector<int> currentPack)
+
+void itl::EffectManager::generate_all_effect_packs()
 {
-    if(itr == this->functions.end())
+    const int n = functions.size();
+
+    int* indices = new int[n];
+
+    for (int i = 0; i < n; i++)
     {
-        this->packIndexes.emplace_back(currentPack);
-        return;
+        indices[i] = 0;
     }
 
-    for(int idx = 0; idx < itr->second.size(); idx++)
+    while (true)
     {
-        std::vector<int> copy = currentPack;
-        copy.emplace_back(idx);
-        this->generate_all_effect_packs(++itr--, copy);
+        packIndexes.emplace_back();
+
+        for (int i = 0; i < n; i++)
+        {
+            packIndexes.back().emplace_back(indices[i]);
+        }
+
+        int next = n - 1;
+        while (next >= 0 && (indices[next] + 1 >= this->functions[static_cast<FUNCTION_T>(next)].size()))
+        {
+            next--;
+        }
+
+        if (next < 0)
+        {
+            return;
+        }
+
+        indices[next]++;
+
+        for (int i = next + 1; i < n; i++)
+        {
+            indices[i] = 0;
+        }
     }
 }
 

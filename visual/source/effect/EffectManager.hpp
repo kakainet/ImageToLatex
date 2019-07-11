@@ -40,8 +40,7 @@ namespace itl
 
         void load_functions();
 
-        void generate_all_effect_packs(std::map<FUNCTION_T, std::vector<std::function<void(sf::Sprite&)>>>::iterator itr,
-                                       std::vector<int> currentPack);
+        void generate_all_effect_packs();
 
     };
 }
