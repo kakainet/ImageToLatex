@@ -60,10 +60,6 @@ namespace itl
             for(auto& var: paths)
             {
                 std::future<bool> result = this->thread_pool->enqueue(&State::process_line, this, var, output, i, extension);
-                if(!result.get())
-                {
-                    return false;
-                }
             }
         }
 

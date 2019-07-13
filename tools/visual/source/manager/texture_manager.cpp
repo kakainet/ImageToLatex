@@ -35,14 +35,9 @@ namespace itl
                 Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
                 break;
             }
-            this->storage->emplace_back(next_texture);
+            this->storage.push_back(next_texture);
         }
 
         return !failed;
-    }
-
-    sf::Texture& TextureManager::get_random_element()
-    {
-        return this->storage->at(static_cast<ulong>(Math::random(0,static_cast<int>(this->storage->size()))));
     }
 }
