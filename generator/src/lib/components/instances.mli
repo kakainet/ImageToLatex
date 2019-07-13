@@ -1,4 +1,4 @@
-open Syntax
+open Latex.Syntax
 
 val instance : ?sign:bool -> string -> t
 

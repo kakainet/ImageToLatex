@@ -2,6 +2,7 @@
 
 open Core
 
+open Latex
 open Syntax
 open Operators.Unary
 

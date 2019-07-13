@@ -1,0 +1,3 @@
+(executable
+  (name l1_1)
+  (libraries core lib))

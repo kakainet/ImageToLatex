@@ -1,4 +1,4 @@
-open Syntax
+open Latex.Syntax
 
 val factorial : ?brackets:(t -> t) -> t -> t
 
