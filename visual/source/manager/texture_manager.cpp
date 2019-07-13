@@ -16,10 +16,14 @@ namespace itl
     {
         bool failed = false;
 
-        const std::vector<std::string> textures =
+        std::vector<std::string> textures =
                 {
-                        path_to_data + "/textures/white.png"
+                        "white.png",
+                        "blue.png"
                 };
+
+        std::transform(textures.begin(),textures.end(), textures.begin(),
+                [=](std::string str){ return path_to_data + "/textures/" + str;});
 
 
         for(auto& path : textures)
@@ -34,7 +38,7 @@ namespace itl
             this->storage->emplace_back(next_texture);
         }
 
-        return failed;
+        return !failed;
     }
 
     sf::Texture& TextureManager::get_random_element()

@@ -129,7 +129,7 @@ std::vector<std::shared_ptr<sf::Sprite>> itl::EffectManager::generateSprites(sf:
 
     for(auto& indexPack: this->packIndexes)
     {
-        auto new_sprite = std::make_shared<sf::Sprite>();
+        auto new_sprite = std::make_shared<sf::Sprite>(sprite);
 
         for(int i = 0; i < indexPack.size(); i++)
         {

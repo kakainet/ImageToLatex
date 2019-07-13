@@ -20,8 +20,8 @@ namespace itl
     {
         return
                 this->load_textures(path_to_data)
-                ||this->generate_images(path_to_pictures, extension)
-                ? constants::system::error_code : constants::system::pass_code;
+                && this->generate_images(path_to_pictures, extension)
+                ? constants::system::pass_code : constants::system::error_code;
     }
 
     bool State::load_fonts(const std::string& path_to_data) noexcept
@@ -56,9 +56,14 @@ namespace itl
             this->background.setTexture(texture);
             for(auto& var: paths)
             {
-                this->process_line(var, output, std::to_string(i), extension);
+                if(!this->process_line(var, output, std::to_string(i), extension))
+                {
+                    return false;
+                }
             }
         }
+
+        return true;
     }
 
     bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save,
@@ -89,7 +94,15 @@ namespace itl
             ss_texture.create(constants::window::size.x, constants::window::size.y);
             ss_texture.update(*this->window);
             sf::Image screen = ss_texture.copyToImage();
-            screen.saveToFile(dir_to_save+ "/" + background_number + "_" + file_name + "_" + std::to_string(itr++) + extension);
+            std::stringstream path_to_save;
+            path_to_save << dir_to_save
+                         << "/"
+                         << background_number
+                         << "_" << file_name
+                         << "_"
+                         << std::to_string(itr++)
+                         << extension;
+            screen.saveToFile(path_to_save.str());
         }
 
         return true;
