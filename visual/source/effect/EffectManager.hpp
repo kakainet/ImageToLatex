@@ -20,13 +20,13 @@ namespace itl
     {
     public:
         EffectManager();
-        std::vector<sf::Sprite> generateSprites(sf::Sprite& sprite);
+        std::vector<std::shared_ptr<sf::Sprite>> generateSprites(sf::Sprite& sprite);
 
     private:
 
         enum class FUNCTION_T
         {
-            SCALE,
+            SCALE = 0,
             ROTATE,
             POSITION
         };

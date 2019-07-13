@@ -21,6 +21,7 @@ namespace itl
                         path_to_data + "/textures/white.png"
                 };
 
+
         for(auto& path : textures)
         {
             sf::Texture next_texture;

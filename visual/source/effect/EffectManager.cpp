@@ -85,7 +85,7 @@ void itl::EffectManager::load_functions()
 
 void itl::EffectManager::generate_all_effect_packs()
 {
-    const int n = functions.size();
+    const int n = static_cast<int>(functions.size());
 
     int* indices = new int[n];
 
@@ -104,7 +104,7 @@ void itl::EffectManager::generate_all_effect_packs()
         }
 
         int next = n - 1;
-        while (next >= 0 && (indices[next] + 1 >= this->functions[static_cast<FUNCTION_T>(next)].size()))
+        while (next >= 0 && (indices[next] + 1 >= this->functions.at(static_cast<FUNCTION_T>(next)).size()))
         {
             next--;
         }
@@ -123,18 +123,21 @@ void itl::EffectManager::generate_all_effect_packs()
     }
 }
 
-std::vector<sf::Sprite> itl::EffectManager::generateSprites(sf::Sprite &sprite)
+std::vector<std::shared_ptr<sf::Sprite>> itl::EffectManager::generateSprites(sf::Sprite &sprite)
 {
-    auto result = std::vector<sf::Sprite>();
+    auto result = std::vector<std::shared_ptr<sf::Sprite>>();
 
-    for(int i = 0; i < this->packIndexes.size(); i++)
+    for(auto& indexPack: this->packIndexes)
     {
-        sf::Sprite new_sprite;
-        for(int j = 0; j < this->packIndexes[i].size(); j++)
+        auto new_sprite = std::make_shared<sf::Sprite>();
+
+        for(int i = 0; i < indexPack.size(); i++)
         {
-            this->functions[static_cast<FUNCTION_T>(i)][j](new_sprite);
+            auto fun = static_cast<FUNCTION_T>(i);
+            this->functions[fun][indexPack[i]](*new_sprite);
         }
-        result.emplace_back(sprite);
+
+        result.push_back(new_sprite);
     }
 
     return result;

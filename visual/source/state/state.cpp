@@ -38,7 +38,7 @@ namespace itl
     {
         std::vector<cv::String> fn;
         std::vector<std::string> paths;
-        glob(dir + "/*" + extension, fn, false);
+        glob(dir + "/input/*" + extension, fn, false);
         paths.resize(fn.size());
 
         auto convert_cvstr_to_str = [](cv::String str)
@@ -48,11 +48,12 @@ namespace itl
 
         std::transform(fn.begin(), fn.end(), paths.begin(), convert_cvstr_to_str);
 
-        std::string output = dir + "../output";
+        std::string output = dir + "/output";
 
         for(int i = 0; i < this->texture_manager->size(); i++)
         {
-            this->background.setTexture(this->texture_manager->get(i));
+            auto texture = this->texture_manager->get(i);
+            this->background.setTexture(texture);
             for(auto& var: paths)
             {
                 this->process_line(var, output, std::to_string(i), extension);
@@ -74,20 +75,21 @@ namespace itl
 
         sf::Sprite base;
         base.setTexture(sprite_texture);
-
+        auto file_name = (path_to_raw.substr(path_to_raw.find_last_of('/')+1));
+        file_name = file_name.substr(0, file_name.find_last_of('.'));
         auto sprites = this->effect_manager->generateSprites(base);
 
         for(auto& spr : sprites)
         {
             this->window->clear();
             this->window->draw(this->background);
-            this->window->draw(spr);
+            this->window->draw(*spr);
             this->window->display();
             sf::Texture ss_texture;
             ss_texture.create(constants::window::size.x, constants::window::size.y);
             ss_texture.update(*this->window);
             sf::Image screen = ss_texture.copyToImage();
-            screen.saveToFile(dir_to_save+ "/" + background_number + "_" + std::to_string(itr) + extension);
+            screen.saveToFile(dir_to_save+ "/" + background_number + "_" + file_name + "_" + std::to_string(itr++) + extension);
         }
 
         return true;
