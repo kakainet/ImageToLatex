@@ -12,8 +12,10 @@ visual/release/
 visual/debug/
 visual/Visual
 visual/visual
+visual/external
 .idea/
 unit_test_machine/cmake-build-debug/
+visual/gtest
 
 # graphic
 *.png
