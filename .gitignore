@@ -15,5 +15,5 @@ visual/visual
 .idea/
 unit_test_machine/cmake-build-debug/
 
-#graphic
+# graphic
 *.png
