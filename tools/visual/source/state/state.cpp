@@ -9,7 +9,11 @@ namespace itl
 
         this->font_manager = std::make_shared<FontManager>();
         this->texture_manager = std::make_shared<TextureManager>();
-        this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title);
+        for(int i = 0; i < std::thread::hardware_concurrency(); i++)
+        {
+            this->windows.push(std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title));
+            this->backgrounds.push(sf::Sprite());
+        }
         this->effect_manager = std::make_unique<EffectManager>();
         this->thread_pool = std::make_unique<ThreadPool>(std::thread::hardware_concurrency());
 
@@ -53,12 +57,9 @@ namespace itl
 
         for(int i = 0; i < this->texture_manager->size(); i++)
         {
-            auto texture = this->texture_manager->get(i);
-            this->background.setTexture(texture);
             for(auto& var: paths)
             {
-                std::future<bool> result = this->thread_pool->enqueue(&State::process_line, this, var, output, std::to_string(i), extension);
-
+                std::future<bool> result = this->thread_pool->enqueue(&State::process_line, this, var, output, i, extension);
                 if(!result.get())
                 {
                     return false;
@@ -70,8 +71,15 @@ namespace itl
     }
 
     bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save,
-            const std::string& background_number, const std::string& extension) noexcept
+            int background_number, const std::string& extension) noexcept
     {
+        auto background_texture = this->texture_manager->get(background_number);
+
+        auto window_guard = this->windows.getFree();
+        auto background_guard = this->backgrounds.getFree();
+
+        background_guard.get()->setTexture(background_texture);
+
         int itr = 0;
         sf::Texture sprite_texture;
 
@@ -89,13 +97,12 @@ namespace itl
 
         for(auto& spr : sprites)
         {
-            this->window->clear();
-            this->window->draw(this->background);
-            this->window->draw(*spr);
-            this->window->display();
+            window_guard.get()->clear();
+            window_guard.get()->draw(*background_guard.get());
+            window_guard.get()->draw(*spr);
             sf::Texture ss_texture;
             ss_texture.create(constants::window::size.x, constants::window::size.y);
-            ss_texture.update(*this->window);
+            ss_texture.update(*window_guard.get());
             sf::Image screen = ss_texture.copyToImage();
             std::stringstream path_to_save;
             path_to_save << dir_to_save
@@ -107,6 +114,9 @@ namespace itl
                          << extension;
             screen.saveToFile(path_to_save.str());
         }
+
+        window_guard.setStatus(false);
+        background_guard.setStatus(false);
 
         return true;
     }

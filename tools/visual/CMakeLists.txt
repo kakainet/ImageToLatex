@@ -21,11 +21,13 @@ add_executable(Visual
         source/perlin_noise/perlin_noise.hpp
         source/perlin_noise/perlin_noise.cpp
         source/math/math.hpp
-        source/effect/EffectManager.cpp
-        source/effect/EffectManager.hpp
+        source/effect/effect_manager.cpp
+        source/effect/effect_manager.hpp
         source/flag_manager/flag_manager.cpp
         source/flag_manager/flag_manager.hpp
-        source/utils/utils.hpp)
+        source/utils/utils.hpp
+        source/resource_guard/resource_guard.hpp
+        source/resource_collection/resource_collection.hpp)
 
 #sfml
 set(SFML_DIR "external/sfml/lib/cmake/SFML")
@@ -50,5 +52,5 @@ find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 target_link_libraries(Visual ${OpenCV_LIBS})
 
-#ctpl
+#threadpool
 include_directories(external/threadpool)

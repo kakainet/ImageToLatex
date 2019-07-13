@@ -1,4 +1,4 @@
-#include "EffectManager.hpp"
+#include "effect_manager.hpp"
 
 
 itl::EffectManager::EffectManager()

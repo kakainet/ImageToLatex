@@ -17,10 +17,10 @@ namespace constants
         constexpr auto extension_idx = 2;
         constexpr auto dir_to_data_idx = 3;
         constexpr auto required_command_args_size = 4;
-        constexpr auto wrong_args_size = "Wrong number of arguments";
+        constexpr auto wrong_args_size = "Wrong number of arguments.";
         constexpr auto empty_path = "Cache can't find resource in empty path.";
         constexpr auto not_found = "Cache can't find resource in this path.";
-        constexpr auto line_processing_error = "Error occured during line processing";
+        constexpr auto line_processing_error = "Error occured during line processing.";
         constexpr auto latex_path = "../../../latex/latex.sh";
         constexpr auto error_code = 1;
         constexpr auto pass_code = 0;
@@ -62,6 +62,11 @@ namespace constants
 
     namespace texture
     {
-        constexpr auto failed_load_texture = "Failed to load texture";
+        constexpr auto failed_load_texture = "Failed to load texture.";
+    }
+
+    namespace thread
+    {
+        constexpr auto fail_distr_worker = "Failed during distribution worker - there is no free worker.";
     }
 }
