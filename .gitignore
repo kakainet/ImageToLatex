@@ -8,7 +8,12 @@ _build
 # cpp
 visual/cmake-build-debug/
 visual/.idea/
-visual/external/
+visual/release/
+visual/debug/
+visual/Visual
+visual/visual
 .idea/
-visual/gtest/lib/
 unit_test_machine/cmake-build-debug/
+
+# graphic
+*.png

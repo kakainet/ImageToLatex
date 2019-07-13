@@ -8,7 +8,8 @@ namespace itl
     class TextureManager : public Manager<sf::Texture>
     {
     public:
-        virtual bool load_data() override;
+        TextureManager();
+        virtual bool load_data(const std::string& path_to_data) override;
         virtual sf::Texture& get_random_element() override;
     };
 }

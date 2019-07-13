@@ -8,7 +8,8 @@ namespace itl
     class FontManager : public Manager<sf::Font>
     {
     public:
-        virtual bool load_data() override;
+        FontManager();
+        virtual bool load_data(const std::string& path_to_data) override;
         virtual sf::Font& get_random_element() override;
     };
 }

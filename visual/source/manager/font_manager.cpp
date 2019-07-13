@@ -2,11 +2,20 @@
 
 namespace itl
 {
-    bool FontManager::load_data()
+    FontManager::FontManager()
+    {
+        itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+                         Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+
+        itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+                         Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+    }
+
+    bool FontManager::load_data(const std::string& path_to_data)
     {
         const std::vector<std::string> fonts =
                 {
-                        "../../../data/fonts/arial.ttf"
+                        path_to_data + "/fonts/arial.ttf"
                 };
 
         for(auto& path : fonts)
