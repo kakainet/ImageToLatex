@@ -1,12 +1,15 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include <thread>
 
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
 #include <opencv2/core/utility.hpp>
+
+#include <ThreadPool.h>
 
 #include "../config/config.hpp"
 #include "../manager/texture_manager.hpp"
@@ -36,6 +39,7 @@ namespace itl
         std::shared_ptr<TextureManager> texture_manager;
         std::shared_ptr<FontManager> font_manager;
         std::unique_ptr<EffectManager> effect_manager;
+        std::unique_ptr<ThreadPool> thread_pool;
     };
 }
 

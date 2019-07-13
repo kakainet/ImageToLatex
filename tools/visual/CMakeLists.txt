@@ -49,3 +49,6 @@ target_link_libraries(Visual gtest gtest_main)
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 target_link_libraries(Visual ${OpenCV_LIBS})
+
+#ctpl
+include_directories(external/threadpool)

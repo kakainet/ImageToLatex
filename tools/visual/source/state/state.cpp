@@ -11,6 +11,7 @@ namespace itl
         this->texture_manager = std::make_shared<TextureManager>();
         this->window = std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title);
         this->effect_manager = std::make_unique<EffectManager>();
+        this->thread_pool = std::make_unique<ThreadPool>(std::thread::hardware_concurrency());
 
         itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
@@ -56,7 +57,9 @@ namespace itl
             this->background.setTexture(texture);
             for(auto& var: paths)
             {
-                if(!this->process_line(var, output, std::to_string(i), extension))
+                std::future<bool> result = this->thread_pool->enqueue(&State::process_line, this, var, output, std::to_string(i), extension);
+
+                if(!result.get())
                 {
                     return false;
                 }
