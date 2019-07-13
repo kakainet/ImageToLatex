@@ -2,9 +2,6 @@ import sys
 import sympy as sm
 
 
-def containsFlag(args, flag):
-    return flag in args
-
 #script name | input | output
 req_arguments = 3
 
@@ -23,7 +20,7 @@ with open(sys.argv[1], 'r') as input:
         sm.preview('$$'+line+'$$',
                    dvioptions=["-T", "tight", "-z", "0", "--truecolor", "-D 600", "-bg", "Transparent"],
                    viewer='file', filename='output'+str(itr)+'.png', euler=True)
-        if(containsFlag(sys.argv, '-p')):
+        if '-p' in sys.argv:
             print('Generated image: ' + 'output'+str(itr)+'.png')
         itr = itr + 1
 
