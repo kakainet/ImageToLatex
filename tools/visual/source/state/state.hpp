@@ -40,7 +40,7 @@ namespace itl
         std::unique_ptr<EffectManager> effect_manager;
         std::unique_ptr<ThreadPool> thread_pool;
         ResourceCollection<sf::RenderWindow> windows;
-        ResourceCollection<sf::Sprite> backgrounds;
+        std::mutex mutex;
     };
 }
 

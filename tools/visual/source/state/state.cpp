@@ -12,7 +12,6 @@ namespace itl
         for(int i = 0; i < std::thread::hardware_concurrency(); i++)
         {
             this->windows.push(std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title));
-            this->backgrounds.push(sf::Sprite());
         }
         this->effect_manager = std::make_unique<EffectManager>();
         this->thread_pool = std::make_unique<ThreadPool>(std::thread::hardware_concurrency());
@@ -59,7 +58,9 @@ namespace itl
         {
             for(auto& var: paths)
             {
-                std::future<bool> result = this->thread_pool->enqueue(&State::process_line, this, var, output, i, extension);
+                std::future<bool> result = this->thread_pool->enqueue(&State::process_line, this,
+                                                                      var, output, i,
+                                                                      extension);
             }
         }
 
@@ -69,12 +70,13 @@ namespace itl
     bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save,
             int background_number, const std::string& extension) noexcept
     {
+        mutex.lock();
         auto background_texture = this->texture_manager->get(background_number);
-
         auto window_guard = this->windows.getFree();
-        auto background_guard = this->backgrounds.getFree();
+        mutex.unlock();
 
-        background_guard.get()->setTexture(background_texture);
+        sf::Sprite background;
+        background.setTexture(background_texture);
 
         int itr = 0;
         sf::Texture sprite_texture;
@@ -94,9 +96,10 @@ namespace itl
         for(auto& spr : sprites)
         {
             window_guard.get()->clear();
-            window_guard.get()->draw(*background_guard.get());
+            window_guard.get()->draw(background);
             window_guard.get()->draw(*spr);
             sf::Texture ss_texture;
+            mutex.lock();
             ss_texture.create(constants::window::size.x, constants::window::size.y);
             ss_texture.update(*window_guard.get());
             sf::Image screen = ss_texture.copyToImage();
@@ -108,11 +111,13 @@ namespace itl
                          << "_"
                          << std::to_string(itr++)
                          << extension;
+            mutex.unlock();
             screen.saveToFile(path_to_save.str());
         }
 
+        mutex.lock();
         window_guard.setStatus(false);
-        background_guard.setStatus(false);
+        mutex.unlock();
 
         return true;
     }
