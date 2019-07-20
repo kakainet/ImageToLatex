@@ -37,11 +37,11 @@ namespace itl
         std::unique_ptr<EffectManager> effect_manager;
         std::unique_ptr<ThreadPool> thread_pool;
         std::queue<std::shared_ptr<sf::RenderWindow>> windows;
-        std::mutex mutex;
         const int hardware_concurrency;
         int assigned_threads_to_data;
         using texture_id = int;
         std::map<std::thread::id, texture_id> convert_from_thread_to_texture;
+        std::mutex mtx;
     };
 }
 

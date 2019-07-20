@@ -3,7 +3,7 @@
 namespace itl
 {
     State::State(const std::string& title)
-        :hardware_concurrency(1)
+        :hardware_concurrency(std::thread::hardware_concurrency())
     {
         itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
@@ -75,11 +75,12 @@ namespace itl
             this->convert_from_thread_to_texture[std::this_thread::get_id()] = assigned_threads_to_data++;
         }
 
-        std::lock_guard<std::mutex> lck(mutex);
         auto window_guard = this->windows.front();
         this->windows.pop();
+        mtx.lock();
         auto background_guard = this->texture_manager->get(
                 this->convert_from_thread_to_texture[std::this_thread::get_id()], background_number);
+        mtx.unlock();
         int itr = 0;
         sf::Texture sprite_texture;
 
