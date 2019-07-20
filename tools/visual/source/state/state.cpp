@@ -68,13 +68,19 @@ namespace itl
     bool State::process_line(const std::string path_to_raw, const std::string dir_to_save,
             int background_number, const std::string extension) noexcept
     {
-        if(this->assigned_threads_to_data != )
+        if(this->assigned_threads_to_data != this->hardware_concurrency &&
+           this->convert_from_thread_to_texture.find(std::this_thread::get_id()) !=
+           this->convert_from_thread_to_texture.end())
+        {
+            this->convert_from_thread_to_texture[std::this_thread::get_id()] = assigned_threads_to_data++;
+        }
+
         std::lock_guard<std::mutex> lck(mutex);
         std::thread::id this_id = std::this_thread::get_id();
-        sf::Texture background_texture = this->texture_manager->get(background_number);
         auto window_guard = this->windows.front();
         this->windows.pop();
-        auto background_guard = this->backgrounds.front();
+        auto background_guard = this->texture_manager->get(
+                this->convert_from_thread_to_texture[std::this_thread::get_id()], background_number);
         int itr = 0;
         sf::Texture sprite_texture;
 
@@ -86,6 +92,8 @@ namespace itl
 
 
         sf::Sprite base;
+        sf::Sprite background;
+        background.setTexture(background_guard);
         base.setTexture(sprite_texture);
         auto file_name = (path_to_raw.substr(path_to_raw.find_last_of('/')+1));
         file_name = file_name.substr(0, file_name.find_last_of('.'));
@@ -94,7 +102,7 @@ namespace itl
         for(auto& spr : sprites)
         {
             window_guard.get()->clear();
-            window_guard.get()->draw(*background_guard);
+            window_guard.get()->draw(background);
             window_guard.get()->draw(*spr);
             sf::Texture ss_texture;
             mutex.lock();

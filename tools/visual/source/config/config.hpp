@@ -60,6 +60,12 @@ namespace constants
         constexpr auto logging_all = "-la";
     }
 
+    namespace manager
+    {
+        constexpr auto loading_data_second_time = "Tried to load data second time";
+        constexpr auto failed_update = "Failed during updating texture";
+    }
+
     namespace texture
     {
         constexpr auto failed_load_texture = "Failed to load texture.";
