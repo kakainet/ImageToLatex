@@ -16,10 +16,12 @@ namespace itl
         Manager();
         using path_t = std::string;
         std::vector<std::pair<path_t, T>> storage;
+        std::string path_to_data;
     public:
         virtual bool load_data(const std::string& path_to_data, int number_of_copies) = 0;
         virtual bool update_single(const std::string& path_to_data, int idx_copy) = 0;
         int size() const;
+        int unique_size() const;
         T& get(int idx_copy, int idx_data);
     };
 
@@ -27,6 +29,12 @@ namespace itl
     int Manager<T>::size() const
     {
         this->storage.size();
+    }
+
+    template<class T>
+    int Manager<T>::unique_size() const
+    {
+        this->data_paths.size();
     }
 
     template<class T>

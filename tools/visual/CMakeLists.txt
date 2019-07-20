@@ -23,9 +23,7 @@ add_executable(Visual
         source/effect/effect_manager.hpp
         source/flag_manager/flag_manager.cpp
         source/flag_manager/flag_manager.hpp
-        source/utils/utils.hpp
-        source/resource_guard/resource_guard.hpp
-        source/resource_collection/resource_collection.hpp)
+        source/utils/utils.hpp)
 
 #sfml
 set(SFML_DIR "external/sfml/lib/cmake/SFML")

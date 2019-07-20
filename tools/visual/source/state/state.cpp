@@ -3,7 +3,7 @@
 namespace itl
 {
     State::State(const std::string& title)
-        :hardware_concurrency(std::thread::hardware_concurrency())
+        :hardware_concurrency(1)
     {
         itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
@@ -53,7 +53,7 @@ namespace itl
         std::string output = dir + "/output";
 
         std::vector<std::future<bool>> results;
-        for(int i = 0; i < this->texture_manager->size(); i++)
+        for(int i = 0; i < this->texture_manager->unique_size(); i++)
         {
             for(auto& var: paths)
             {
@@ -76,7 +76,6 @@ namespace itl
         }
 
         std::lock_guard<std::mutex> lck(mutex);
-        std::thread::id this_id = std::this_thread::get_id();
         auto window_guard = this->windows.front();
         this->windows.pop();
         auto background_guard = this->texture_manager->get(
@@ -105,7 +104,6 @@ namespace itl
             window_guard.get()->draw(background);
             window_guard.get()->draw(*spr);
             sf::Texture ss_texture;
-            mutex.lock();
             ss_texture.create(constants::window::size.x, constants::window::size.y);
             ss_texture.update(*window_guard.get());
             sf::Image screen = ss_texture.copyToImage();
@@ -117,7 +115,6 @@ namespace itl
                          << "_"
                          << std::to_string(itr++)
                          << extension;
-            mutex.unlock();
             screen.saveToFile(path_to_save.str());
         }
 

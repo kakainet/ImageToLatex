@@ -4,15 +4,9 @@ namespace itl
 {
     void Logger::Log(const std::string& message, const Logger::STREAM& stream, const Logger::TYPE& type) noexcept
     {
-        Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
-                    Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
-
         std::string prefix;
-        setPrefix(type,prefix);
-        sendMessage(message, stream,prefix);
-
-        Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
-                    Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        setPrefix(type, prefix);
+        sendMessage(message, stream, prefix);
     }
 
     void Logger::sendMessage(const std::string& message, Logger::STREAM stream, std::string &prefix) noexcept
@@ -24,20 +18,20 @@ namespace itl
         {
             case Logger::STREAM::FILE:
             {
-                fileMessage(message,prefix,time);
+                fileMessage(message, prefix, time);
                 break;
             }
 
             case Logger::STREAM::CONSOLE:
             {
-                consoleMessage(message,prefix, time);
+                consoleMessage(message, prefix, time);
                 break;
             }
 
             case Logger::STREAM::BOTH:
             {
-                consoleMessage(message,prefix, time);
-                fileMessage(message,prefix, time);
+                consoleMessage(message, prefix, time);
+                fileMessage(message, prefix, time);
                 break;
             }
         }

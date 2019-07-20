@@ -1,0 +1,12 @@
+Sat Jul 20 20:09:01 2019
+[ERROR] Cache can't find resource in this path.
+
+Sat Jul 20 20:09:42 2019
+[ERROR] Cache can't find resource in this path.
+
+Sat Jul 20 20:09:47 2019
+[ERROR] Cache can't find resource in this path.
+
+Sat Jul 20 20:10:13 2019
+[ERROR] Failed during updating texture
+

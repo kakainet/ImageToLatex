@@ -19,6 +19,8 @@ namespace itl
 
     bool TextureManager::load_data(const std::string& path_to_data, int number_of_copies)
     {
+        this->path_to_data = path_to_data;
+
         if(this->data_paths.empty())
         {
             Logger::Log(constants::manager::data_path_empty, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
@@ -29,23 +31,17 @@ namespace itl
 
         auto data_to_load = path_to_data + this->data_paths[0];
 
-        if(std::find(this->data_paths.begin(), this->data_paths.end(), path_to_data) == this->data_paths.end())
-        {
-            Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
-            return failed;
-        }
-
         while(number_of_copies--)
         {
             sf::Texture next_texture;
-            if(!next_texture.loadFromFile(path_to_data))
+            if(!next_texture.loadFromFile(data_to_load))
             {
                 failed = true;
                 Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
                 break;
             }
 
-            this->storage.emplace_back(std::pair<std::string, sf::Texture>({path_to_data, next_texture}));
+            this->storage.emplace_back(std::pair<std::string, sf::Texture>({data_to_load, next_texture}));
         }
 
         return !failed;
@@ -53,7 +49,9 @@ namespace itl
 
     bool TextureManager::update_single(const std::string& path, int idx_copy)
     {
-        if(!this->storage[idx_copy].second.loadFromFile(path))
+        std::lock_guard<std::mutex> lck(mtx);
+
+        if(!this->storage[idx_copy].second.loadFromFile(path_to_data + path))
         {
             return false;
         }

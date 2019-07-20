@@ -17,7 +17,6 @@
 #include "../config/config.hpp"
 #include "../manager/texture_manager.hpp"
 #include "../effect/effect_manager.hpp"
-#include "../resource_collection/resource_collection.hpp"
 
 namespace itl
 {
