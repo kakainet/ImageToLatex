@@ -13,11 +13,12 @@ namespace itl
     {
     protected:
         Manager();
-        std::vector<T> storage;
+        using path_t = std::string;
+        std::vector<std::pair<path_t, T>> storage;
     public:
-        virtual bool load_data(const std::string& path_to_data) = 0;
+        virtual bool load_data(const std::string& path_to_data, int number_of_copies) = 0;
         int size();
-        T& get(int idx);
+        T& get(int idx, const std::string& path_to_data);
     };
 
     template<class T>
@@ -27,7 +28,7 @@ namespace itl
     }
 
     template<class T>
-    T& Manager<T>::get(int idx)
+    T& Manager<T>::get(int idx, const std::string& path_to_data)
     {
         return this->storage[idx];
     }

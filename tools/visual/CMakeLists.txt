@@ -14,8 +14,6 @@ add_executable(Visual
         source/state/state.cpp
         source/state/state.hpp
         source/manager/manager.hpp
-        source/manager/font_manager.cpp
-        source/manager/font_manager.hpp
         source/manager/texture_manager.cpp
         source/manager/texture_manager.hpp
         source/perlin_noise/perlin_noise.hpp

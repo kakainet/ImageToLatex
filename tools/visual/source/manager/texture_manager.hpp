@@ -9,6 +9,6 @@ namespace itl
     {
     public:
         TextureManager();
-        virtual bool load_data(const std::string& path_to_data) override;
+        virtual bool load_data(const std::string& path_to_data, int number_of_copies) override;
     };
 }

@@ -12,7 +12,7 @@ namespace itl
                          Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
     }
 
-    bool TextureManager::load_data(const std::string& path_to_data)
+    bool TextureManager::load_data(const std::string& path_to_data, int number_of_copies)
     {
         bool failed = false;
 
@@ -25,17 +25,22 @@ namespace itl
         std::transform(textures.begin(),textures.end(), textures.begin(),
                 [=](std::string str){ return path_to_data + "/textures/" + str;});
 
+        if(std::find(textures.begin(), textures.end(), path_to_data) == textures.end())
+        {
+            Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            return failed;
+        }
 
-        for(auto& path : textures)
+        while(number_of_copies--)
         {
             sf::Texture next_texture;
-            if(!next_texture.loadFromFile(path))
+            if(!next_texture.loadFromFile(path_to_data))
             {
                 failed = true;
                 Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
                 break;
             }
-            this->storage.push_back(next_texture);
+            this->storage.emplace_back(std::pair<std::string, sf::Texture>({path_to_data, next_texture}));
         }
 
         return !failed;
