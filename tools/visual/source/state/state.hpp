@@ -37,8 +37,6 @@ namespace itl
         std::shared_ptr<TextureManager> texture_manager;
         std::unique_ptr<EffectManager> effect_manager;
         std::unique_ptr<ThreadPool> thread_pool;
-        //ResourceCollection<sf::RenderWindow> windows;
-        //ResourceCollection<sf::Sprite> backgrounds;
         std::queue<std::shared_ptr<sf::RenderWindow>> windows;
         std::mutex mutex;
         const int hardware_concurrency;

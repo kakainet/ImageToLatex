@@ -12,6 +12,7 @@ namespace itl
         for(int i = 0; i < this->hardware_concurrency; i++)
         {
             this->windows.emplace(std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title));
+
         }
         this->effect_manager = std::make_unique<EffectManager>();
         this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
@@ -96,6 +97,7 @@ namespace itl
             window_guard.get()->draw(*background_guard);
             window_guard.get()->draw(*spr);
             sf::Texture ss_texture;
+            mutex.lock();
             ss_texture.create(constants::window::size.x, constants::window::size.y);
             ss_texture.update(*window_guard.get());
             sf::Image screen = ss_texture.copyToImage();
@@ -107,11 +109,11 @@ namespace itl
                          << "_"
                          << std::to_string(itr++)
                          << extension;
+            mutex.unlock();
             screen.saveToFile(path_to_save.str());
         }
 
         this->windows.push(window_guard);
-
         return true;
     }
 }

@@ -18,8 +18,7 @@ namespace itl
 
         std::vector<std::string> textures =
                 {
-                        "white.png",
-                        "blue.png"
+                        "white.png"
                 };
 
         std::transform(textures.begin(),textures.end(), textures.begin(),

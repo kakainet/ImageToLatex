@@ -17,20 +17,23 @@ namespace itl
         void push(std::shared_ptr<T> obj_ptr);
     private:
         std::vector<ResourceGuard<T>> guards;
+        std::mutex mutex;
     };
 
     template<class T>
     ResourceGuard<T>& ResourceCollection<T>::getFree()
     {
+        mutex.lock();
         for(auto& guard : guards)
         {
             if(!guard.isUsed())
             {
                 guard.setStatus(true);
+                mutex.unlock();
                 return guard;
             }
         }
-
+        mutex.unlock();
         itl::Logger::Log(constants::thread::fail_distr_worker, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
         exit(1);
     }
