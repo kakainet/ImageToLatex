@@ -17,7 +17,7 @@ namespace itl
         using path_t = std::string;
         std::vector<std::pair<path_t, T>> storage;
     public:
-        virtual bool load_data(const std::string& path_to_init_data, int number_of_copies) = 0;
+        virtual bool load_data(const std::string& path_to_data, int number_of_copies) = 0;
         virtual bool update_single(const std::string& path_to_data, int idx_copy) = 0;
         int size() const;
         T& get(int idx_copy, int idx_data);

@@ -5,7 +5,7 @@ namespace itl
 
     TextureManager::TextureManager()
     {
-        itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         this->data_paths =
@@ -13,17 +13,23 @@ namespace itl
                         "/textures/white.png"
                 };
 
-        itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
     }
 
-    bool TextureManager::load_data(const std::string& path_to_init_data, int number_of_copies)
+    bool TextureManager::load_data(const std::string& path_to_data, int number_of_copies)
     {
+        if(this->data_paths.empty())
+        {
+            Logger::Log(constants::manager::data_path_empty, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            return false;
+        }
 
         bool failed = false;
 
+        auto data_to_load = path_to_data + this->data_paths[0];
 
-        if(std::find(this->data_paths.begin(), this->data_paths.end(), path_to_init_data) == this->data_paths.end())
+        if(std::find(this->data_paths.begin(), this->data_paths.end(), path_to_data) == this->data_paths.end())
         {
             Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return failed;
@@ -32,14 +38,14 @@ namespace itl
         while(number_of_copies--)
         {
             sf::Texture next_texture;
-            if(!next_texture.loadFromFile(path_to_init_data))
+            if(!next_texture.loadFromFile(path_to_data))
             {
                 failed = true;
                 Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
                 break;
             }
 
-            this->storage.emplace_back(std::pair<std::string, sf::Texture>({path_to_init_data, next_texture}));
+            this->storage.emplace_back(std::pair<std::string, sf::Texture>({path_to_data, next_texture}));
         }
 
         return !failed;

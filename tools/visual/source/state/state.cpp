@@ -6,7 +6,7 @@ namespace itl
         :hardware_concurrency(std::thread::hardware_concurrency())
     {
         itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
-                         Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+                         Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         this->texture_manager = std::make_shared<TextureManager>();
         for(int i = 0; i < this->hardware_concurrency; i++)
@@ -18,7 +18,7 @@ namespace itl
         this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
 
         itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
-                         Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+                         Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         this->assigned_threads_to_data = 0;
     }

@@ -64,6 +64,7 @@ namespace constants
     {
         constexpr auto loading_data_second_time = "Tried to load data second time";
         constexpr auto failed_update = "Failed during updating texture";
+        constexpr auto data_path_empty = "Data path is empty";
     }
 
     namespace texture
