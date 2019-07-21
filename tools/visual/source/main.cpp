@@ -9,14 +9,16 @@
 
 int main(int argc, char* argv[])
 {
+    std::shared_ptr<itl::Logger> logger;
+
     if(argc < constants::system::required_command_args_size)
     {
-        itl::Logger::Log(constants::system::wrong_args_size, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
-        itl::Logger::Log(constants::system::usage, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE::INFO);
-        return 0;
+        logger->log(constants::system::wrong_args_size, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
+        logger->log(constants::system::usage, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE::INFO);
+        return constants::system::error_code;
     }
 
-    itl::FlagManager flagManager(argc, argv);
+    itl::FlagManager flagManager(argc, argv, logger);
 
     if(flagManager.containsFlag(constants::flags::testing))
     {
@@ -24,11 +26,11 @@ int main(int argc, char* argv[])
 
         if(RUN_ALL_TESTS() != constants::gtest::tests_passed)
         {
-            itl::Logger::Log(constants::gtest::fail_msg, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::WARNING);
+            logger->log(constants::gtest::fail_msg, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::WARNING);
         }
     }
 
-    itl::State state("ImageToLatex");
+    itl::State state("ImageToLatex", logger);
     return state.run(argv[constants::system::dir_to_pics_idx],
                      argv[constants::system::extension_idx],
                      argv[constants::system::dir_to_data_idx]);

@@ -19,8 +19,8 @@ add_executable(Visual
         source/perlin_noise/perlin_noise.hpp
         source/perlin_noise/perlin_noise.cpp
         source/math/math.hpp
-        source/effect/effect_manager.cpp
-        source/effect/effect_manager.hpp
+        source/effect/effect_applicator.cpp
+        source/effect/effect_applicator.hpp
         source/flag_manager/flag_manager.cpp
         source/flag_manager/flag_manager.hpp
         source/utils/utils.hpp)

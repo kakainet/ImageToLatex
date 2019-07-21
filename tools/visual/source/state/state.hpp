@@ -16,7 +16,7 @@
 
 #include "../config/config.hpp"
 #include "../manager/texture_manager.hpp"
-#include "../effect/effect_manager.hpp"
+#include "../effect/effect_applicator.hpp"
 
 namespace itl
 {
@@ -25,7 +25,7 @@ namespace itl
     public:
         int run(const std::string& path_to_pictures, const std::string& extension, const std::string& path_to_data);
 
-        explicit State(const std::string& title);
+        explicit State(const std::string& title, const std::shared_ptr<Logger>& log);
 
     private:
         bool load_textures(const std::string& path_to_data) noexcept;
@@ -34,7 +34,8 @@ namespace itl
                                  int background_number, const std::string extension) noexcept;
 
         std::shared_ptr<TextureManager> texture_manager;
-        std::unique_ptr<EffectManager> effect_manager;
+        std::shared_ptr<Logger> logger;
+        std::unique_ptr<EffectApplicator> effect_manager;
         std::unique_ptr<ThreadPool> thread_pool;
         std::queue<std::shared_ptr<sf::RenderWindow>> windows;
         const int hardware_concurrency;

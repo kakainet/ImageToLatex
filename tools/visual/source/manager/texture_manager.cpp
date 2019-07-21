@@ -3,9 +3,10 @@
 namespace itl
 {
 
-    TextureManager::TextureManager()
+    TextureManager::TextureManager(const std::shared_ptr<Logger>& log)
+        : Manager(log)
     {
-        Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         this->data_paths =
@@ -13,7 +14,7 @@ namespace itl
                         "/textures/white.png"
                 };
 
-        Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
     }
 
@@ -23,7 +24,7 @@ namespace itl
 
         if(this->data_paths.empty())
         {
-            Logger::Log(constants::manager::data_path_empty, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            this->logger->log(constants::manager::data_path_empty, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return false;
         }
 
@@ -37,7 +38,7 @@ namespace itl
             if(!next_texture.loadFromFile(data_to_load))
             {
                 failed = true;
-                Logger::Log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+                this->logger->log(constants::system::not_found, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
                 break;
             }
 

@@ -1,22 +1,23 @@
-#include "effect_manager.hpp"
+#include "effect_applicator.hpp"
 
 namespace itl
 {
-    EffectManager::EffectManager()
+    EffectApplicator::EffectApplicator(const std::shared_ptr<Logger>& log)
+        : logger(log)
     {
-        Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         this->load_functions();
         this->generate_all_effect_packs();
 
-        Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
     }
 
 
 
-    void EffectManager::load_functions()
+    void EffectApplicator::load_functions()
     {
         this->functions[FUNCTION_T::SCALE] = std::vector<std::function<void(sf::Sprite&)>>();
         this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
@@ -84,18 +85,18 @@ namespace itl
     }
 
 
-    void EffectManager::generate_all_effect_packs()
+    void EffectApplicator::generate_all_effect_packs()
     {
         const int n = static_cast<int>(functions.size());
 
         int* indices = new int[n];
 
-        for (int i = 0; i < n; i++)
+        for(int i = 0; i < n; i++)
         {
             indices[i] = 0;
         }
 
-        while (true)
+        while(true)
         {
             packIndexes.emplace_back();
 
@@ -105,26 +106,26 @@ namespace itl
             }
 
             int next = n - 1;
-            while (next >= 0 && (indices[next] + 1 >= this->functions.at(static_cast<FUNCTION_T>(next)).size()))
+            while(next >= 0 && (indices[next] + 1 >= this->functions.at(static_cast<FUNCTION_T>(next)).size()))
             {
                 next--;
             }
 
-            if (next < 0)
+            if(next < 0)
             {
                 return;
             }
 
             indices[next]++;
 
-            for (int i = next + 1; i < n; i++)
+            for(int i = next + 1; i < n; i++)
             {
                 indices[i] = 0;
             }
         }
     }
 
-    std::vector<std::shared_ptr<sf::Sprite>> itl::EffectManager::generateSprites(sf::Sprite &sprite)
+    std::vector<std::shared_ptr<sf::Sprite>> EffectApplicator::generateSprites(sf::Sprite &sprite)
     {
         auto result = std::vector<std::shared_ptr<sf::Sprite>>();
 

@@ -2,22 +2,22 @@
 
 namespace itl
 {
-    State::State(const std::string& title)
-        :hardware_concurrency(std::thread::hardware_concurrency())
+    State::State(const std::string& title, const std::shared_ptr<Logger>& log)
+        : hardware_concurrency(std::thread::hardware_concurrency()), logger(log)
     {
-        itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
-        this->texture_manager = std::make_shared<TextureManager>();
+        this->texture_manager = std::make_shared<TextureManager>(this->logger);
         for(int i = 0; i < this->hardware_concurrency; i++)
         {
             this->windows.emplace(std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title));
 
         }
-        this->effect_manager = std::make_unique<EffectManager>();
+        this->effect_manager = std::make_unique<EffectApplicator>(this->logger);
         this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
 
-        itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         this->assigned_threads_to_data = 0;
@@ -86,7 +86,7 @@ namespace itl
 
         if(!sprite_texture.loadFromFile(path_to_raw))
         {
-            Logger::Log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            this->logger->log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return false;
         }
 

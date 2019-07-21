@@ -2,7 +2,7 @@
 
 namespace itl
 {
-    void Logger::Log(const std::string& message, const Logger::STREAM& stream, const Logger::TYPE& type) noexcept
+    void Logger::log(const std::string& message, const Logger::STREAM& stream, const Logger::TYPE& type) noexcept
     {
         std::string prefix;
         setPrefix(type, prefix);

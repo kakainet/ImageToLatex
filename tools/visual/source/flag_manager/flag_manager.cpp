@@ -2,9 +2,10 @@
 
 namespace itl
 {
-    FlagManager::FlagManager(int argc, char** argv)
+    FlagManager::FlagManager(int argc, char** argv, const std::shared_ptr<Logger>& log)
+        : logger(log)
     {
-        Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         for(int i = constants::system::required_command_args_size; i < argc; i++)
@@ -12,7 +13,7 @@ namespace itl
             this->flags.emplace_back(argv[i]);
         }
 
-        Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
     }

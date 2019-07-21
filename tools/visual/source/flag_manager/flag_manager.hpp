@@ -5,16 +5,18 @@
 
 #include <algorithm>
 #include <string>
+#include <memory>
 #include <vector>
 
 namespace itl
 {
     class FlagManager
     {
-        std::vector<std::string> flags;
-
     public:
-        explicit FlagManager(int argc, char* argv[]);
+        explicit FlagManager(int argc, char* argv[], const std::shared_ptr<Logger>& log);
         bool containsFlag(const std::string& flag);
+    private:
+        std::vector<std::string> flags;
+        std::shared_ptr<Logger> logger;
     };
 }
