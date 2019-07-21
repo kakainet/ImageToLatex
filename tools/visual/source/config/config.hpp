@@ -54,6 +54,7 @@ namespace constants
 
     namespace flags
     {
+        constexpr auto contradiction_flags = "FLags which were passed to program are contradictory.";
         constexpr auto testing = "-t";
         constexpr auto printing_steps = "-p";
         constexpr auto logging_erros = "-le";

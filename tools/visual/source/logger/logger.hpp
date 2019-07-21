@@ -30,11 +30,12 @@ namespace itl
             ERROR
         };
 
+        Logger(bool all, bool info, bool suggestions, bool errors, bool warnings);
+
         void log(const std::string&,
                 const Logger::STREAM& = Logger::STREAM::CONSOLE,
                 const Logger::TYPE& = Logger::TYPE::ERROR) noexcept;
     private:
-
 
         void sendMessage(const std::string& message,
                 Logger::STREAM stream,
@@ -50,5 +51,12 @@ namespace itl
 
         void setPrefix(Logger::TYPE type,
                 std::string& prefix) noexcept;
+
+        const bool log_all;
+
+        bool log_info;
+        bool log_suggestions;
+        bool log_errors;
+        bool log_warnings;
     };
 }
