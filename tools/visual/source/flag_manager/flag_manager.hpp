@@ -1,12 +1,14 @@
 #pragma once
 
-#include "../config/config.hpp"
-#include "../logger/logger.hpp"
-
 #include <algorithm>
+#include <string.h>
+#include <numeric>
 #include <string>
 #include <memory>
 #include <vector>
+
+#include "../config/config.hpp"
+#include "../logger/logger.hpp"
 
 namespace itl
 {
@@ -14,7 +16,7 @@ namespace itl
     {
     public:
         explicit FlagManager(int argc, char* argv[], const std::shared_ptr<Logger>& log);
-        bool containsFlag(const std::string& flag);
+        bool contains_flag(const std::string& flag);
     private:
         std::vector<std::string> flags;
         std::shared_ptr<Logger> logger;

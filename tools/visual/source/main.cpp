@@ -20,15 +20,15 @@ int main(int argc, char* argv[])
 
     int flag_number = argc - constants::system::required_command_args_size;
 
-    itl::FlagManager flagManager(argc, argv, logger);
+    itl::FlagManager flag_manager(argc, argv, logger);
 
-    logger->init(flagManager.containsFlag(constants::flags::logging_all),
-                 flagManager.containsFlag(constants::flags::logging_info),
-                 flagManager.containsFlag(constants::flags::logging_suggestions),
-                 flagManager.containsFlag(constants::flags::logging_erros),
-                 flagManager.containsFlag(constants::flags::logging_warnings));
+    logger->init(flag_manager.contains_flag(constants::flags::logging_all),
+                 flag_manager.contains_flag(constants::flags::logging_info),
+                 flag_manager.contains_flag(constants::flags::logging_suggestions),
+                 flag_manager.contains_flag(constants::flags::logging_erros),
+                 flag_manager.contains_flag(constants::flags::logging_warnings));
 
-    if(flagManager.containsFlag(constants::flags::testing))
+    if(flag_manager.contains_flag(constants::flags::testing))
     {
         testing::InitGoogleTest(&argc, argv);
 
