@@ -2,8 +2,9 @@
 
 namespace itl
 {
-    State::State(const std::string& title, const std::shared_ptr<Logger>& log)
-        : hardware_concurrency(std::thread::hardware_concurrency()), logger(log)
+    State::State(const std::string& title, const std::shared_ptr<Logger>& log,
+                 const std::shared_ptr<itl::FlagManager>& flag_manager)
+        : hardware_concurrency(std::thread::hardware_concurrency()), logger(log), flag_manager(flag_manager)
     {
         this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
@@ -51,6 +52,9 @@ namespace itl
         std::transform(fn.begin(), fn.end(), paths.begin(), convert_cvstr_to_str);
 
         std::string output = dir + "/output";
+        unsigned long long processed = 0;
+        const unsigned long long target = this->texture_manager->unique_size() * paths.size();
+        int8_t percent = 0;
 
         std::vector<std::future<bool>> results;
         for(int i = 0; i < this->texture_manager->unique_size(); i++)
@@ -58,6 +62,13 @@ namespace itl
             for(auto& var: paths)
             {
                 results.emplace_back(this->thread_pool->enqueue(&State::process_line, this, var, output, i, extension));
+            }
+
+            if(this->flag_manager->contains_flag(constants::flags::printing_steps) &&
+              (++processed) / static_cast<float>(target) > 0.1f * percent)
+            {
+                std::cout<<"Processed "<< percent << "%\n" <<std::flush;
+                percent += 10;
             }
         }
 
@@ -89,7 +100,6 @@ namespace itl
             this->logger->log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return false;
         }
-
 
         sf::Sprite base;
         sf::Sprite background;

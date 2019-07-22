@@ -20,15 +20,15 @@ int main(int argc, char* argv[])
 
     int flag_number = argc - constants::system::required_command_args_size;
 
-    itl::FlagManager flag_manager(argc, argv, logger);
+    std::shared_ptr<itl::FlagManager> flag_manager = std::make_shared<itl::FlagManager>(argc, argv, logger);
 
-    logger->init(flag_manager.contains_flag(constants::flags::logging_all),
-                 flag_manager.contains_flag(constants::flags::logging_info),
-                 flag_manager.contains_flag(constants::flags::logging_suggestions),
-                 flag_manager.contains_flag(constants::flags::logging_erros),
-                 flag_manager.contains_flag(constants::flags::logging_warnings));
+    logger->init(flag_manager->contains_flag(constants::flags::logging_all),
+                 flag_manager->contains_flag(constants::flags::logging_info),
+                 flag_manager->contains_flag(constants::flags::logging_suggestions),
+                 flag_manager->contains_flag(constants::flags::logging_erros),
+                 flag_manager->contains_flag(constants::flags::logging_warnings));
 
-    if(flag_manager.contains_flag(constants::flags::testing))
+    if(flag_manager->contains_flag(constants::flags::testing))
     {
         testing::InitGoogleTest(&argc, argv);
 
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    itl::State state("ImageToLatex", logger);
+    itl::State state("ImageToLatex", logger, flag_manager);
     return state.run(argv[flag_number + constants::system::dir_to_pics_idx],
                      argv[flag_number + constants::system::extension_idx],
                      argv[flag_number + constants::system::dir_to_data_idx]);
