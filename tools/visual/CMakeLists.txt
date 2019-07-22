@@ -14,15 +14,13 @@ add_executable(Visual
         source/state/state.cpp
         source/state/state.hpp
         source/manager/manager.hpp
-        source/manager/font_manager.cpp
-        source/manager/font_manager.hpp
         source/manager/texture_manager.cpp
         source/manager/texture_manager.hpp
         source/perlin_noise/perlin_noise.hpp
         source/perlin_noise/perlin_noise.cpp
         source/math/math.hpp
-        source/effect/EffectManager.cpp
-        source/effect/EffectManager.hpp
+        source/effect/effect_manager.cpp
+        source/effect/effect_manager.hpp
         source/flag_manager/flag_manager.cpp
         source/flag_manager/flag_manager.hpp
         source/utils/utils.hpp)
@@ -49,3 +47,6 @@ target_link_libraries(Visual gtest gtest_main)
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 target_link_libraries(Visual ${OpenCV_LIBS})
+
+#threadpool
+include_directories(external/threadpool)

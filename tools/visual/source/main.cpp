@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    FlagManager flagManager(argc, argv);
+    itl::FlagManager flagManager(argc, argv);
 
     if(flagManager.containsFlag(constants::flags::testing))
     {

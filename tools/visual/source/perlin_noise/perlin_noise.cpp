@@ -3,7 +3,7 @@
 itl::PerlinNoise::PerlinNoise()
 {
     itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
-                     Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
 
     for(int i = 0; i < constants::perlin_noise::noises_num; i++)
@@ -19,7 +19,7 @@ itl::PerlinNoise::PerlinNoise()
     }
 
     itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
-                     Logger::STREAM::CONSOLE,Logger::TYPE::INFO);
+                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 }
 
 void itl::PerlinNoise::generate(const std::string &dir) const noexcept

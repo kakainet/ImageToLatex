@@ -6,15 +6,14 @@ _build
 .merlin
 
 # cpp
-visual/cmake-build-debug/
-visual/.idea/
-visual/release/
-visual/debug/
-visual/Visual
-visual/visual
-visual/external
-unit_test_machine/cmake-build-debug/
-visual/gtest
+tools/visual/cmake-build-debug/
+tools/visual/.idea/
+tools/visual/release/
+tools/visual/debug/
+tools/visual/Visual
+tools/visual/visual
+tools/visual/external
+tools/visual/gtest
 
 # graphic
 *.png
