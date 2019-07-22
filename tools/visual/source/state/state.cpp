@@ -105,7 +105,9 @@ namespace itl
             window_guard.get()->draw(background);
             window_guard.get()->draw(*spr);
             sf::Texture ss_texture;
+            mtx.lock();
             ss_texture.create(constants::window::size.x, constants::window::size.y);
+            mtx.unlock();
             ss_texture.update(*window_guard.get());
             sf::Image screen = ss_texture.copyToImage();
             std::stringstream path_to_save;

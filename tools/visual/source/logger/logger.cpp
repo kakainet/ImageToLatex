@@ -2,6 +2,17 @@
 
 namespace itl
 {
+    Logger::Logger(bool all, bool info, bool suggestions, bool errors, bool warnings)
+            : log_all(all), log_info(info), log_suggestions(suggestions), log_errors(errors), log_warnings(warnings)
+    {
+        this->init(all, info, suggestions, errors, warnings);
+    }
+
+    Logger::Logger()
+        : Logger(true, true, true, true, true)
+    {
+    }
+
     void Logger::log(const std::string& message, const Logger::STREAM& stream, const Logger::TYPE& type) noexcept
     {
         if(type == TYPE::INFO && !this->log_info) return;
@@ -90,8 +101,7 @@ namespace itl
         }
     }
 
-    Logger::Logger(bool all, bool info, bool suggestions, bool errors, bool warnings)
-        : log_all(all), log_info(info), log_suggestions(suggestions), log_errors(errors), log_warnings(warnings)
+    void Logger::init(bool all, bool info, bool suggestions, bool errors, bool warnings)
     {
         auto set_all_to_val = [=](bool val)
         {
@@ -111,6 +121,13 @@ namespace itl
         if(all)
         {
             set_all_to_val(true);
+        }else
+        {
+            this->log_all = false;
+            this->log_info = info;
+            this->log_suggestions = suggestions;
+            this->log_errors = errors;
+            this->log_warnings = warnings;
         }
     }
 }

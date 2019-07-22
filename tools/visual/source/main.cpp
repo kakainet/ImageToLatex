@@ -9,7 +9,7 @@
 
 int main(int argc, char* argv[])
 {
-    std::shared_ptr<itl::Logger> logger;
+    std::shared_ptr<itl::Logger> logger = std::make_shared<itl::Logger>();
 
     if(argc < constants::system::required_command_args_size)
     {
@@ -18,7 +18,15 @@ int main(int argc, char* argv[])
         return constants::system::error_code;
     }
 
+    int flag_number = argc - constants::system::required_command_args_size;
+
     itl::FlagManager flagManager(argc, argv, logger);
+
+    logger->init(flagManager.containsFlag(constants::flags::logging_all),
+                 flagManager.containsFlag(constants::flags::logging_info),
+                 flagManager.containsFlag(constants::flags::logging_suggestions),
+                 flagManager.containsFlag(constants::flags::logging_erros),
+                 flagManager.containsFlag(constants::flags::logging_warnings));
 
     if(flagManager.containsFlag(constants::flags::testing))
     {
@@ -31,7 +39,7 @@ int main(int argc, char* argv[])
     }
 
     itl::State state("ImageToLatex", logger);
-    return state.run(argv[constants::system::dir_to_pics_idx],
-                     argv[constants::system::extension_idx],
-                     argv[constants::system::dir_to_data_idx]);
+    return state.run(argv[flag_number + constants::system::dir_to_pics_idx],
+                     argv[flag_number + constants::system::extension_idx],
+                     argv[flag_number + constants::system::dir_to_data_idx]);
 }
