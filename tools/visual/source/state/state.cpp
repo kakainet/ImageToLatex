@@ -52,9 +52,6 @@ namespace itl
         std::transform(fn.begin(), fn.end(), paths.begin(), convert_cvstr_to_str);
 
         std::string output = dir + "/output";
-        unsigned long long processed = 0;
-        const unsigned long long target = this->texture_manager->unique_size() * paths.size();
-        int8_t percent = 0;
 
         std::vector<std::future<bool>> results;
         for(int i = 0; i < this->texture_manager->unique_size(); i++)
@@ -63,13 +60,6 @@ namespace itl
             {
                 results.emplace_back(this->thread_pool->enqueue(&State::process_line, this, var, output, i, extension));
             }
-
-            if(this->flag_manager->contains_flag(constants::flags::printing_steps) &&
-              (++processed) / static_cast<float>(target) > 0.1f * percent)
-            {
-                std::cout<<"Processed "<< percent << "%\n" <<std::flush;
-                percent += 10;
-            }
         }
 
         return std::accumulate(results.begin(), results.end(), true,
@@ -77,7 +67,7 @@ namespace itl
     }
 
     bool State::process_line(const std::string path_to_raw, const std::string dir_to_save,
-            int background_number, const std::string extension) noexcept
+                             int background_number, const std::string extension) noexcept
     {
         if(this->assigned_threads_to_data != this->hardware_concurrency &&
            this->convert_from_thread_to_texture.find(std::this_thread::get_id()) !=
@@ -101,6 +91,7 @@ namespace itl
             return false;
         }
 
+
         sf::Sprite base;
         sf::Sprite background;
         background.setTexture(background_guard);
@@ -115,9 +106,7 @@ namespace itl
             window_guard.get()->draw(background);
             window_guard.get()->draw(*spr);
             sf::Texture ss_texture;
-            mtx.lock();
             ss_texture.create(constants::window::size.x, constants::window::size.y);
-            mtx.unlock();
             ss_texture.update(*window_guard.get());
             sf::Image screen = ss_texture.copyToImage();
             std::stringstream path_to_save;
