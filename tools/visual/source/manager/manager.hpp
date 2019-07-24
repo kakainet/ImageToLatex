@@ -22,7 +22,7 @@ namespace itl
         virtual bool update_single(const std::string& path_to_data, int idx_copy) = 0;
         int size() const;
         int unique_size() const;
-        T& get(int idx_copy, int idx_data);
+        T* get(int idx_copy, int idx_data);
     };
 
     template<class T>
@@ -38,7 +38,7 @@ namespace itl
     }
 
     template<class T>
-    T& Manager<T>::get(int idx_copy, int idx_data)
+    T* Manager<T>::get(int idx_copy, int idx_data)
     {
         if(this->storage[idx_copy].first != this->data_paths[idx_data])
         {
@@ -48,7 +48,7 @@ namespace itl
             }
         }
 
-        return this->storage[idx_copy].second;
+        return &this->storage[idx_copy].second;
     }
 
     template<class T>
