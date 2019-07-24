@@ -68,6 +68,7 @@ namespace itl
     bool State::process_line(const std::string path_to_raw, const std::string dir_to_save,
             int background_number, const std::string extension) noexcept
     {
+        std::unique_lock<std::mutex> lck(this->mtx);
         if(this->assigned_threads_to_data != this->hardware_concurrency &&
            this->convert_from_thread_to_texture.find(std::this_thread::get_id()) !=
            this->convert_from_thread_to_texture.end())
@@ -76,16 +77,18 @@ namespace itl
         }
 
         auto window_guard = this->windows.front();
+
         this->windows.pop();
-        mtx.lock();
         auto background_guard = this->texture_manager->get(
                 this->convert_from_thread_to_texture[std::this_thread::get_id()], background_number);
-        mtx.unlock();
+        lck.unlock();
+
         int itr = 0;
         sf::Texture sprite_texture;
 
         if(!sprite_texture.loadFromFile(path_to_raw))
         {
+            lck.lock();
             Logger::Log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return false;
         }
@@ -93,11 +96,17 @@ namespace itl
 
         sf::Sprite base;
         sf::Sprite background;
+        lck.lock();
+
         background.setTexture(background_guard);
         base.setTexture(sprite_texture);
+
+
         auto file_name = (path_to_raw.substr(path_to_raw.find_last_of('/')+1));
         file_name = file_name.substr(0, file_name.find_last_of('.'));
+
         auto sprites = this->effect_manager->generateSprites(base);
+        lck.unlock();
 
         for(auto& spr : sprites)
         {
@@ -105,7 +114,9 @@ namespace itl
             window_guard.get()->draw(background);
             window_guard.get()->draw(*spr);
             sf::Texture ss_texture;
+            lck.lock();
             ss_texture.create(constants::window::size.x, constants::window::size.y);
+            lck.unlock();
             ss_texture.update(*window_guard.get());
             sf::Image screen = ss_texture.copyToImage();
             std::stringstream path_to_save;
@@ -116,9 +127,11 @@ namespace itl
                          << "_"
                          << std::to_string(itr++)
                          << extension;
+
             screen.saveToFile(path_to_save.str());
         }
 
+        lck.lock();
         this->windows.push(window_guard);
         return true;
     }
