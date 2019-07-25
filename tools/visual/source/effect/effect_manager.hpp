@@ -1,18 +1,21 @@
 #pragma once
 
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/System/Vector2.hpp>
-
-#include "../logger/logger.hpp"
-#include "../config/config.hpp"
-#include "../math/math.hpp"
-
 #include <memory>
 #include <vector>
 #include <map>
 #include <functional>
 
-#include <string.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/utility.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
+#include "../logger/logger.hpp"
+#include "../config/config.hpp"
+#include "../math/math.hpp"
+
+#include <cstring>
 
 namespace itl
 {
@@ -20,7 +23,7 @@ namespace itl
     {
     public:
         EffectManager();
-        std::vector<std::shared_ptr<sf::Sprite>> generateSprites(sf::Sprite& sprite);
+        std::vector<std::shared_ptr<cv::Mat>> generateSprites(cv::Mat& sprite);
 
     private:
 
@@ -31,7 +34,7 @@ namespace itl
             POSITION
         };
 
-        std::map<FUNCTION_T, std::vector<std::function<void(sf::Sprite&)>>> functions;
+        std::map<FUNCTION_T, std::vector<std::function<void(cv::Mat&)>>> functions;
 
         /**
          * @brief packIndexes[i][j] is index of j'th effect from i'th pack.

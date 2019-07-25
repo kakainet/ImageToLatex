@@ -15,8 +15,6 @@ add_executable(Visual
         source/state/state.cpp
         source/state/state.hpp
         source/manager/manager.hpp
-        source/manager/texture_manager.cpp
-        source/manager/texture_manager.hpp
         source/perlin_noise/perlin_noise.hpp
         source/perlin_noise/perlin_noise.cpp
         source/math/math.hpp
@@ -25,11 +23,6 @@ add_executable(Visual
         source/flag_manager/flag_manager.cpp
         source/flag_manager/flag_manager.hpp
         source/utils/utils.hpp)
-
-#sfml
-set(SFML_DIR "external/sfml/lib/cmake/SFML")
-find_package(SFML 2.5.1 COMPONENTS graphics audio REQUIRED)
-target_link_libraries(Visual sfml-graphics sfml-audio)
 
 #boost
 set(Boost_USE_STATIC_LIBS OFF)

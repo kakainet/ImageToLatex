@@ -1,13 +1,14 @@
 #pragma once
 
-#include "../../external/sfml/include/SFML/System/Vector2.hpp"
 #include <vector>
+
+#include <opencv2/core.hpp>
 
 namespace constants
 {
     namespace window
     {
-        const auto size = sf::Vector2u{800,800};
+        const auto size = cv::Vec2i{800,800};
     }
 
     namespace system
@@ -46,8 +47,8 @@ namespace constants
 
     namespace effect
     {
-        const sf::Vector2f scale_incr_bounds = {1.05f, 2.f};
-        const sf::Vector2f scale_decr_bounds = {0.5f, 0.95f};
+        const cv::Vec2f scale_incr_bounds = {1.05f, 2.f};
+        const cv::Vec2f scale_decr_bounds = {0.5f, 0.95f};
         constexpr auto max_degree = 45;
         constexpr auto accuracy = 100;
     }

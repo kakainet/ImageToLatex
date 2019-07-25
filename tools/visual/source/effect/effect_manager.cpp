@@ -18,17 +18,17 @@ namespace itl
 
     void EffectManager::load_functions()
     {
-        this->functions[FUNCTION_T::SCALE] = std::vector<std::function<void(sf::Sprite&)>>();
-        this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
+        /*this->functions[FUNCTION_T::SCALE] = std::vector<std::function<void(cv::Mat&)>>();
+        this->functions[FUNCTION_T::SCALE].emplace_back([](cv::Mat& sprite)
                                                         {
                                                             auto val = Math::random_float(
                                                                     constants::effect::scale_incr_bounds.x,
                                                                     constants::effect::scale_incr_bounds.y,
                                                                     constants::effect::accuracy);
-                                                            sprite.setScale({val, val});
+                                                            sprite.({val, val});
                                                         });
 
-        this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
+        this->functions[FUNCTION_T::SCALE].emplace_back([](cv::Mat& sprite)
                                                         {
                                                             auto rand = [](){return Math::random_float(
                                                                     constants::effect::scale_incr_bounds.x,
@@ -37,7 +37,7 @@ namespace itl
                                                             sprite.setScale({rand(), rand()});
                                                         });
 
-        this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
+        this->functions[FUNCTION_T::SCALE].emplace_back([](cv::Mat& sprite)
                                                         {
                                                             auto val = Math::random_float(
                                                                     constants::effect::scale_decr_bounds.x,
@@ -46,40 +46,63 @@ namespace itl
                                                             sprite.setScale({val, val});
                                                         });
 
-        this->functions[FUNCTION_T::SCALE].emplace_back([](sf::Sprite& sprite)
+        this->functions[FUNCTION_T::SCALE].emplace_back([](cv::Mat& sprite)
                                                         {
                                                             auto rand = [](){return Math::random_float(
                                                                     constants::effect::scale_decr_bounds.x,
                                                                     constants::effect::scale_decr_bounds.y,
                                                                     constants::effect::accuracy);};
                                                             sprite.setScale({rand(), rand()});
-                                                        });
+                                                        });*/
 
-        this->functions[FUNCTION_T::ROTATE] = std::vector<std::function<void(sf::Sprite&)>>();
-        this->functions[FUNCTION_T::ROTATE].emplace_back([](sf::Sprite& sprite)
+        this->functions[FUNCTION_T::ROTATE] = std::vector<std::function<void(cv::Mat&)>>();
+        this->functions[FUNCTION_T::ROTATE].emplace_back([](cv::Mat& sprite)
                                                          {
                                                              auto val = Math::random_float(
                                                                      0,
                                                                      constants::effect::max_degree,
                                                                      constants::effect::accuracy);
-                                                             sprite.setRotation(val);
+
+                                                                 cv::Mat r = getRotationMatrix2D(
+                                                                         cv::Point2f(sprite.cols/2.f,
+                                                                                 sprite.rows/2.f),
+                                                                                 val,
+                                                                                 1.0);
+
+                                                                 cv::warpAffine(sprite,
+                                                                         sprite,
+                                                                         r,
+                                                                         cv::Size(sprite.cols, sprite.rows));
+
                                                          });
 
-        this->functions[FUNCTION_T::ROTATE].emplace_back([](sf::Sprite& sprite)
+        this->functions[FUNCTION_T::ROTATE].emplace_back([](cv::Mat& sprite)
                                                          {
                                                              auto val = Math::random_float(
                                                                      -constants::effect::max_degree,
                                                                      0,
                                                                      constants::effect::accuracy);
-                                                             sprite.setRotation(val);
+
+                                                             cv::Mat r = getRotationMatrix2D(
+                                                                     cv::Point2f(sprite.cols/2.f,
+                                                                                 sprite.rows/2.f),
+                                                                     val,
+                                                                     1.0);
+
+                                                             cv::warpAffine(sprite,
+                                                                            sprite,
+                                                                            r,
+                                                                            cv::Size(sprite.cols, sprite.rows));
                                                          });
 
-        this->functions[FUNCTION_T::POSITION].emplace_back([](sf::Sprite& sprite)
+        this->functions[FUNCTION_T::POSITION].emplace_back([](cv::Mat& sprite)
                                                            {
-                                                               auto val = sf::Vector2f(
-                                                                       Math::random(0, constants::window::size.x),
-                                                                       Math::random(0, constants::window::size.y));
-                                                               sprite.setPosition(val);
+                                                               auto val = cv::Vec2f(
+                                                                       Math::random(0, constants::window::size(0)),
+                                                                       Math::random(0, constants::window::size(1)));
+                                                               //cv::Mat imgTranslated(sprite.size(),sprite.type(), cv::Scalar::all(0));
+                                                               sprite(cv::Rect(val(0), val(1),sprite.cols-val(0),sprite.rows-val(1)))
+                                                               .copyTo(sprite(cv::Rect(0,0,sprite.cols-val(0),sprite.rows-val(1))));
                                                            });
     }
 
@@ -124,13 +147,13 @@ namespace itl
         }
     }
 
-    std::vector<std::shared_ptr<sf::Sprite>> itl::EffectManager::generateSprites(sf::Sprite &sprite)
+    std::vector<std::shared_ptr<cv::Mat>> itl::EffectManager::generateSprites(cv::Mat &sprite)
     {
-        auto result = std::vector<std::shared_ptr<sf::Sprite>>();
+        auto result = std::vector<std::shared_ptr<cv::Mat>>();
 
         for(auto& indexPack: this->packIndexes)
         {
-            auto new_sprite = std::make_shared<sf::Sprite>(sprite);
+            auto new_sprite = std::make_shared<cv::Mat>(sprite);
 
             for(int i = 0; i < indexPack.size(); i++)
             {

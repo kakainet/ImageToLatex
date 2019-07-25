@@ -3,17 +3,11 @@
 namespace itl
 {
     State::State(const std::string& title)
-        :hardware_concurrency(std::thread::hardware_concurrency())
+        :hardware_concurrency(1)
     {
         itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
-        this->texture_manager = std::make_shared<TextureManager>();
-        for(int i = 0; i < this->hardware_concurrency; i++)
-        {
-            this->windows.emplace(std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title));
-
-        }
         this->effect_manager = std::make_unique<EffectManager>();
         this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
 
@@ -33,7 +27,7 @@ namespace itl
 
     bool State::load_textures(const std::string& path_to_data) noexcept
     {
-        return this->texture_manager->load_data(path_to_data, this->hardware_concurrency);
+        return true;
     }
 
     bool State::generate_images(const std::string& dir, const std::string& extension)
@@ -53,7 +47,7 @@ namespace itl
         std::string output = dir + "/output";
 
         std::vector<std::future<bool>> results;
-        for(int i = 0; i < this->texture_manager->unique_size(); i++)
+        for(int i = 0; i < 1; i++)
         {
             for(auto& var: paths)
             {
@@ -68,68 +62,34 @@ namespace itl
                 [=](bool acc, auto&& res) { return acc && res.get(); });
     }
 
-    bool State::process_line(const std::string path_to_raw, const std::string dir_to_save,
-            int background_number, const std::string extension) noexcept
+    bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save,
+                      int background_number, const std::string& extension) noexcept
     {
-        std::shared_ptr<sf::RenderWindow> window_guard = nullptr;
-        sf::Texture* background_guard = nullptr;
-
-        {
-            std::scoped_lock<std::mutex> lck(this->mtx);
-            if(this->assigned_threads_to_data != this->hardware_concurrency &&
-               this->convert_from_thread_to_texture.find(std::this_thread::get_id()) !=
-               this->convert_from_thread_to_texture.end())
-            {
-                this->convert_from_thread_to_texture[std::this_thread::get_id()] = this->assigned_threads_to_data++;
-            }
-
-            window_guard = this->windows.front();
-            this->windows.pop();
-
-            background_guard = this->texture_manager->get(
-                    this->convert_from_thread_to_texture[std::this_thread::get_id()], background_number);
-        }
-
-        int itr = 0;
-        sf::Texture sprite_texture;
-
-        if(!sprite_texture.loadFromFile(path_to_raw))
+        cv::Mat base(cv::imread(path_to_raw, CV_LOAD_IMAGE_COLOR));
+        cv::Mat background(cv::imread("data/textures/white.png", CV_LOAD_IMAGE_COLOR));
+        if(!base.data)
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
             Logger::Log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return false;
         }
 
+        int itr = 0;
 
-        sf::Sprite base;
-        sf::Sprite background;
         std::string file_name;
-        std::vector<std::shared_ptr<sf::Sprite>> sprites;
+        std::vector<std::shared_ptr<cv::Mat>> sprites;
 
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
-            background.setTexture(*background_guard);
-            base.setTexture(sprite_texture);
             file_name = (path_to_raw.substr(path_to_raw.find_last_of('/')+1));
             file_name = file_name.substr(0, file_name.find_last_of('.'));
             sprites = this->effect_manager->generateSprites(base);
         }
 
-
         for(auto& spr : sprites)
         {
-            window_guard->clear();
-            window_guard->draw(background);
-            window_guard->draw(*spr);
-            sf::Texture ss_texture;
-
-            ss_texture.create(constants::window::size.x, constants::window::size.y);
-
-            ss_texture.update(*window_guard);
-            sf::Image screen = ss_texture.copyToImage();
             std::stringstream path_to_save;
             std::scoped_lock<std::mutex> lck(this->mtx);
-
 
             path_to_save << dir_to_save
                          << "/"
@@ -139,12 +99,9 @@ namespace itl
                          << std::to_string(itr++)
                          << extension;
 
-            screen.saveToFile(path_to_save.str());
-        }
-
-        {
-            std::scoped_lock<std::mutex> lck(this->mtx);
-            this->windows.push(window_guard);
+            cv::Mat dst;
+            cv::add(background, *spr, dst);
+            cv::imwrite(path_to_save.str(), dst);
         }
 
         return true;
