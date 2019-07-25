@@ -118,20 +118,18 @@ namespace itl
 
         for(auto& spr : sprites)
         {
-            //std::cout<<std::this_thread::get_id()<<"\n";
             window_guard->clear();
             window_guard->draw(background);
             window_guard->draw(*spr);
             sf::Texture ss_texture;
 
-            {
-                std::scoped_lock<std::mutex> lck(this->mtx);
-                ss_texture.create(constants::window::size.x, constants::window::size.y);
-            }
+            ss_texture.create(constants::window::size.x, constants::window::size.y);
 
             ss_texture.update(*window_guard);
             sf::Image screen = ss_texture.copyToImage();
             std::stringstream path_to_save;
+            std::scoped_lock<std::mutex> lck(this->mtx);
+
 
             path_to_save << dir_to_save
                          << "/"
