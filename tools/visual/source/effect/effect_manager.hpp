@@ -23,13 +23,13 @@ namespace itl
     {
     public:
         EffectManager();
-        std::vector<std::shared_ptr<cv::Mat>> generateSprites(cv::Mat& sprite);
+        std::vector<std::shared_ptr<cv::Mat>> generateSprites(const cv::Mat& sprite);
 
     private:
 
         enum class FUNCTION_T
         {
-            SCALE = 0,
+            //SCALE = 0,
             ROTATE,
             POSITION
         };
@@ -44,6 +44,8 @@ namespace itl
         void load_functions();
 
         void generate_all_effect_packs();
+
+        void rotate(cv::Mat& sprite, float angle);
 
     };
 }

@@ -56,43 +56,25 @@ namespace itl
                                                         });*/
 
         this->functions[FUNCTION_T::ROTATE] = std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[FUNCTION_T::ROTATE].emplace_back([](cv::Mat& sprite)
+        this->functions[FUNCTION_T::ROTATE].emplace_back([this](cv::Mat& sprite)
                                                          {
                                                              auto val = Math::random_float(
                                                                      0,
                                                                      constants::effect::max_degree,
                                                                      constants::effect::accuracy);
 
-                                                                 cv::Mat r = getRotationMatrix2D(
-                                                                         cv::Point2f(sprite.cols/2.f,
-                                                                                 sprite.rows/2.f),
-                                                                                 val,
-                                                                                 1.0);
-
-                                                                 cv::warpAffine(sprite,
-                                                                         sprite,
-                                                                         r,
-                                                                         cv::Size(sprite.cols, sprite.rows));
+                                                             this->rotate(sprite, val);
 
                                                          });
 
-        this->functions[FUNCTION_T::ROTATE].emplace_back([](cv::Mat& sprite)
+        this->functions[FUNCTION_T::ROTATE].emplace_back([this](cv::Mat& sprite)
                                                          {
                                                              auto val = Math::random_float(
                                                                      -constants::effect::max_degree,
                                                                      0,
                                                                      constants::effect::accuracy);
 
-                                                             cv::Mat r = getRotationMatrix2D(
-                                                                     cv::Point2f(sprite.cols/2.f,
-                                                                                 sprite.rows/2.f),
-                                                                     val,
-                                                                     1.0);
-
-                                                             cv::warpAffine(sprite,
-                                                                            sprite,
-                                                                            r,
-                                                                            cv::Size(sprite.cols, sprite.rows));
+                                                             this->rotate(sprite, val);
                                                          });
 
         this->functions[FUNCTION_T::POSITION].emplace_back([](cv::Mat& sprite)
@@ -147,23 +129,36 @@ namespace itl
         }
     }
 
-    std::vector<std::shared_ptr<cv::Mat>> itl::EffectManager::generateSprites(cv::Mat &sprite)
+    std::vector<std::shared_ptr<cv::Mat>> itl::EffectManager::generateSprites(const cv::Mat &sprite)
     {
         auto result = std::vector<std::shared_ptr<cv::Mat>>();
 
         for(auto& indexPack: this->packIndexes)
         {
-            auto new_sprite = std::make_shared<cv::Mat>(sprite);
+            auto new_sprite = cv::Mat(sprite);
 
-            for(int i = 0; i < indexPack.size(); i++)
+            for(size_t i = 0; i < indexPack.size(); i++)
             {
                 auto fun = static_cast<FUNCTION_T>(i);
-                this->functions[fun][indexPack[i]](*new_sprite);
+                this->functions[fun][indexPack[i]](new_sprite);
             }
 
-            result.push_back(new_sprite);
+            result.push_back(std::make_shared<cv::Mat>(new_sprite));
         }
 
         return result;
+    }
+
+    void EffectManager::rotate(cv::Mat &sprite, float angle)
+    {
+        cv::Point2f center((sprite.cols-1)/2.0, (sprite.rows-1)/2.0);
+        cv::Mat rot = cv::getRotationMatrix2D(center, angle, 1.0);
+        cv::Rect2f bbox = cv::RotatedRect(cv::Point2f(), sprite.size(), angle).boundingRect2f();
+        rot.at<double>(0,2) += bbox.width/2.0 - sprite.cols/2.0;
+        rot.at<double>(1,2) += bbox.height/2.0 - sprite.rows/2.0;
+
+        cv::Mat dst;
+        cv::warpAffine(sprite, dst, rot, bbox.size());
+        sprite = dst;
     }
 }
