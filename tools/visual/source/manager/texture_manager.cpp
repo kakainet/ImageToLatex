@@ -50,8 +50,6 @@ namespace itl
 
     bool TextureManager::update_single(const std::string& path, int idx_copy)
     {
-        std::lock_guard<std::mutex> lck(mtx);
-
         if(!this->storage[idx_copy].second.loadFromFile(path_to_data + path))
         {
             return false;
