@@ -16,10 +16,10 @@
 
 namespace itl
 {
-    class EffectManager
+    class EffectApplicator
     {
     public:
-        EffectManager();
+        explicit EffectApplicator(const std::shared_ptr<Logger>& log);
         std::vector<std::shared_ptr<sf::Sprite>> generateSprites(sf::Sprite& sprite);
 
     private:
@@ -41,6 +41,8 @@ namespace itl
         void load_functions();
 
         void generate_all_effect_packs();
+
+        std::shared_ptr<Logger> logger;
 
     };
 }

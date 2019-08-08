@@ -9,27 +9,37 @@
 
 int main(int argc, char* argv[])
 {
+    std::shared_ptr<itl::Logger> logger = std::make_shared<itl::Logger>();
+
     if(argc < constants::system::required_command_args_size)
     {
-        itl::Logger::Log(constants::system::wrong_args_size, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
-        itl::Logger::Log(constants::system::usage, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE::INFO);
-        return 0;
+        logger->log(constants::system::wrong_args_size, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
+        logger->log(constants::system::usage, itl::Logger::STREAM::CONSOLE, itl::Logger::TYPE::INFO);
+        return constants::system::error_code;
     }
 
-    itl::FlagManager flagManager(argc, argv);
+    int flag_number = argc - constants::system::required_command_args_size;
 
-    if(flagManager.containsFlag(constants::flags::testing))
+    std::shared_ptr<itl::FlagManager> flag_manager = std::make_shared<itl::FlagManager>(argc, argv, logger);
+
+    logger->init(flag_manager->contains_flag(constants::flags::logging_all),
+                 flag_manager->contains_flag(constants::flags::logging_info),
+                 flag_manager->contains_flag(constants::flags::logging_suggestions),
+                 flag_manager->contains_flag(constants::flags::logging_erros),
+                 flag_manager->contains_flag(constants::flags::logging_warnings));
+
+    if(flag_manager->contains_flag(constants::flags::testing))
     {
         testing::InitGoogleTest(&argc, argv);
 
         if(RUN_ALL_TESTS() != constants::gtest::tests_passed)
         {
-            itl::Logger::Log(constants::gtest::fail_msg, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::WARNING);
+            logger->log(constants::gtest::fail_msg, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::WARNING);
         }
     }
 
-    itl::State state("ImageToLatex");
-    return state.run(argv[constants::system::dir_to_pics_idx],
-                     argv[constants::system::extension_idx],
-                     argv[constants::system::dir_to_data_idx]);
+    itl::State state("ImageToLatex", logger, flag_manager);
+    return state.run(argv[flag_number + constants::system::dir_to_pics_idx],
+                     argv[flag_number + constants::system::extension_idx],
+                     argv[flag_number + constants::system::dir_to_data_idx]);
 }
