@@ -1,0 +1,4 @@
+(library
+  (name latex)
+  (libraries core)
+  (preprocess (pps ppx_jane)))

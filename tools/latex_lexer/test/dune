@@ -1,0 +1,4 @@
+(tests
+  (names test_helpers)
+  (libraries core ounit latex)
+  (preprocess (pps ppx_jane)))
