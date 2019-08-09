@@ -4,7 +4,7 @@ project(Visual)
 
 #cpp
 set_target_properties(PROPERTIES CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -std=c++17")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -std=c++17 -O3")
 
 #sources
 add_executable(Visual
