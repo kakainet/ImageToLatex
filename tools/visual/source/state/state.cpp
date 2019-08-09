@@ -67,7 +67,7 @@ namespace itl
     {
         cv::Mat base(cv::imread(path_to_raw, CV_LOAD_IMAGE_COLOR));
         cv::Mat background(cv::imread("data/textures/white.png", CV_LOAD_IMAGE_COLOR));
-        if(!base.data)
+        if(!base.data || !background.data)
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
             Logger::Log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);

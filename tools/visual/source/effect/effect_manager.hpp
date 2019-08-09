@@ -47,5 +47,7 @@ namespace itl
 
         void rotate(cv::Mat& sprite, float angle);
 
+        void move(cv::Mat &img, float pixels_dx, float pixels_dy);
+
     };
 }

@@ -77,14 +77,12 @@ namespace itl
                                                              this->rotate(sprite, val);
                                                          });
 
-        this->functions[FUNCTION_T::POSITION].emplace_back([](cv::Mat& sprite)
+        this->functions[FUNCTION_T::POSITION].emplace_back([this](cv::Mat& sprite)
                                                            {
                                                                auto val = cv::Vec2f(
                                                                        Math::random(0, constants::window::size(0)),
                                                                        Math::random(0, constants::window::size(1)));
-                                                               //cv::Mat imgTranslated(sprite.size(),sprite.type(), cv::Scalar::all(0));
-                                                               sprite(cv::Rect(val(0), val(1),sprite.cols-val(0),sprite.rows-val(1)))
-                                                               .copyTo(sprite(cv::Rect(0,0,sprite.cols-val(0),sprite.rows-val(1))));
+                                                               this->move(sprite, val(0), val(1));
                                                            });
     }
 
@@ -135,7 +133,7 @@ namespace itl
 
         for(auto& indexPack: this->packIndexes)
         {
-            auto new_sprite = cv::Mat(sprite);
+            cv::Mat new_sprite = sprite;
 
             for(size_t i = 0; i < indexPack.size(); i++)
             {
@@ -160,5 +158,11 @@ namespace itl
         cv::Mat dst;
         cv::warpAffine(sprite, dst, rot, bbox.size());
         sprite = dst;
+    }
+
+    void EffectManager::move(cv::Mat &img, float pixels_dx, float pixels_dy)
+    {
+        cv::Mat trans_mat = (cv::Mat_<double>(2,3) << 1, 0, pixels_dx, 0, 1, pixels_dy);
+        cv::warpAffine(img,img,trans_mat,img.size());
     }
 }
