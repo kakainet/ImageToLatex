@@ -102,8 +102,10 @@ namespace itl
             cv::Mat temp(background.rows, background.cols, CV_32FC2);
             cv::Mat new_img(background.rows, background.cols, CV_32FC2);
             cv::resize(*spr, new_img, new_img.size(), 0, 0, cv::INTER_CUBIC);
-            cv::add(background, new_img, temp);
+            cv::add(new_img, background, temp);
             cv::imwrite(path_to_save.str(), temp);
+            //cv::imwrite(path_to_save.str(), background);
+
         }
 
         return true;

@@ -165,4 +165,24 @@ namespace itl
         cv::Mat trans_mat = (cv::Mat_<double>(2,3) << 1, 0, pixels_dx, 0, 1, pixels_dy);
         cv::warpAffine(img,img,trans_mat,img.size());
     }
+
+    cv::Mat EffectManager::put(const cv::Mat& fst, const cv::Mat& snd)
+    {
+        //put snd onto fst
+        cv::Mat output(fst);
+
+        const int x = 70;
+        const int y = 70;
+        cv::Mat destRoi;
+        try
+        {
+            destRoi = output(cv::Rect(x, y, snd.cols, snd.rows));
+        } catch (...)
+        {
+            Logger::Log(constants::effect::failed_merging, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            return cv::Mat();
+        }
+        snd.copyTo(destRoi);
+        return output;
+    }
 }

@@ -49,5 +49,8 @@ namespace itl
 
         void move(cv::Mat &img, float pixels_dx, float pixels_dy);
 
+        cv::Mat put(const cv::Mat& fst, const cv::Mat& snd);
+
+
     };
 }

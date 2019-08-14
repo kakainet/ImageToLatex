@@ -51,6 +51,7 @@ namespace constants
         const cv::Vec2f scale_decr_bounds = {0.5f, 0.95f};
         constexpr auto max_degree = 45;
         constexpr auto accuracy = 100;
+        constexpr auto failed_merging = "Failed during creating roi: out of image boundaries";
     }
 
     namespace flags
