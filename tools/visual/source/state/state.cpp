@@ -62,11 +62,71 @@ namespace itl
                 [=](bool acc, auto&& res) { return acc && res.get(); });
     }
 
+    void merge_images(cv::Mat* background, cv::Mat* upcoming, int x, int y)
+    {
+        printf("[DEBUG] merging images background x=%d, y=%d and data channels %d\n ", background->cols, background->rows, background->channels());
+        printf("[DEBUG] merging images upcoming x=%d, y=%d and data channels %d\n ", upcoming->cols, upcoming->rows, upcoming->channels());
+        auto handle_cv_8uc4 = [=](int i, int j)
+                {
+                    if(upcoming->at<cv::Vec4b>(j, i)[4] > 10)
+                    {
+                        background->at<cv::Vec4b>(y+j, x+i) = upcoming->at<cv::Vec4b>(j, i);
+                    }
+                };
+
+        auto handle_cv_8uc3 = [=](int i, int j)
+        {
+            background->at<cv::Vec4b>(y+j, x+i)[0] = upcoming->at<cv::Vec3b>(j, i)[0];
+            background->at<cv::Vec4b>(y+j, x+i)[1] = upcoming->at<cv::Vec3b>(j, i)[1];
+            background->at<cv::Vec4b>(y+j, x+i)[2] = upcoming->at<cv::Vec3b>(j, i)[2];
+            background->at<cv::Vec4b>(y+j, x+i)[3] = 255;
+        };
+
+        for(int i = 0; i < upcoming->cols; i++)
+        {
+            for(int j = 0; j < upcoming->rows; j++)
+            {
+                if(j + y >= background->rows)
+                {
+                    break;
+                }
+
+                if(x + i >= background->cols)
+                {
+                    return;
+                }
+
+                switch(upcoming->channels())
+                {
+                    case 3:
+                    {
+                        handle_cv_8uc3(i, j);
+                        break;
+                    }
+
+                    case 4:
+                    {
+                        handle_cv_8uc4(i, j);
+                        break;
+                    }
+
+                    default:
+                    {
+                    }
+                }
+
+            }
+        }
+    }
+
     bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save,
                       int background_number, const std::string& extension) noexcept
     {
-        cv::Mat base(cv::imread(path_to_raw, CV_LOAD_IMAGE_COLOR));
-        cv::Mat background(cv::imread("data/textures/blue.png", CV_LOAD_IMAGE_COLOR));
+        cv::Mat base(cv::imread(path_to_raw, cv::IMREAD_UNCHANGED));
+        cv::Mat background(cv::imread("data/textures/blue.png", cv::IMREAD_UNCHANGED));
+        printf("background rows and cols: %d %d\n",background.rows, background.cols);
+        printf("BASE rows and cols: %d %d\n",base.rows, base.cols);
+
         if(!base.data || !background.data)
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
@@ -107,7 +167,12 @@ namespace itl
 
             //put is exactly position effect - it is separated due to performance
             //using relative position instead of enlarging sprite is significantly faster
-            cv::imwrite(path_to_save.str(), this->effect_manager->put(background, *spr));
+            cv::Mat dst(std::max(background.rows, spr->rows), std::max(background.cols, spr->cols), CV_8UC4);
+            merge_images(&dst, &background, 0, 0);
+            //background.copyTo(dst);
+            //spr->copyTo(dst);
+            cv::imwrite(path_to_save.str(), dst);
+            //cv::imwrite(path_to_save.str(), this->effect_manager->put(background, *spr));
 
         }
 

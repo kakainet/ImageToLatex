@@ -160,21 +160,9 @@ namespace itl
 
     cv::Mat EffectManager::put(const cv::Mat& fst, const cv::Mat& snd)
     {
-        //put snd onto fst
-        cv::Mat output(snd);
-
-        const int x = 0;
-        const int y = 0;
-        cv::Mat destRoi;
-        try
-        {
-            destRoi = output(cv::Rect(x, y, snd.cols, snd.rows));
-        }catch (...)
-        {
-            Logger::Log(constants::effect::failed_merging, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
-            return cv::Mat();
-        }
-        snd.copyTo(destRoi);
+        cv::Mat output = fst.clone();
+        printf("output rows and cols: %d %d\n",output.rows, output.cols);
+        snd.copyTo(output(cv::Rect(0, 0, snd.cols, snd.rows))); // copy the small to the big, you get a 5px black boarde
         return output;
     }
 }
