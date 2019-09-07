@@ -66,11 +66,17 @@ namespace itl
                       int background_number, const std::string& extension) noexcept
     {
         cv::Mat base(cv::imread(path_to_raw, CV_LOAD_IMAGE_COLOR));
-        cv::Mat background(cv::imread("data/textures/white.png", CV_LOAD_IMAGE_COLOR));
+        cv::Mat background(cv::imread("data/textures/blue.png", CV_LOAD_IMAGE_COLOR));
         if(!base.data || !background.data)
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
-            Logger::Log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            std::stringstream ss;
+            ss << constants::texture::failed_load_texture
+               << "\n\tBase texture path: "
+               << path_to_raw
+               << "\n\tBackground texture path: "
+               << "data/textures/white.png";
+            Logger::Log(ss.str(), Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return false;
         }
 
@@ -99,12 +105,9 @@ namespace itl
                          << std::to_string(itr++)
                          << extension;
 
-            cv::Mat temp(background.rows, background.cols, CV_32FC2);
-            cv::Mat new_img(background.rows, background.cols, CV_32FC2);
-            cv::resize(*spr, new_img, new_img.size(), 0, 0, cv::INTER_CUBIC);
-            cv::add(new_img, background, temp);
-            cv::imwrite(path_to_save.str(), temp);
-            //cv::imwrite(path_to_save.str(), background);
+            //put is exactly position effect - it is separated due to performance
+            //using relative position instead of enlarging sprite is significantly faster
+            cv::imwrite(path_to_save.str(), this->effect_manager->put(background, *spr));
 
         }
 

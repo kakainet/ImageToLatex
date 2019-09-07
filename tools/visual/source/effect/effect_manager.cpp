@@ -76,14 +76,6 @@ namespace itl
 
                                                              this->rotate(sprite, val);
                                                          });
-
-        this->functions[FUNCTION_T::POSITION].emplace_back([this](cv::Mat& sprite)
-                                                           {
-                                                               auto val = cv::Vec2f(
-                                                                       Math::random(0, constants::window::size(0)),
-                                                                       Math::random(0, constants::window::size(1)));
-                                                               this->move(sprite, val(0), val(1));
-                                                           });
     }
 
 
@@ -169,15 +161,15 @@ namespace itl
     cv::Mat EffectManager::put(const cv::Mat& fst, const cv::Mat& snd)
     {
         //put snd onto fst
-        cv::Mat output(fst);
+        cv::Mat output(snd);
 
-        const int x = 70;
-        const int y = 70;
+        const int x = 0;
+        const int y = 0;
         cv::Mat destRoi;
         try
         {
             destRoi = output(cv::Rect(x, y, snd.cols, snd.rows));
-        } catch (...)
+        }catch (...)
         {
             Logger::Log(constants::effect::failed_merging, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return cv::Mat();
