@@ -51,6 +51,10 @@ namespace constants
         const cv::Vec2f scale_decr_bounds = {0.5f, 0.95f};
         constexpr auto max_degree = 45;
         constexpr auto accuracy = 100;
+        constexpr auto rgb_channel_idx = 3;
+        constexpr auto rgba_channel_idx = 4;
+        constexpr auto wrong_channel = "Failed during recognizing channel of input matrix";
+        constexpr auto alpha_trash_hold = 10;
         constexpr auto failed_merging = "Failed during creating roi: out of image boundaries";
     }
 

@@ -64,11 +64,9 @@ namespace itl
 
     void merge_images(cv::Mat* background, cv::Mat* upcoming, int x, int y)
     {
-        printf("[DEBUG] merging images background x=%d, y=%d and data channels %d\n ", background->cols, background->rows, background->channels());
-        printf("[DEBUG] merging images upcoming x=%d, y=%d and data channels %d\n ", upcoming->cols, upcoming->rows, upcoming->channels());
         auto handle_cv_8uc4 = [=](int i, int j)
                 {
-                    if(upcoming->at<cv::Vec4b>(j, i)[4] > 10)
+                    if(upcoming->at<cv::Vec4b>(j, i)[3] > constants::effect::alpha_trash_hold)
                     {
                         background->at<cv::Vec4b>(y+j, x+i) = upcoming->at<cv::Vec4b>(j, i);
                     }
@@ -79,7 +77,7 @@ namespace itl
             background->at<cv::Vec4b>(y+j, x+i)[0] = upcoming->at<cv::Vec3b>(j, i)[0];
             background->at<cv::Vec4b>(y+j, x+i)[1] = upcoming->at<cv::Vec3b>(j, i)[1];
             background->at<cv::Vec4b>(y+j, x+i)[2] = upcoming->at<cv::Vec3b>(j, i)[2];
-            background->at<cv::Vec4b>(y+j, x+i)[3] = 255;
+            background->at<cv::Vec4b>(y+j, x+i)[3] = std::numeric_limits<uint8_t>::max() - 1;
         };
 
         for(int i = 0; i < upcoming->cols; i++)
@@ -98,13 +96,13 @@ namespace itl
 
                 switch(upcoming->channels())
                 {
-                    case 3:
+                    case constants::effect::rgb_channel_idx:
                     {
                         handle_cv_8uc3(i, j);
                         break;
                     }
 
-                    case 4:
+                    case constants::effect::rgba_channel_idx:
                     {
                         handle_cv_8uc4(i, j);
                         break;
@@ -112,6 +110,9 @@ namespace itl
 
                     default:
                     {
+                        itl::Logger::Log(constants::effect::failed_merging,
+                                         Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+                        return;
                     }
                 }
 
@@ -124,8 +125,6 @@ namespace itl
     {
         cv::Mat base(cv::imread(path_to_raw, cv::IMREAD_UNCHANGED));
         cv::Mat background(cv::imread("data/textures/blue.png", cv::IMREAD_UNCHANGED));
-        printf("background rows and cols: %d %d\n",background.rows, background.cols);
-        printf("BASE rows and cols: %d %d\n",base.rows, base.cols);
 
         if(!base.data || !background.data)
         {
@@ -167,12 +166,14 @@ namespace itl
 
             //put is exactly position effect - it is separated due to performance
             //using relative position instead of enlarging sprite is significantly faster
-            cv::Mat dst(std::max(background.rows, spr->rows), std::max(background.cols, spr->cols), CV_8UC4);
+            cv::Mat dst(background.rows, background.cols, CV_8UC4);
+
+            int dx = background.cols - spr->cols;
+            int dy = background.rows - spr->rows;
+
             merge_images(&dst, &background, 0, 0);
-            //background.copyTo(dst);
-            //spr->copyTo(dst);
+            merge_images(&dst, &*spr, dx < 0 ? 0 : Math::random(0, dx), dy < 0 ? 0 : Math::random(0, dy));
             cv::imwrite(path_to_save.str(), dst);
-            //cv::imwrite(path_to_save.str(), this->effect_manager->put(background, *spr));
 
         }
 

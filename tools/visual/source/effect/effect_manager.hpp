@@ -24,8 +24,6 @@ namespace itl
     public:
         EffectManager();
         std::vector<std::shared_ptr<cv::Mat>> generateSprites(const cv::Mat& sprite);
-        cv::Mat put(const cv::Mat& fst, const cv::Mat& snd);
-
     private:
 
         enum class FUNCTION_T
@@ -49,8 +47,5 @@ namespace itl
         void rotate(cv::Mat& sprite, float angle);
 
         void move(cv::Mat &img, float pixels_dx, float pixels_dy);
-
-
-
     };
 }

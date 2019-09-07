@@ -157,12 +157,4 @@ namespace itl
         cv::Mat trans_mat = (cv::Mat_<double>(2,3) << 1, 0, pixels_dx, 0, 1, pixels_dy);
         cv::warpAffine(img,img,trans_mat,img.size());
     }
-
-    cv::Mat EffectManager::put(const cv::Mat& fst, const cv::Mat& snd)
-    {
-        cv::Mat output = fst.clone();
-        printf("output rows and cols: %d %d\n",output.rows, output.cols);
-        snd.copyTo(output(cv::Rect(0, 0, snd.cols, snd.rows))); // copy the small to the big, you get a 5px black boarde
-        return output;
-    }
 }
