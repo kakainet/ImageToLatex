@@ -10,6 +10,7 @@
 
 #include "../config/config.hpp"
 #include "../effect/effect_manager.hpp"
+#include "../transform/transform.hpp"
 
 namespace itl
 {
@@ -28,10 +29,8 @@ namespace itl
 
         std::unique_ptr<EffectManager> effect_manager;
         std::unique_ptr<ThreadPool> thread_pool;
+        std::unique_ptr<Transform> transform;
         const int hardware_concurrency;
-        int assigned_threads_to_data;
-        using texture_id = int;
-        std::map<std::thread::id, texture_id> convert_from_thread_to_texture;
         std::mutex mtx;
     };
 }

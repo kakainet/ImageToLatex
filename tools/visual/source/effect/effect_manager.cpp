@@ -63,7 +63,7 @@ namespace itl
                                                                      constants::effect::max_degree,
                                                                      constants::effect::accuracy);
 
-                                                             this->rotate(sprite, val);
+                                                             this->transform->rotate(sprite, val);
 
                                                          });
 
@@ -74,7 +74,7 @@ namespace itl
                                                                      0,
                                                                      constants::effect::accuracy);
 
-                                                             this->rotate(sprite, val);
+                                                             this->transform->rotate(sprite, val);
                                                          });
     }
 
@@ -92,11 +92,11 @@ namespace itl
 
         while (true)
         {
-            packIndexes.emplace_back();
+            pack_indexes.emplace_back();
 
             for (int i = 0; i < n; i++)
             {
-                packIndexes.back().emplace_back(indices[i]);
+                pack_indexes.back().emplace_back(indices[i]);
             }
 
             int next = n - 1;
@@ -119,11 +119,11 @@ namespace itl
         }
     }
 
-    std::vector<std::shared_ptr<cv::Mat>> itl::EffectManager::generateSprites(const cv::Mat &sprite)
+    std::vector<std::shared_ptr<cv::Mat>> EffectManager::generateSprites(const cv::Mat &sprite)
     {
         auto result = std::vector<std::shared_ptr<cv::Mat>>();
 
-        for(auto& indexPack: this->packIndexes)
+        for(auto& indexPack: this->pack_indexes)
         {
             cv::Mat new_sprite = sprite;
 
@@ -137,24 +137,5 @@ namespace itl
         }
 
         return result;
-    }
-
-    void EffectManager::rotate(cv::Mat &sprite, float angle)
-    {
-        cv::Point2f center((sprite.cols-1)/2.0, (sprite.rows-1)/2.0);
-        cv::Mat rot = cv::getRotationMatrix2D(center, angle, 1.0);
-        cv::Rect2f bbox = cv::RotatedRect(cv::Point2f(), sprite.size(), angle).boundingRect2f();
-        rot.at<double>(0,2) += bbox.width/2.0 - sprite.cols/2.0;
-        rot.at<double>(1,2) += bbox.height/2.0 - sprite.rows/2.0;
-
-        cv::Mat dst;
-        cv::warpAffine(sprite, dst, rot, bbox.size());
-        sprite = dst;
-    }
-
-    void EffectManager::move(cv::Mat &img, float pixels_dx, float pixels_dy)
-    {
-        cv::Mat trans_mat = (cv::Mat_<double>(2,3) << 1, 0, pixels_dx, 0, 1, pixels_dy);
-        cv::warpAffine(img,img,trans_mat,img.size());
     }
 }

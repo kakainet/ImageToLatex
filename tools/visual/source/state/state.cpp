@@ -17,11 +17,10 @@ namespace itl
 
         this->effect_manager = std::make_unique<EffectManager>();
         this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
+        this->transform = std::make_unique<Transform>();
 
         itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
-
-        this->assigned_threads_to_data = 0;
     }
 
     int State::run(const std::string& path_to_pictures, const std::string& extension, const std::string& path_to_data)
@@ -67,64 +66,6 @@ namespace itl
 
         return std::accumulate(results.begin(), results.end(), true,
                 [=](bool acc, auto&& res) { return acc && res.get(); });
-    }
-
-    void merge_images(cv::Mat* background, cv::Mat* upcoming, int x, int y)
-    {
-        auto handle_cv_8uc4 = [=](int i, int j)
-                {
-                    if(upcoming->at<cv::Vec4b>(j, i)[3] > constants::effect::alpha_trash_hold)
-                    {
-                        background->at<cv::Vec4b>(y+j, x+i) = upcoming->at<cv::Vec4b>(j, i);
-                    }
-                };
-
-        auto handle_cv_8uc3 = [=](int i, int j)
-        {
-            background->at<cv::Vec4b>(y+j, x+i)[0] = upcoming->at<cv::Vec3b>(j, i)[0];
-            background->at<cv::Vec4b>(y+j, x+i)[1] = upcoming->at<cv::Vec3b>(j, i)[1];
-            background->at<cv::Vec4b>(y+j, x+i)[2] = upcoming->at<cv::Vec3b>(j, i)[2];
-            background->at<cv::Vec4b>(y+j, x+i)[3] = std::numeric_limits<uint8_t>::max() - 1;
-        };
-
-        for(int i = 0; i < upcoming->cols; i++)
-        {
-            for(int j = 0; j < upcoming->rows; j++)
-            {
-                if(j + y >= background->rows)
-                {
-                    break;
-                }
-
-                if(x + i >= background->cols)
-                {
-                    return;
-                }
-
-                switch(upcoming->channels())
-                {
-                    case constants::effect::rgb_channel_idx:
-                    {
-                        handle_cv_8uc3(i, j);
-                        break;
-                    }
-
-                    case constants::effect::rgba_channel_idx:
-                    {
-                        handle_cv_8uc4(i, j);
-                        break;
-                    }
-
-                    default:
-                    {
-                        itl::Logger::Log(constants::effect::failed_merging,
-                                         Logger::STREAM::BOTH, Logger::TYPE::ERROR);
-                        return;
-                    }
-                }
-
-            }
-        }
     }
 
     bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save,
@@ -178,10 +119,9 @@ namespace itl
             int dx = background.cols - spr->cols;
             int dy = background.rows - spr->rows;
 
-            merge_images(&dst, &background, 0, 0);
-            merge_images(&dst, &*spr, dx < 0 ? 0 : Math::random(0, dx), dy < 0 ? 0 : Math::random(0, dy));
+            this->transform->merge_images(&dst, &background, 0, 0);
+            this->transform->merge_images(&dst, &*spr, dx < 0 ? 0 : Math::random(0, dx), dy < 0 ? 0 : Math::random(0, dy));
             cv::imwrite(path_to_save.str(), dst);
-
         }
 
         return true;

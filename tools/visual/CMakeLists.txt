@@ -22,7 +22,7 @@ add_executable(Visual
         source/effect/effect_manager.hpp
         source/flag_manager/flag_manager.cpp
         source/flag_manager/flag_manager.hpp
-        source/utils/utils.hpp)
+        source/utils/utils.hpp source/transform/transform.cpp source/transform/transform.hpp)
 
 #boost
 set(Boost_USE_STATIC_LIBS OFF)
