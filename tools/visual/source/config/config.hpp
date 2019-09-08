@@ -81,5 +81,6 @@ namespace constants
     namespace thread
     {
         constexpr auto fail_distr_worker = "Failed during distribution worker - there is no free worker.";
+        constexpr auto number_thread_info = "Program use multithreading. Threads number:";
     }
 }

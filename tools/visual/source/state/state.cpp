@@ -3,9 +3,16 @@
 namespace itl
 {
     State::State(const std::string& title)
-        :hardware_concurrency(1)
+        :hardware_concurrency(std::thread::hardware_concurrency())
     {
         itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+                         Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        std::stringstream thread_info;
+        thread_info << constants::thread::number_thread_info
+                    << " "
+                    << std::to_string(this->hardware_concurrency);
+
+        itl::Logger::Log(thread_info.str(),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         this->effect_manager = std::make_unique<EffectManager>();
@@ -124,7 +131,10 @@ namespace itl
                       int background_number, const std::string& extension) noexcept
     {
         cv::Mat base(cv::imread(path_to_raw, cv::IMREAD_UNCHANGED));
+
+        this->mtx.lock();
         cv::Mat background(cv::imread("data/textures/blue.png", cv::IMREAD_UNCHANGED));
+        this->mtx.unlock();
 
         if(!base.data || !background.data)
         {
@@ -145,7 +155,6 @@ namespace itl
         std::vector<std::shared_ptr<cv::Mat>> sprites;
 
         {
-            std::scoped_lock<std::mutex> lck(this->mtx);
             file_name = (path_to_raw.substr(path_to_raw.find_last_of('/')+1));
             file_name = file_name.substr(0, file_name.find_last_of('.'));
             sprites = this->effect_manager->generateSprites(base);
@@ -154,8 +163,6 @@ namespace itl
         for(auto& spr : sprites)
         {
             std::stringstream path_to_save;
-            std::scoped_lock<std::mutex> lck(this->mtx);
-
             path_to_save << dir_to_save
                          << "/"
                          << background_number
