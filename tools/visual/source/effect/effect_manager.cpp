@@ -2,15 +2,16 @@
 
 namespace itl
 {
-    EffectManager::EffectManager()
+    EffectManager::EffectManager(const std::shared_ptr<Logger>& log)
+        : logger(log)
     {
-        Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
         this->load_functions();
         this->generate_all_effect_packs();
 
-        Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
     }
 
@@ -85,12 +86,12 @@ namespace itl
 
         int* indices = new int[n];
 
-        for (int i = 0; i < n; i++)
+        for(int i = 0; i < n; i++)
         {
             indices[i] = 0;
         }
 
-        while (true)
+        while(true)
         {
             pack_indexes.emplace_back();
 
@@ -105,14 +106,14 @@ namespace itl
                 next--;
             }
 
-            if (next < 0)
+            if(next < 0)
             {
                 return;
             }
 
             indices[next]++;
 
-            for (int i = next + 1; i < n; i++)
+            for(int i = next + 1; i < n; i++)
             {
                 indices[i] = 0;
             }

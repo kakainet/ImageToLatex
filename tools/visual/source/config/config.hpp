@@ -13,7 +13,7 @@ namespace constants
 
     namespace system
     {
-        constexpr auto usage = "Usage: DIR_TO_PICTURES | EXTENSION_OF_PICTURES | DIR_TO_DATA | <optional> flags";
+        constexpr auto usage = "Usage: \n\t| <optional> flags \n\t| DIR_TO_PICTURES \n\t| EXTENSION_OF_PICTURES \n\t| DIR_TO_DATA";
         constexpr auto dir_to_pics_idx = 1;
         constexpr auto extension_idx = 2;
         constexpr auto dir_to_data_idx = 3;
@@ -60,9 +60,13 @@ namespace constants
 
     namespace flags
     {
+        constexpr auto contradiction_flags = "FLags which were passed to program are contradictory.";
         constexpr auto testing = "-t";
         constexpr auto printing_steps = "-p";
         constexpr auto logging_erros = "-le";
+        constexpr auto logging_info = "-li";
+        constexpr auto logging_suggestions = "-ls";
+        constexpr auto logging_warnings = "-lw";
         constexpr auto logging_all = "-la";
     }
 

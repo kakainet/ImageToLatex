@@ -2,24 +2,26 @@
 
 namespace itl
 {
-    State::State(const std::string& title)
-        :hardware_concurrency(std::thread::hardware_concurrency())
+    State::State(const std::string& title, const std::shared_ptr<Logger>& log,
+                 const std::shared_ptr<itl::FlagManager>& flag_manager)
+        : flag_manager(flag_manager), logger(log), hardware_concurrency(std::thread::hardware_concurrency())
     {
-        itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
         std::stringstream thread_info;
         thread_info << constants::thread::number_thread_info
                     << " "
                     << std::to_string(this->hardware_concurrency);
 
-        itl::Logger::Log(thread_info.str(),
+        this->logger->log(thread_info.str(),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
-        this->effect_manager = std::make_unique<EffectManager>();
-        this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
-        this->transform = std::make_unique<Transform>();
+        this->effect_manager = std::make_unique<EffectManager>(log);
 
-        itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
+        this->transform = std::make_unique<Transform>(log);
+
+        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
     }
 
@@ -86,7 +88,8 @@ namespace itl
                << path_to_raw
                << "\n\tBackground texture path: "
                << "data/textures/white.png";
-            Logger::Log(ss.str(), Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            this->logger->log(ss.str(), Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+
             return false;
         }
 

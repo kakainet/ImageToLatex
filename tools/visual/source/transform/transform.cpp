@@ -2,12 +2,13 @@
 
 namespace itl
 {
-    Transform::Transform()
+    Transform::Transform(const std::shared_ptr<Logger>& log)
+        : logger(log)
     {
-        Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
-        Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
     }
 
@@ -59,7 +60,7 @@ namespace itl
 
                     default:
                     {
-                        itl::Logger::Log(constants::effect::failed_merging,
+                        this->logger->log(constants::effect::failed_merging,
                                          Logger::STREAM::BOTH, Logger::TYPE::ERROR);
                         return;
                     }

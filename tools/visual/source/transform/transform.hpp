@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -14,7 +15,7 @@ namespace itl
     class Transform
     {
     public:
-        Transform();
+        explicit Transform(const std::shared_ptr<Logger>& log);
 
         void merge_images(cv::Mat* background, cv::Mat* upcoming, int x, int y);
 
@@ -23,6 +24,9 @@ namespace itl
         void move(cv::Mat &img, float pixels_dx, float pixels_dy);
 
         void scale(cv::Mat& sprite, float factor_x, float factor_y);
+
+    private:
+        std::shared_ptr<Logger> logger;
 
     };
 }

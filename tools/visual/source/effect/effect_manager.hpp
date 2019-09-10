@@ -16,8 +16,9 @@ namespace itl
     class EffectManager
     {
     public:
-        EffectManager();
+        explicit EffectManager(const std::shared_ptr<Logger>& log);
         std::vector<std::shared_ptr<cv::Mat>> generateSprites(const cv::Mat& sprite);
+
     private:
 
         enum class FUNCTION_T
@@ -38,5 +39,8 @@ namespace itl
         void generate_all_effect_packs();
 
         std::unique_ptr<Transform> transform;
+
+        std::shared_ptr<Logger> logger;
+
     };
 }

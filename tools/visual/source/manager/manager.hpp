@@ -17,13 +17,21 @@ namespace itl
         using path_t = std::string;
         std::vector<std::pair<path_t, T>> storage;
         std::string path_to_data;
+        std::shared_ptr<Logger> logger;
     public:
+        explicit Manager(std::shared_ptr<Logger> log);
         virtual bool load_data(const std::string& path_to_data, int number_of_copies) = 0;
         virtual bool update_single(const std::string& path_to_data, int idx_copy) = 0;
         int size() const;
         int unique_size() const;
         T* get(int idx_copy, int idx_data);
     };
+
+    template<class T>
+    Manager<T>::Manager(std::shared_ptr<Logger> log)
+        : logger(log)
+    {
+    }
 
     template<class T>
     int Manager<T>::size() const
@@ -44,7 +52,7 @@ namespace itl
         {
             if(!this->update_single(this->data_paths[idx_data], idx_copy))
             {
-                Logger::Log(constants::manager::failed_update, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+                this->logger->log(constants::manager::failed_update, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             }
         }
 
@@ -54,10 +62,10 @@ namespace itl
     template<class T>
     Manager<T>::Manager()
     {
-        itl::Logger::Log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
-        itl::Logger::Log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
+        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
     }
 }
