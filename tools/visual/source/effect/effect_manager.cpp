@@ -100,7 +100,7 @@ namespace itl
             }
 
             int next = n - 1;
-            while (next >= 0 && (indices[next] + 1 >= this->functions.at(static_cast<FUNCTION_T>(next)).size()))
+            while (next >= 0 && (indices[next] + 1 >= static_cast<int>(this->functions.at(static_cast<FUNCTION_T>(next)).size())))
             {
                 next--;
             }

@@ -31,9 +31,9 @@ void itl::PerlinNoise::save_to_file(const PerlinNoise::AlfaMap &map, const std::
 {
     std::ofstream output(dir);
     output<<map.begin()->size()<<' '<<map.size()<<'\n';
-    for(int i = 0; i<map.size(); i++)
+    for(size_t i = 0; i < map.size(); i++)
     {
-        for(unsigned int j = 0; j < map.size(); j++)
+        for(size_t j = 0; j < map.size(); j++)
         {
             j == map.size()-1   ?
                                 output<<map[i][j]<<' ' :
