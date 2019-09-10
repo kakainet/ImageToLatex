@@ -22,6 +22,8 @@ namespace itl
 
         void move(cv::Mat &img, float pixels_dx, float pixels_dy);
 
+        void scale(cv::Mat& sprite, float factor_x, float factor_y);
+
     };
 }
 

@@ -22,9 +22,8 @@ namespace itl
 
         enum class FUNCTION_T
         {
-            //SCALE = 0,
             ROTATE,
-            POSITION
+            SCALE
         };
 
         std::map<FUNCTION_T, std::vector<std::function<void(cv::Mat&)>>> functions;

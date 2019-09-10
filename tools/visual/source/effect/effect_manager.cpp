@@ -18,42 +18,42 @@ namespace itl
 
     void EffectManager::load_functions()
     {
-        /*this->functions[FUNCTION_T::SCALE] = std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[FUNCTION_T::SCALE].emplace_back([](cv::Mat& sprite)
+        this->functions[FUNCTION_T::SCALE] = std::vector<std::function<void(cv::Mat&)>>();
+        this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto val = Math::random_float(
-                                                                    constants::effect::scale_incr_bounds.x,
-                                                                    constants::effect::scale_incr_bounds.y,
+                                                                    constants::effect::scale_incr_bounds(0),
+                                                                    constants::effect::scale_incr_bounds(1),
                                                                     constants::effect::accuracy);
-                                                            sprite.({val, val});
+                                                            this->transform->scale(sprite, val, val);
                                                         });
 
-        this->functions[FUNCTION_T::SCALE].emplace_back([](cv::Mat& sprite)
-                                                        {
-                                                            auto rand = [](){return Math::random_float(
-                                                                    constants::effect::scale_incr_bounds.x,
-                                                                    constants::effect::scale_incr_bounds.y,
-                                                                    constants::effect::accuracy);};
-                                                            sprite.setScale({rand(), rand()});
-                                                        });
-
-        this->functions[FUNCTION_T::SCALE].emplace_back([](cv::Mat& sprite)
+        this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto val = Math::random_float(
-                                                                    constants::effect::scale_decr_bounds.x,
-                                                                    constants::effect::scale_decr_bounds.y,
+                                                                    constants::effect::scale_decr_bounds(0),
+                                                                    constants::effect::scale_decr_bounds(1),
                                                                     constants::effect::accuracy);
-                                                            sprite.setScale({val, val});
+                                                            this->transform->scale(sprite, val, val);
                                                         });
 
-        this->functions[FUNCTION_T::SCALE].emplace_back([](cv::Mat& sprite)
+        this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto rand = [](){return Math::random_float(
-                                                                    constants::effect::scale_decr_bounds.x,
-                                                                    constants::effect::scale_decr_bounds.y,
+                                                                    constants::effect::scale_incr_bounds(0),
+                                                                    constants::effect::scale_incr_bounds(1),
                                                                     constants::effect::accuracy);};
-                                                            sprite.setScale({rand(), rand()});
-                                                        });*/
+                                                            this->transform->scale(sprite, rand(), rand());
+                                                        });
+
+        this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
+                                                        {
+                                                            auto rand = [](){return Math::random_float(
+                                                                    constants::effect::scale_decr_bounds(0),
+                                                                    constants::effect::scale_decr_bounds(1),
+                                                                    constants::effect::accuracy);};
+                                                            this->transform->scale(sprite, rand(), rand());
+                                                        });
 
         this->functions[FUNCTION_T::ROTATE] = std::vector<std::function<void(cv::Mat&)>>();
         this->functions[FUNCTION_T::ROTATE].emplace_back([this](cv::Mat& sprite)

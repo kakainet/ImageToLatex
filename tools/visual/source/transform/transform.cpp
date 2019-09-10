@@ -87,4 +87,12 @@ namespace itl
         cv::Mat trans_mat = (cv::Mat_<double>(2,3) << 1, 0, pixels_dx, 0, 1, pixels_dy);
         cv::warpAffine(img,img,trans_mat,img.size());
     }
+
+    void Transform::scale(cv::Mat &sprite, float factor_x, float factor_y)
+    {
+        cv::resize(sprite, sprite, cv::Size(sprite.cols * factor_x,sprite.rows * factor_y),
+                0,
+                0,
+                CV_INTER_LINEAR);
+    }
 }
