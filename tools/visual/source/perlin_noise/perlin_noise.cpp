@@ -30,19 +30,19 @@ namespace itl
         //todo
     }
 
-    void PerlinNoise::save_to_file(const PerlinNoise::AlfaMap &map, const std::string &dir) const
+    void itl::PerlinNoise::save_to_file(const PerlinNoise::AlfaMap &map, const std::string &dir) const
     {
         std::ofstream output(dir);
-        output<<map.begin()->size()<<' '<<map.size()<<'\n';
-        for(int i = 0; i<map.size(); i++)
-        {
-            for(int j = 0; j<map.size(); j++)
-            {
-                j == map.size()-1   ?
-                output<<map[i][j]<<' ' :
-                output<<map[i][j];
+        output << map.begin()->size() << ' ' << map.size() << '\n';
+        for (size_t i = 0; i < map.size(); i++) {
+            for (size_t j = 0; j < map.size(); j++) {
+                for (size_t j = 0; j < map.size(); j++) {
+                    j == map.size() - 1 ?
+                    output << map[i][j] << ' ' :
+                    output << map[i][j];
+                }
+                output << '\n';
             }
-            output<<'\n';
         }
     }
 

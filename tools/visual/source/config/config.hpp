@@ -1,13 +1,14 @@
 #pragma once
 
-#include "../../external/sfml/include/SFML/System/Vector2.hpp"
 #include <vector>
+
+#include <opencv2/core.hpp>
 
 namespace constants
 {
     namespace window
     {
-        const auto size = sf::Vector2u{800,800};
+        const auto size = cv::Vec2i{800,800};
     }
 
     namespace system
@@ -46,10 +47,15 @@ namespace constants
 
     namespace effect
     {
-        const sf::Vector2f scale_incr_bounds = {1.05f, 2.f};
-        const sf::Vector2f scale_decr_bounds = {0.5f, 0.95f};
+        const cv::Vec2f scale_incr_bounds = {1.05f, 2.f};
+        const cv::Vec2f scale_decr_bounds = {0.5f, 0.95f};
         constexpr auto max_degree = 45;
         constexpr auto accuracy = 100;
+        constexpr auto rgb_channel_idx = 3;
+        constexpr auto rgba_channel_idx = 4;
+        constexpr auto wrong_channel = "Failed during recognizing channel of input matrix";
+        constexpr auto alpha_trash_hold = 10;
+        constexpr auto failed_merging = "Failed during creating roi: out of image boundaries";
     }
 
     namespace flags
@@ -79,5 +85,6 @@ namespace constants
     namespace thread
     {
         constexpr auto fail_distr_worker = "Failed during distribution worker - there is no free worker.";
+        constexpr auto number_thread_info = "Program use multithreading. Threads number:";
     }
 }

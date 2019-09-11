@@ -4,24 +4,25 @@ namespace itl
 {
     State::State(const std::string& title, const std::shared_ptr<Logger>& log,
                  const std::shared_ptr<itl::FlagManager>& flag_manager)
-        : hardware_concurrency(std::thread::hardware_concurrency()), logger(log), flag_manager(flag_manager)
+        : flag_manager(flag_manager), logger(log), hardware_concurrency(std::thread::hardware_concurrency())
     {
         this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        std::stringstream thread_info;
+        thread_info << constants::thread::number_thread_info
+                    << " "
+                    << std::to_string(this->hardware_concurrency);
 
-        this->texture_manager = std::make_shared<TextureManager>(this->logger);
-        for(int i = 0; i < this->hardware_concurrency; i++)
-        {
-            this->windows.emplace(std::make_shared<sf::RenderWindow>(sf::VideoMode( constants::window::size.x, constants::window::size.y ), title));
+        this->logger->log(thread_info.str(),
+                         Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
-        }
-        this->effect_manager = std::make_unique<EffectApplicator>(this->logger);
+        this->effect_manager = std::make_unique<EffectManager>(log);
+
         this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
+        this->transform = std::make_unique<Transform>(log);
 
         this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
-
-        this->assigned_threads_to_data = 0;
     }
 
     int State::run(const std::string& path_to_pictures, const std::string& extension, const std::string& path_to_data)
@@ -34,7 +35,7 @@ namespace itl
 
     bool State::load_textures(const std::string& path_to_data) noexcept
     {
-        return this->texture_manager->load_data(path_to_data, this->hardware_concurrency);
+        return true;
     }
 
     bool State::generate_images(const std::string& dir, const std::string& extension)
@@ -54,7 +55,7 @@ namespace itl
         std::string output = dir + "/output";
 
         std::vector<std::future<bool>> results;
-        for(int i = 0; i < this->texture_manager->unique_size(); i++)
+        for(int i = 0; i < 1; i++)
         {
             for(auto& var: paths)
             {
@@ -69,69 +70,43 @@ namespace itl
                 [=](bool acc, auto&& res) { return acc && res.get(); });
     }
 
-    bool State::process_line(const std::string path_to_raw, const std::string dir_to_save,
-                             int background_number, const std::string extension) noexcept
+    bool State::process_line(const std::string& path_to_raw, const std::string& dir_to_save,
+                      int background_number, const std::string& extension) noexcept
     {
-        std::shared_ptr<sf::RenderWindow> window_guard = nullptr;
-        sf::Texture* background_guard = nullptr;
+        cv::Mat base(cv::imread(path_to_raw, cv::IMREAD_UNCHANGED));
 
+        this->mtx.lock();
+        cv::Mat background(cv::imread("data/textures/blue.png", cv::IMREAD_UNCHANGED));
+        this->mtx.unlock();
+
+        if(!base.data || !background.data)
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
-            if(this->assigned_threads_to_data != this->hardware_concurrency &&
-               this->convert_from_thread_to_texture.find(std::this_thread::get_id()) !=
-               this->convert_from_thread_to_texture.end())
-            {
-                this->convert_from_thread_to_texture[std::this_thread::get_id()] = this->assigned_threads_to_data++;
-            }
+            std::stringstream ss;
+            ss << constants::texture::failed_load_texture
+               << "\n\tBase texture path: "
+               << path_to_raw
+               << "\n\tBackground texture path: "
+               << "data/textures/white.png";
+            this->logger->log(ss.str(), Logger::STREAM::BOTH, Logger::TYPE::ERROR);
 
-            window_guard = this->windows.front();
-            this->windows.pop();
-
-            background_guard = this->texture_manager->get(
-                    this->convert_from_thread_to_texture[std::this_thread::get_id()], background_number);
-        }
-
-        int itr = 0;
-        sf::Texture sprite_texture;
-
-        if(!sprite_texture.loadFromFile(path_to_raw))
-        {
-            std::scoped_lock<std::mutex> lck(this->mtx);
-            this->logger->log(constants::texture::failed_load_texture, Logger::STREAM::BOTH, Logger::TYPE::ERROR);
             return false;
         }
 
+        int itr = 0;
 
-        sf::Sprite base;
-        sf::Sprite background;
         std::string file_name;
-        std::vector<std::shared_ptr<sf::Sprite>> sprites;
+        std::vector<std::shared_ptr<cv::Mat>> sprites;
 
         {
-            std::scoped_lock<std::mutex> lck(this->mtx);
-            background.setTexture(*background_guard);
-            base.setTexture(sprite_texture);
             file_name = (path_to_raw.substr(path_to_raw.find_last_of('/')+1));
             file_name = file_name.substr(0, file_name.find_last_of('.'));
             sprites = this->effect_manager->generateSprites(base);
         }
 
-
         for(auto& spr : sprites)
         {
-            window_guard->clear();
-            window_guard->draw(background);
-            window_guard->draw(*spr);
-            sf::Texture ss_texture;
-
-            ss_texture.create(constants::window::size.x, constants::window::size.y);
-
-            ss_texture.update(*window_guard);
-            sf::Image screen = ss_texture.copyToImage();
             std::stringstream path_to_save;
-            std::scoped_lock<std::mutex> lck(this->mtx);
-
-
             path_to_save << dir_to_save
                          << "/"
                          << background_number
@@ -140,12 +115,16 @@ namespace itl
                          << std::to_string(itr++)
                          << extension;
 
-            screen.saveToFile(path_to_save.str());
-        }
+            //put is exactly position effect - it is separated due to performance
+            //using relative position instead of enlarging sprite is significantly faster
+            cv::Mat dst(background.rows, background.cols, CV_8UC4);
 
-        {
-            std::scoped_lock<std::mutex> lck(this->mtx);
-            this->windows.push(window_guard);
+            int dx = background.cols - spr->cols;
+            int dy = background.rows - spr->rows;
+
+            this->transform->merge_images(&dst, &background, 0, 0);
+            this->transform->merge_images(&dst, &*spr, dx < 0 ? 0 : Math::random(0, dx), dy < 0 ? 0 : Math::random(0, dy));
+            cv::imwrite(path_to_save.str(), dst);
         }
 
         return true;
