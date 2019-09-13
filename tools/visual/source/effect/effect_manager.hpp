@@ -6,6 +6,7 @@
 #include <functional>
 #include <cstring>
 
+#include "../perlin_noise/perlin_noise.hpp"
 #include "../logger/logger.hpp"
 #include "../config/config.hpp"
 #include "../math/math.hpp"
@@ -40,7 +41,8 @@ namespace itl
 
         std::unique_ptr<Transform> transform;
 
-        std::shared_ptr<Logger> logger;
+        std::unique_ptr<PerlinNoise> perlin_noise;
 
+        std::shared_ptr<Logger> logger;
     };
 }

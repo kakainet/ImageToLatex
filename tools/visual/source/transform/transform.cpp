@@ -65,7 +65,6 @@ namespace itl
                         return;
                     }
                 }
-
             }
         }
     }
@@ -83,10 +82,10 @@ namespace itl
         sprite = dst;
     }
 
-    void Transform::move(cv::Mat &img, float pixels_dx, float pixels_dy)
+    void Transform::move(cv::Mat &sprite, float pixels_dx, float pixels_dy)
     {
         cv::Mat trans_mat = (cv::Mat_<double>(2,3) << 1, 0, pixels_dx, 0, 1, pixels_dy);
-        cv::warpAffine(img,img,trans_mat,img.size());
+        cv::warpAffine(sprite, sprite, trans_mat, sprite.size());
     }
 
     void Transform::scale(cv::Mat &sprite, float factor_x, float factor_y)
