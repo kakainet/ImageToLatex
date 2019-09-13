@@ -2,8 +2,9 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 #include "../config/config.hpp"
 #include "../logger/logger.hpp"
@@ -13,15 +14,13 @@ namespace itl
     class PerlinNoise
     {
     public:
-        PerlinNoise(const std::shared_ptr<Logger>& log);
-        using AlfaMap = std::vector<std::vector<float>>;
-
+        explicit PerlinNoise(const std::shared_ptr<Logger>& log);
     private:
         void generate(const std::string& dir) const noexcept;
-        void save_to_file(const AlfaMap& map, const std::string& dir) const;
+        void save_to_file(const cv::Mat& map, const std::string& dir) const;
         void read_from_file(const std::string& dir);
 
-        std::vector<AlfaMap> noises;
+        std::vector<cv::Mat> noises;
         std::shared_ptr<Logger> logger;
     };
 }
