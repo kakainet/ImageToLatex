@@ -6,6 +6,7 @@
  * Ken Perlin
  * Media Research Laboratory, Dept. of Computer Science, New York University
  * perlin@cat.nyu.edu
+ * https://mrl.nyu.edu/~perlin/paper445.pdf
  * ----------------
  * and proposed code related with that paper:
  * ----------------
@@ -35,14 +36,14 @@ namespace itl
     public:
         explicit PerlinNoise(const std::shared_ptr<Logger>& log,
                              const std::string& path_to_data);
-        float** get_random_noise() const;
+        const std::array<float, constants::perlin::size>& get_random_noise() const;
     private:
-        void generate_noise(const std::string& dir, int idx) const;
-        float generate_point_noise(int x, int y, int z, const std::array<int, constants::perlin::size>& permutation) const;
-        void save_to_file(const cv::Mat& map, const std::string& dir) const;
+        void generate_noise_2d(const std::string& dir);
+        float generate_point_noise(float x, float y, float z, const std::array<int, constants::perlin::size>& permutation) const;
+        void save_to_file(const std::array<float, constants::perlin::size>& noise, const std::string& dir) const;
         void read_from_file(const std::string& dir);
 
-        std::vector<float*> noises;
+        std::vector<std::array<float, constants::perlin::size>> noises;
         std::shared_ptr<Logger> logger;
     };
 }
