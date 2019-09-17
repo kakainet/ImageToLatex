@@ -1,0 +1,7 @@
+(library
+  (public_name latex)
+  (name latex)
+  (libraries core_kernel)
+  (preprocess (pps ppx_jane)))
+
+(include_subdirs unqualified)
