@@ -43,7 +43,7 @@ namespace itl
 
         void sendMessage(const std::string& message,
                 Logger::STREAM stream,
-                std::string& prefix) noexcept;
+                std::string& prefix_colored) noexcept;
 
         void consoleMessage(const std::string&message,
                 std::string& prefix,
@@ -55,6 +55,8 @@ namespace itl
 
         void setPrefix(Logger::TYPE type,
                 std::string& prefix) noexcept;
+
+        void getColorByType() noexcept;
 
         bool log_all;
 

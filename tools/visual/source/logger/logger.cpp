@@ -20,12 +20,12 @@ namespace itl
         if(type == TYPE::SUGGESTION && !this->log_suggestions) return;
         if(type == TYPE::ERROR && !this->log_errors) return;
 
-        std::string prefix;
-        setPrefix(type, prefix);
-        sendMessage(message, stream, prefix);
+        std::string prefix_colored;
+        setPrefix(type, prefix_colored);
+        sendMessage(message, stream, prefix_colored);
     }
 
-    void Logger::sendMessage(const std::string& message, Logger::STREAM stream, std::string &prefix) noexcept
+    void Logger::sendMessage(const std::string& message, Logger::STREAM stream, std::string &prefix_colored) noexcept
     {
         std::chrono::time_point<std::chrono::system_clock> date = std::chrono::system_clock::now();
         std::time_t time = std::chrono::system_clock::to_time_t(date);
@@ -34,20 +34,20 @@ namespace itl
         {
             case Logger::STREAM::FILE:
             {
-                fileMessage(message, prefix, time);
+                fileMessage(message, prefix_colored, time);
                 break;
             }
 
             case Logger::STREAM::CONSOLE:
             {
-                consoleMessage(message, prefix, time);
+                consoleMessage(message, prefix_colored, time);
                 break;
             }
 
             case Logger::STREAM::BOTH:
             {
-                consoleMessage(message, prefix, time);
-                fileMessage(message, prefix, time);
+                consoleMessage(message, prefix_colored, time);
+                fileMessage(message, prefix_colored, time);
                 break;
             }
         }
@@ -55,50 +55,59 @@ namespace itl
 
     void Logger::consoleMessage(const std::string& message, std::string &prefix, std::time_t& time) noexcept
     {
-        std::cout << std::ctime(&time);
-        std::cout << prefix << ' ';
-        std::cout << message << "\n\n";
+        std::cout << constants::color::bold_green
+                  << std::ctime(&time)
+                  << prefix
+                  << constants::color::reset
+                  << ' '
+                  << message
+                  << "\n\n";
     }
 
     void Logger::fileMessage(const std::string& message, std::string &prefix, std::time_t& time) noexcept
     {
         std::ofstream file("data/log/log.txt",std::ios::app);
 
-        file << std::ctime(&time);
-        file << prefix << ' ';
-        file << message << "\n\n";
+        file << std::ctime(&time)
+             << prefix << ' '
+             << message << "\n\n";
     }
 
     void Logger::setPrefix(Logger::TYPE type, std::string &prefix) noexcept
     {
+        std::stringstream prefix_with_color;
         switch (type)
         {
-
             case Logger::TYPE::ERROR:
             {
-                prefix = "[ERROR]";
+                prefix_with_color << constants::color::bold_red
+                                  << "[ERROR]";
                 break;
             }
 
-
             case Logger::TYPE::INFO:
             {
-                prefix = "[INFO]";
+                prefix_with_color << constants::color::bold_cyan
+                                  << "[INFO]";
                 break;
             }
 
             case Logger::TYPE::SUGGESTION:
             {
-                prefix = "[SUGGESTION]";
+                prefix_with_color << constants::color::bold_magenta
+                                  << "[SUGGESTION]";
                 break;
             }
 
             case Logger::TYPE::WARNING:
             {
-                prefix = "[WARNING]";
+                prefix_with_color << constants::color::bold_yellow
+                                  << "[WARNING]";
                 break;
             }
         }
+
+        prefix = prefix_with_color.str();
     }
 
     void Logger::init(bool all, bool info, bool suggestions, bool errors, bool warnings)
