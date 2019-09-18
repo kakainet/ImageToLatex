@@ -23,6 +23,7 @@
 #include <string>
 #include <memory>
 #include <fstream>
+#include <cmath>
 
 #include <boost/filesystem.hpp>
 

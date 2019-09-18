@@ -56,7 +56,7 @@ namespace itl
             }
         }
 
-        noises.emplace_back(noise);
+        this->noises.emplace_back(noise);
         save_to_file(noise, dir);
     }
 
@@ -83,14 +83,22 @@ namespace itl
 
     void PerlinNoise::read_from_file(const std::string &dir)
     {
-        //todo
+        std::ifstream input(dir);
+
+        this->noises.emplace_back();
+
+        double val = 0.0;
+        while(input >> val)
+        {
+            this->noises.back().emplace_back(val);
+        }
     }
 
     const std::vector<double>& PerlinNoise::get_random_noise() const
     {
         return this->noises[Math::random(0, static_cast<int>(this->noises.size()))];
     }
-    
+
     double PerlinNoise::generate_point_noise(double x, double y, double z,
                                            const std::vector<int> &p) const
     {
@@ -113,13 +121,14 @@ namespace itl
         const std::int32_t BA = p[B] + Z;
         const std::int32_t BB = p[B + 1] + Z;
 
-        return Math::lerp(w, Math::lerp(v, Math::lerp(u, Math::grad(p[AA], x, y, z),
+        return std::clamp(constants::perlin::lower_bound+ constants::perlin::start_delta+Math::lerp(w, Math::lerp(v, Math::lerp(u, Math::grad(p[AA], x, y, z),
                                     Math::grad(p[BA], x - 1, y, z)),
                             Math::lerp(u, Math::grad(p[AB], x, y - 1, z),
                                  Math::grad(p[BB], x - 1, y - 1, z))),
                     Math::lerp(v, Math::lerp(u, Math::grad(p[AA + 1], x, y, z - 1),
                                  Math::grad(p[BA + 1], x - 1, y, z - 1)),
                          Math::lerp(u, Math::grad(p[AB + 1], x, y - 1, z - 1),
-                              Math::grad(p[BB + 1], x - 1, y - 1, z - 1))));
+                              Math::grad(p[BB + 1], x - 1, y - 1, z - 1)))),
+                          constants::perlin::lower_bound, constants::perlin::upper_bound);
     }
 }
