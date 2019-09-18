@@ -70,6 +70,16 @@ namespace constants
         constexpr auto logging_all = "-la";
     }
 
+    namespace color
+    {
+        constexpr auto reset = "\033[0m";
+        constexpr auto bold_red = "\033[1;31m";
+        constexpr auto bold_yellow = "\033[1;33m";
+        constexpr auto bold_cyan = "\033[1;36m";
+        constexpr auto bold_magenta = "\033[1;37m";
+        constexpr auto bold_green = "\033[1;92m";
+    }
+
     namespace manager
     {
         constexpr auto loading_data_second_time = "Tried to load data second time";
