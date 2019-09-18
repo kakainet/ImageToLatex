@@ -36,14 +36,14 @@ namespace itl
     public:
         explicit PerlinNoise(const std::shared_ptr<Logger>& log,
                              const std::string& path_to_data);
-        const std::array<float, constants::perlin::size>& get_random_noise() const;
+        const std::vector<float>& get_random_noise() const;
     private:
         void generate_noise_2d(const std::string& dir);
-        float generate_point_noise(float x, float y, float z, const std::array<int, constants::perlin::size>& permutation) const;
-        void save_to_file(const std::array<float, constants::perlin::size>& noise, const std::string& dir) const;
+        float generate_point_noise(float x, float y, float z, const std::vector<int>& permutation) const;
+        void save_to_file(const std::vector<float>& noise, const std::string& dir) const;
         void read_from_file(const std::string& dir);
 
-        std::vector<std::array<float, constants::perlin::size>> noises;
+        std::vector<std::vector<float>> noises;
         std::shared_ptr<Logger> logger;
     };
 }

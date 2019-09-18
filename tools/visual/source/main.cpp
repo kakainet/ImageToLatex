@@ -1,14 +1,33 @@
+#include <sys/resource.h>
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-
+#include "perlin_noise/perlin_noise.hpp"
 #include "state/state.hpp"
 #include "flag_manager/flag_manager.hpp"
 #include "logger/logger.hpp"
 
 int main(int argc, char* argv[])
 {
-    std::shared_ptr<itl::Logger> logger = std::make_shared<itl::Logger>();
+    const rlim_t kStackSize = 64 * 1024 * 1024;   // min stack size = 64 MB
+    struct rlimit rl{};
+    int result;
 
+    result = getrlimit(RLIMIT_STACK, &rl);
+    if (result == 0)
+    {
+        if (rl.rlim_cur < kStackSize)
+        {
+            rl.rlim_cur = kStackSize;
+            result = setrlimit(RLIMIT_STACK, &rl);
+            if (result != 0)
+            {
+                fprintf(stderr, "setrlimit returned result = %d\n", result);
+            }
+        }
+    }
+
+    std::shared_ptr<itl::Logger> logger = std::make_shared<itl::Logger>();
     if(argc < constants::system::required_command_args_size)
     {
         logger->log(constants::system::wrong_args_size, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::ERROR);
@@ -35,9 +54,13 @@ int main(int argc, char* argv[])
             logger->log(constants::gtest::fail_msg, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::WARNING);
         }
     }
+    itl::PerlinNoise perlinNoise(logger, argv[flag_number + constants::system::dir_to_data_idx]);
 
-    itl::State state("ImageToLatex", logger, flag_manager);
+
+    /*itl::State state("ImageToLatex", logger, flag_manager);
     return state.run(argv[flag_number + constants::system::dir_to_pics_idx],
                      argv[flag_number + constants::system::extension_idx],
-                     argv[flag_number + constants::system::dir_to_data_idx]);
+                     argv[flag_number + constants::system::dir_to_data_idx]);*/
+    return 0;
+
 }

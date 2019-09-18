@@ -3,7 +3,9 @@
 namespace itl
 {
     PerlinNoise::PerlinNoise(const std::shared_ptr<Logger> &log, const std::string& path_to_data)
-            : logger(log) {
+        :logger(log)
+    {
+
         this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                           Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
@@ -11,7 +13,7 @@ namespace itl
         {
             std::stringstream full_path_perlin;
             full_path_perlin << path_to_data
-                             << "/noise_"
+                             << "/noises/noise_"
                              << std::to_string(i)
                              << ".in";
 
@@ -35,21 +37,19 @@ namespace itl
 
     void PerlinNoise::generate_noise_2d(const std::string& dir)
     {
-        std::array<float, constants::perlin::size> noise{};
-        std::array<int, constants::perlin::size> permutation{};
+        std::vector<float> noise(static_cast<unsigned long>(constants::perlin::size));
+        std::vector<int> permutation(static_cast<unsigned long>(constants::perlin::size));
         std::iota(permutation.begin(), permutation.end(), 0);
-        std::random_device rand;
-        std::mt19937 machine(rand());
-        std::shuffle(permutation.begin(), permutation.end(), machine);
+        std::shuffle(permutation.begin(), permutation.end(),  std::mt19937{std::random_device{}()});
 
-        for(int y = 0; y < constants::perlin::size; y++)
+        for(int y = 0; y < constants::perlin::dim; y++)
         {
-            for(int x = 0; x < constants::perlin::size; x++)
+            for(int x = 0; x < constants::perlin::dim; x++)
             {
                 noise[y * constants::perlin::size + x] = generate_point_noise(
                         static_cast<float>(x) / constants::perlin::frequency,
                         static_cast<float>(y) / constants::perlin::frequency,
-                        constants::perlin::size / 2.f,
+                        0,
                         permutation);
             }
         }
@@ -58,16 +58,25 @@ namespace itl
         save_to_file(noise, dir);
     }
 
-    void PerlinNoise::save_to_file(const std::array<float, constants::perlin::size> &noise, const std::string &dir) const
+    void PerlinNoise::save_to_file(const std::vector<float> &noise, const std::string &dir) const
     {
         std::ofstream output(dir);
-        for(size_t i = 0; i < constants::perlin::size - 1; i++)
-        {
-            output << noise[i]
-                   << ' ';
+        for (size_t i = 0; i < constants::perlin::size - 1; i++) {
+
+            output << noise[i];
+
+            if(i != 0 && (i+1) % constants::perlin::dim == 0)
+            {
+                output << '\n';
+            } else
+            {
+                output<< ' ';
+            }
+
         }
         output << noise[constants::perlin::size - 1]
                << '\n';
+
     }
 
     void PerlinNoise::read_from_file(const std::string &dir)
@@ -75,40 +84,37 @@ namespace itl
         //todo
     }
 
-    const std::array<float, constants::perlin::size>& PerlinNoise::get_random_noise() const
+    const std::vector<float>& PerlinNoise::get_random_noise() const
     {
         return this->noises[Math::random(0, static_cast<int>(this->noises.size()))];
     }
 
 
     float PerlinNoise::generate_point_noise(float x, float y, float z,
-                                           const std::array<int, constants::perlin::size> &permutation) const
+                                           const std::vector<int> &p) const
     {
-        int X = static_cast<int>(std::floor(x)) & 255,
-            Y = static_cast<int>(std::floor(y)) & 255,
-            Z = static_cast<int>(std::floor(z)) & 255;
-        x -= static_cast<int>(std::floor(x));
-        y -= static_cast<int>(std::floor(y));
-        z -= static_cast<int>(std::floor(z));
-        float u = Math::fade(x),
-              v = Math::fade(y),
-              w = Math::fade(z);
-        int A = permutation[X  ]+Y, AA = permutation[A]+Z, AB = permutation[A+1]+Z,
-            B = permutation[X+1]+Y, BA = permutation[B]+Z, BB = permutation[B+1]+Z;
+        const std::int32_t X = static_cast<std::int32_t>(std::floor(x)) & 255;
+        const std::int32_t Y = static_cast<std::int32_t>(std::floor(y)) & 255;
+        const std::int32_t Z = static_cast<std::int32_t>(std::floor(z)) & 255;
 
-        return Math::lerp(w,
-                          Math::lerp(v, Math::lerp(u,
-                                                   Math::grad(permutation[AA  ], x  , y  , z   ),
-                                                   Math::grad(permutation[BA  ], x-1, y  , z   )),
-                                           Math::lerp(u,
-                                                      Math::grad(permutation[AB  ], x  , y-1, z   ),
-                                                      Math::grad(permutation[BB  ], x-1, y-1, z   ))),
-                             Math::lerp(v,
-                                        Math::lerp(u,
-                                                   Math::grad(permutation[AA+1], x  , y  , z-1 ),
-                                                   Math::grad(permutation[BA+1], x-1, y  , z-1 )),
-                                        Math::lerp(u,
-                                                   Math::grad(permutation[AB+1], x  , y-1, z-1 ),
-                                                   Math::grad(permutation[BB+1], x-1, y-1, z-1 ))));
+        x -= std::floor(x);
+        y -= std::floor(y);
+        z -= std::floor(z);
+
+        const float u = Math::fade(x);
+        const float v = Math::fade(y);
+        const float w = Math::fade(z);
+
+        const std::int32_t A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z;
+        const std::int32_t B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;
+
+        return Math::lerp(w, Math::lerp(v, Math::lerp(u, Math::grad(p[AA], x, y, z),
+                                          Math::grad(p[BA], x - 1, y, z)),
+                            Math::lerp(u, Math::grad(p[AB], x, y - 1, z),
+                                       Math::grad(p[BB], x - 1, y - 1, z))),
+                    Math::lerp(v, Math::lerp(u, Math::grad(p[AA + 1], x, y, z - 1),
+                                 Math::grad(p[BA + 1], x - 1, y, z - 1)),
+                               Math::lerp(u, Math::grad(p[AB + 1], x, y - 1, z - 1),
+                              Math::grad(p[BB + 1], x - 1, y - 1, z - 1))));
     }
 }
