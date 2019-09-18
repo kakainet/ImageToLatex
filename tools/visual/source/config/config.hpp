@@ -87,7 +87,9 @@ namespace constants
     {
         constexpr int dim = 16;
         constexpr int size = dim * dim;
-        constexpr auto frequency = 8; //preferred 2^k where k \in {0,..., log(size) - 3}
+        constexpr int permutation_size = 256;
+        constexpr int octaves = 10;
+        constexpr auto frequency = 2;
         constexpr auto missing_noise = "Missing noise. Program will recreate component with id ";
         constexpr auto noises_num = 20;
     }

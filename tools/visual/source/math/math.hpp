@@ -39,17 +39,17 @@ public:
       return (float)dis(gen)/accuracy;
     }
 
-    static float fade(float t) noexcept
+    static double fade(double t) noexcept
     {
       return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
-    static float lerp(float t, float a, float b) noexcept
+    static double lerp(double t, double a, double b) noexcept
     {
       return a + t * (b - a);
     }
 
-    static float grad(int hash, float x, float y, float z) noexcept
+    static double grad(uint8_t hash, double x, double y, double z) noexcept
     {
       int h = hash & 15;
       float u = h < 8 ? x : y;

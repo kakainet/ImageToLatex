@@ -18,5 +18,9 @@ tools/visual/gtest
 # graphic
 *.png
 
+#text
+*.in
+*.txt
+
 # jetbrains
 .idea
