@@ -17,7 +17,7 @@ namespace itl
     class EffectManager
     {
     public:
-        explicit EffectManager(const std::shared_ptr<Logger>& log);
+        explicit EffectManager(const std::shared_ptr<Logger>& log, const std::string& path_to_data);
         std::vector<std::shared_ptr<cv::Mat>> generateSprites(const cv::Mat& sprite);
 
     private:
@@ -25,7 +25,8 @@ namespace itl
         enum class FUNCTION_T
         {
             ROTATE,
-            SCALE
+            SCALE,
+            PERLIN
         };
 
         std::map<FUNCTION_T, std::vector<std::function<void(cv::Mat&)>>> functions;

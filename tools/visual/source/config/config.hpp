@@ -95,7 +95,7 @@ namespace constants
 
     namespace perlin
     {
-        constexpr int dim = 16;
+        constexpr int dim = 2048;
         constexpr int size = dim * dim;
         constexpr int permutation_size = 256;
         constexpr double lower_bound = 0.6;
@@ -103,6 +103,6 @@ namespace constants
         constexpr double start_delta = 0.2;
         constexpr auto frequency = 10;
         constexpr auto missing_noise = "Missing noise. Program will recreate component with id ";
-        constexpr auto noises_num = 20;
+        constexpr auto noises_num = 2;
     }
 }

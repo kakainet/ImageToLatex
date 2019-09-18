@@ -54,13 +54,11 @@ int main(int argc, char* argv[])
             logger->log(constants::gtest::fail_msg, itl::Logger::STREAM::BOTH, itl::Logger::TYPE::WARNING);
         }
     }
-    itl::PerlinNoise perlinNoise(logger, argv[flag_number + constants::system::dir_to_data_idx]);
 
-
-    /*itl::State state("ImageToLatex", logger, flag_manager);
+    itl::State state("ImageToLatex", logger, flag_manager);
     return state.run(argv[flag_number + constants::system::dir_to_pics_idx],
                      argv[flag_number + constants::system::extension_idx],
-                     argv[flag_number + constants::system::dir_to_data_idx]);*/
+                     argv[flag_number + constants::system::dir_to_data_idx]);
     return 0;
 
 }
