@@ -79,26 +79,6 @@ namespace itl
 
                                                              this->transform->rotate(sprite, val);
                                                          });
-        this->functions[FUNCTION_T::PERLIN] = std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[FUNCTION_T::PERLIN].emplace_back([this](cv::Mat& sprite)
-                                                         {
-                                                             const std::vector<double>& noise = this->perlin_noise->get_random_noise();
-                                                             //random x,y which will be left upper corner of
-                                                             //noise part which will be used to noising sprite
-                                                             std::cout<<noise.size()<<std::endl;
-                                                             int x = Math::random(0, std::max(0, constants::perlin::dim - sprite.cols));
-                                                             int y = Math::random(0, std::max(0, constants::perlin::dim - sprite.rows));
-
-                                                             for(int i = x; i < sprite.cols + x; i++)
-                                                             {
-                                                                 for(int j = y; j < sprite.rows + y; j++)
-                                                                 {
-                                                                     sprite.at<cv::Vec4b>(j-y, i-x)[3] *= noise[j*constants::perlin::dim + i];
-                                                                 }
-                                                             }
-
-                                                         });
-
     }
 
 

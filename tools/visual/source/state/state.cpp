@@ -69,7 +69,7 @@ namespace itl
         cv::Mat base(cv::imread(path_to_raw, cv::IMREAD_UNCHANGED));
 
         this->mtx.lock();
-        cv::Mat background(cv::imread("data/textures/blue.png", cv::IMREAD_UNCHANGED));
+        cv::Mat background(cv::imread("data/textures/white.png", cv::IMREAD_UNCHANGED));
         this->mtx.unlock();
 
         if(!base.data || !background.data)
@@ -80,7 +80,7 @@ namespace itl
                << "\n\tBase texture path: "
                << path_to_raw
                << "\n\tBackground texture path: "
-               << "data/textures/white.png";
+               << "../data/textures/white.png";
             this->logger->log(ss.str(), Logger::STREAM::BOTH, Logger::TYPE::ERROR);
 
             return false;

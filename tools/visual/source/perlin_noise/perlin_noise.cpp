@@ -91,12 +91,11 @@ namespace itl
         {
             this->noises.back().emplace_back(val);
         }
-        std::cout<<"readed from file with size "<<this->noises.back().size()<<"\n";
     }
 
     const std::vector<double>& PerlinNoise::get_random_noise() const
     {
-        return this->noises[Math::random(0, static_cast<int>(this->noises.size()))-1];
+        return this->noises[Math::random(0, static_cast<int>(this->noises.size())-1)];
     }
 
     double PerlinNoise::generate_point_noise(double x, double y, double z,
