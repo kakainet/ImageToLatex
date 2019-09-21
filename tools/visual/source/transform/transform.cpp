@@ -103,4 +103,37 @@ namespace itl
                             static_cast<int>(sprite.rows * factor_y)),
                    0, 0, CV_INTER_LINEAR);
     }
+
+    /*
+     * @brief equivalent of std::clamp for scaling cv::Mat
+     */
+    void Transform::scale_clamp(cv::Mat& sprite, float factor_x, float factor_y,
+                                int lo, int hi)
+    {
+        float dx, dy;
+        int current_x = static_cast<int>(factor_x * sprite.cols);
+        int current_y = static_cast<int>(factor_y * sprite.rows);
+        if(current_x <= hi)
+        {
+            dx = current_x >= lo ? factor_x
+                                 : static_cast<float>(lo) / sprite.cols;
+        }
+        else
+        {
+            dx = static_cast<float>(hi) / sprite.cols;
+        }
+
+        if(current_y <= hi)
+        {
+            dy = current_y >= lo ? factor_x
+                                 : static_cast<float>(lo) / sprite.rows;
+        }
+        else
+        {
+            dy = static_cast<float>(hi) / sprite.rows;
+        }
+
+        scale(sprite, dx, dy);
+    }
+
 }  // namespace itl

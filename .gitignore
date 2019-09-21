@@ -25,3 +25,6 @@ tools/visual/clang_rec.sh
 
 # jetbrains
 .idea
+
+#other
+*.zip

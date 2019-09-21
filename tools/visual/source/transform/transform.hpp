@@ -24,6 +24,9 @@ namespace itl
 
         void scale(cv::Mat& sprite, float factor_x, float factor_y);
 
+        void scale_clamp(cv::Mat& sprite, float factor_x, float factor_y,
+                         int lower, int upper);
+
        private:
         std::shared_ptr<Logger> logger;
     };
