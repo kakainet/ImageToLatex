@@ -6,13 +6,13 @@
 
 class utils
 {
-public:
+   public:
     template <class T>
     static T& get_random_element(const std::vector<T>& vec);
 };
 
-template<class T>
+template <class T>
 T& utils::get_random_element(const std::vector<T>& vec)
 {
-    return vec[Math::random(0, static_cast<int>(vec.size()-1))];
+    return vec[Math::random(0, static_cast<int>(vec.size() - 1))];
 }

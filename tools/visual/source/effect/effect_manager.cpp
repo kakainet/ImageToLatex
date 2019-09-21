@@ -6,81 +6,78 @@ namespace itl
                                  const std::string& path_to_data)
         : logger(log)
     {
-        this->logger->log(std::string(cst::info::init_module_msg_start) + std::string(typeid(this).name()),
-                    Logger::stream_t::console, Logger::type_t::info);
+        this->logger->log(std::string(cst::info::init_module_msg_start) +
+                              std::string(typeid(this).name()),
+                          Logger::stream_t::console, Logger::type_t::info);
 
-        this->perlin_noise = std::make_unique<PerlinNoise>(logger, path_to_data);
+        this->perlin_noise =
+            std::make_unique<PerlinNoise>(logger, path_to_data);
         this->load_functions();
         this->generate_all_effect_packs();
 
-        this->logger->log(std::string(cst::info::init_module_msg_end) + std::string(typeid(this).name()),
-                    Logger::stream_t::console, Logger::type_t::info);
+        this->logger->log(std::string(cst::info::init_module_msg_end) +
+                              std::string(typeid(this).name()),
+                          Logger::stream_t::console, Logger::type_t::info);
     }
-
-
 
     void EffectManager::load_functions()
     {
-        this->functions[function_t::scale] = std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[function_t::scale].emplace_back([this](cv::Mat& sprite)
-                                                        {
-                                                            auto val = Math::random_float(
-                                                                    cst::effect::scale_incr_bounds(0),
-                                                                    cst::effect::scale_incr_bounds(1),
-                                                                    cst::effect::accuracy);
-                                                            this->transform->scale(sprite, val, val);
-                                                        });
+        this->functions[function_t::scale] =
+            std::vector<std::function<void(cv::Mat&)>>();
+        this->functions[function_t::scale].emplace_back(
+            [this](cv::Mat& sprite) {
+                auto val = Math::random_float(cst::effect::scale_incr_bounds(0),
+                                              cst::effect::scale_incr_bounds(1),
+                                              cst::effect::accuracy);
+                this->transform->scale(sprite, val, val);
+            });
 
-        this->functions[function_t::scale].emplace_back([this](cv::Mat& sprite)
-                                                        {
-                                                            auto val = Math::random_float(
-                                                                    cst::effect::scale_decr_bounds(0),
-                                                                    cst::effect::scale_decr_bounds(1),
-                                                                    cst::effect::accuracy);
-                                                            this->transform->scale(sprite, val, val);
-                                                        });
+        this->functions[function_t::scale].emplace_back(
+            [this](cv::Mat& sprite) {
+                auto val = Math::random_float(cst::effect::scale_decr_bounds(0),
+                                              cst::effect::scale_decr_bounds(1),
+                                              cst::effect::accuracy);
+                this->transform->scale(sprite, val, val);
+            });
 
-        this->functions[function_t::scale].emplace_back([this](cv::Mat& sprite)
-                                                        {
-                                                            auto rand = [](){return Math::random_float(
-                                                                    cst::effect::scale_incr_bounds(0),
-                                                                    cst::effect::scale_incr_bounds(1),
-                                                                    cst::effect::accuracy);};
-                                                            this->transform->scale(sprite, rand(), rand());
-                                                        });
+        this->functions[function_t::scale].emplace_back(
+            [this](cv::Mat& sprite) {
+                auto rand = []() {
+                    return Math::random_float(cst::effect::scale_incr_bounds(0),
+                                              cst::effect::scale_incr_bounds(1),
+                                              cst::effect::accuracy);
+                };
+                this->transform->scale(sprite, rand(), rand());
+            });
 
-        this->functions[function_t::scale].emplace_back([this](cv::Mat& sprite)
-                                                        {
-                                                            auto rand = [](){return Math::random_float(
-                                                                    cst::effect::scale_decr_bounds(0),
-                                                                    cst::effect::scale_decr_bounds(1),
-                                                                    cst::effect::accuracy);};
-                                                            this->transform->scale(sprite, rand(), rand());
-                                                        });
+        this->functions[function_t::scale].emplace_back(
+            [this](cv::Mat& sprite) {
+                auto rand = []() {
+                    return Math::random_float(cst::effect::scale_decr_bounds(0),
+                                              cst::effect::scale_decr_bounds(1),
+                                              cst::effect::accuracy);
+                };
+                this->transform->scale(sprite, rand(), rand());
+            });
 
-        this->functions[function_t::rotate] = std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[function_t::rotate].emplace_back([this](cv::Mat& sprite)
-                                                         {
-                                                             auto val = Math::random_float(
-                                                                     0,
-                                                                     cst::effect::max_degree,
-                                                                     cst::effect::accuracy);
+        this->functions[function_t::rotate] =
+            std::vector<std::function<void(cv::Mat&)>>();
+        this->functions[function_t::rotate].emplace_back(
+            [this](cv::Mat& sprite) {
+                auto val = Math::random_float(0, cst::effect::max_degree,
+                                              cst::effect::accuracy);
 
-                                                             this->transform->rotate(sprite, val);
+                this->transform->rotate(sprite, val);
+            });
 
-                                                         });
+        this->functions[function_t::rotate].emplace_back(
+            [this](cv::Mat& sprite) {
+                auto val = Math::random_float(-cst::effect::max_degree, 0,
+                                              cst::effect::accuracy);
 
-        this->functions[function_t::rotate].emplace_back([this](cv::Mat& sprite)
-                                                         {
-                                                             auto val = Math::random_float(
-                                                                     -cst::effect::max_degree,
-                                                                     0,
-                                                                     cst::effect::accuracy);
-
-                                                             this->transform->rotate(sprite, val);
-                                                         });
+                this->transform->rotate(sprite, val);
+            });
     }
-
 
     void EffectManager::generate_all_effect_packs()
     {
@@ -97,13 +94,17 @@ namespace itl
         {
             pack_indexes.emplace_back();
 
-            for (int i = 0; i < n; i++)
+            for(int i = 0; i < n; i++)
             {
                 pack_indexes.back().emplace_back(indices[i]);
             }
 
             int next = n - 1;
-            while (next >= 0 && (indices[next] + 1 >= static_cast<int>(this->functions.at(static_cast<function_t>(next)).size())))
+            while(
+                next >= 0 &&
+                (indices[next] + 1 >=
+                 static_cast<int>(
+                     this->functions.at(static_cast<function_t>(next)).size())))
             {
                 next--;
             }
@@ -122,11 +123,12 @@ namespace itl
         }
     }
 
-    std::vector<std::shared_ptr<cv::Mat>> EffectManager::generateSprites(const cv::Mat &sprite)
+    std::vector<std::shared_ptr<cv::Mat>> EffectManager::generateSprites(
+        const cv::Mat& sprite)
     {
         auto result = std::vector<std::shared_ptr<cv::Mat>>();
 
-        for(auto& indexPack: this->pack_indexes)
+        for(auto& indexPack : this->pack_indexes)
         {
             cv::Mat new_sprite = sprite;
 
@@ -141,4 +143,4 @@ namespace itl
 
         return result;
     }
-}
+}  // namespace itl

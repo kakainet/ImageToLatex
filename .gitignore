@@ -14,6 +14,7 @@ tools/visual/Visual
 tools/visual/visual
 tools/visual/external
 tools/visual/gtest
+tools/visual/clang_rec.sh
 
 # graphic
 *.png

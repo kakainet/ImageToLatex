@@ -1,27 +1,28 @@
 #pragma once
 
+#include <cstring>
+#include <functional>
+#include <map>
 #include <memory>
 #include <vector>
-#include <map>
-#include <functional>
-#include <cstring>
 
-#include "../perlin_noise/perlin_noise.hpp"
-#include "../logger/logger.hpp"
 #include "../config/config.hpp"
+#include "../logger/logger.hpp"
 #include "../math/math.hpp"
+#include "../perlin_noise/perlin_noise.hpp"
 #include "../transform/transform.hpp"
 
 namespace itl
 {
     class EffectManager
     {
-    public:
-        explicit EffectManager(const std::shared_ptr<Logger>& log, const std::string& path_to_data);
-        std::vector<std::shared_ptr<cv::Mat>> generateSprites(const cv::Mat& sprite);
+       public:
+        explicit EffectManager(const std::shared_ptr<Logger>& log,
+                               const std::string& path_to_data);
+        std::vector<std::shared_ptr<cv::Mat>> generateSprites(
+            const cv::Mat& sprite);
 
-    private:
-
+       private:
         enum class function_t
         {
             rotate,
@@ -29,7 +30,8 @@ namespace itl
             perlin
         };
 
-        std::map<function_t, std::vector<std::function<void(cv::Mat&)>>> functions;
+        std::map<function_t, std::vector<std::function<void(cv::Mat&)>>>
+            functions;
 
         /**
          * @brief packIndexes[i][j] is index of j'th effect from i'th pack.
@@ -46,4 +48,4 @@ namespace itl
 
         std::shared_ptr<Logger> logger;
     };
-}
+}  // namespace itl
