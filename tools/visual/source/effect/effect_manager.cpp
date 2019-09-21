@@ -22,6 +22,24 @@ namespace itl
 
     void EffectManager::load_functions()
     {
+        this->functions[function_t::rotate] =
+            std::vector<std::function<void(cv::Mat&)>>();
+        this->functions[function_t::rotate].emplace_back(
+            [this](cv::Mat& sprite) {
+                auto val = Math::random_float(0, cst::effect::max_degree,
+                                              cst::effect::accuracy);
+
+                this->transform->rotate(sprite, val);
+            });
+
+        this->functions[function_t::rotate].emplace_back(
+            [this](cv::Mat& sprite) {
+                auto val = Math::random_float(-cst::effect::max_degree, 0,
+                                              cst::effect::accuracy);
+
+                this->transform->rotate(sprite, val);
+            });
+
         this->functions[function_t::scale] =
             std::vector<std::function<void(cv::Mat&)>>();
         this->functions[function_t::scale].emplace_back(
@@ -58,24 +76,6 @@ namespace itl
                                               cst::effect::accuracy);
                 };
                 this->transform->scale(sprite, rand(), rand());
-            });
-
-        this->functions[function_t::rotate] =
-            std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[function_t::rotate].emplace_back(
-            [this](cv::Mat& sprite) {
-                auto val = Math::random_float(0, cst::effect::max_degree,
-                                              cst::effect::accuracy);
-
-                this->transform->rotate(sprite, val);
-            });
-
-        this->functions[function_t::rotate].emplace_back(
-            [this](cv::Mat& sprite) {
-                auto val = Math::random_float(-cst::effect::max_degree, 0,
-                                              cst::effect::accuracy);
-
-                this->transform->rotate(sprite, val);
             });
     }
 

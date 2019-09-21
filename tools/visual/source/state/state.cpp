@@ -91,7 +91,9 @@ namespace itl
             cv::imread(path_to_background, cv::IMREAD_UNCHANGED));
         this->mtx.unlock();
 
-        if(!base.data || !background.data)
+        if(!base.data || !background.data ||
+           background.rows != cst::window::size.rows ||
+           background.cols != cst::window::size.cols)
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
             std::stringstream ss;
@@ -122,9 +124,9 @@ namespace itl
                          << file_name << "_" << std::to_string(itr++)
                          << extension;
 
-            // put is exactly position effect - it is separated due to
-            // performance using relative position instead of enlarging sprite
-            // is significantly faster
+            // apply position effect - it is separated due to
+            // performance. Using relative position instead
+            // of enlarging sprite is significantly faster
             cv::Mat dst(background.rows, background.cols, CV_8UC4);
 
             int dx = background.cols - spr->cols;

@@ -8,7 +8,7 @@ namespace itl
         this->init(all, info, suggestions, errors, warnings, time);
     }
 
-    Logger::Logger() : Logger(true, true, true, true, true, true) {}
+    Logger::Logger() : Logger(true, true, true, true, true, false) {}
 
     void Logger::log(const std::string& message, const Logger::stream_t& stream,
                      const Logger::type_t& type) noexcept

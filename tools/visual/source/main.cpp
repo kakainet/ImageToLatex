@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
     std::shared_ptr<itl::Logger> logger = std::make_shared<itl::Logger>();
     if(argc < cst::system::required_command_args_size)
     {
+        logger->init(true, true, true, true, true, false);
         logger->log(cst::system::wrong_args_size,
                     itl::Logger::stream_t::console, itl::Logger::type_t::error);
         logger->log(cst::system::usage, itl::Logger::stream_t::console,
