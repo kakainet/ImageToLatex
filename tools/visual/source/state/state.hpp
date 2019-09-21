@@ -24,7 +24,6 @@ namespace itl
                 const std::shared_ptr<itl::FlagManager>& flag_manager);
 
     private:
-        bool load_textures(const std::string& path_to_data) noexcept;
         bool generate_images(const std::string& dir, const std::string& extension);
         bool process_line(const std::string& path_to_raw, const std::string& dir_to_save,
                                  int background_number, const std::string& extension) noexcept;

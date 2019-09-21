@@ -27,11 +27,6 @@ namespace constants
         constexpr auto pass_code = 0;
     }
 
-    namespace perlin_noise
-    {
-        constexpr auto noises_num = 200;
-    }
-
     namespace info
     {
         constexpr auto init_module_msg_start = "Initializing module: ";
@@ -96,5 +91,18 @@ namespace constants
     {
         constexpr auto fail_distr_worker = "Failed during distribution worker - there is no free worker.";
         constexpr auto number_thread_info = "Program use multithreading. Threads number:";
+    }
+
+    namespace perlin
+    {
+        constexpr int dim = 2048;
+        constexpr int size = dim * dim;
+        constexpr int permutation_size = 256;
+        constexpr double lower_bound = 0.6;
+        constexpr double upper_bound = 1.0;
+        constexpr double start_delta = 0.2;
+        constexpr auto frequency = 10;
+        constexpr auto missing_noise = "Missing noise. Program will recreate component with id ";
+        constexpr auto noises_num = 2;
     }
 }

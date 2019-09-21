@@ -6,6 +6,7 @@
 #include <functional>
 #include <cstring>
 
+#include "../perlin_noise/perlin_noise.hpp"
 #include "../logger/logger.hpp"
 #include "../config/config.hpp"
 #include "../math/math.hpp"
@@ -16,7 +17,7 @@ namespace itl
     class EffectManager
     {
     public:
-        explicit EffectManager(const std::shared_ptr<Logger>& log);
+        explicit EffectManager(const std::shared_ptr<Logger>& log, const std::string& path_to_data);
         std::vector<std::shared_ptr<cv::Mat>> generateSprites(const cv::Mat& sprite);
 
     private:
@@ -24,7 +25,8 @@ namespace itl
         enum class FUNCTION_T
         {
             ROTATE,
-            SCALE
+            SCALE,
+            PERLIN
         };
 
         std::map<FUNCTION_T, std::vector<std::function<void(cv::Mat&)>>> functions;
@@ -40,7 +42,8 @@ namespace itl
 
         std::unique_ptr<Transform> transform;
 
-        std::shared_ptr<Logger> logger;
+        std::unique_ptr<PerlinNoise> perlin_noise;
 
+        std::shared_ptr<Logger> logger;
     };
 }

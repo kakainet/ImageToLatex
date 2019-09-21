@@ -2,12 +2,14 @@
 
 namespace itl
 {
-    EffectManager::EffectManager(const std::shared_ptr<Logger>& log)
+    EffectManager::EffectManager(const std::shared_ptr<Logger>& log,
+                                 const std::string& path_to_data)
         : logger(log)
     {
         this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
                     Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
+        this->perlin_noise = std::make_unique<PerlinNoise>(logger, path_to_data);
         this->load_functions();
         this->generate_all_effect_packs();
 

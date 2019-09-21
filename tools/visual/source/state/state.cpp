@@ -16,8 +16,6 @@ namespace itl
         this->logger->log(thread_info.str(),
                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
 
-        this->effect_manager = std::make_unique<EffectManager>(log);
-
         this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
         this->transform = std::make_unique<Transform>(log);
 
@@ -27,15 +25,11 @@ namespace itl
 
     int State::run(const std::string& path_to_pictures, const std::string& extension, const std::string& path_to_data)
     {
+        //Effect manager depends on data so it is not created in ctor but there
+        this->effect_manager = std::make_unique<EffectManager>(this->logger, path_to_data);
         return
-                this->load_textures(path_to_data)
-                && this->generate_images(path_to_pictures, extension)
+                this->generate_images(path_to_pictures, extension)
                 ? constants::system::pass_code : constants::system::error_code;
-    }
-
-    bool State::load_textures(const std::string& path_to_data) noexcept
-    {
-        return true;
     }
 
     bool State::generate_images(const std::string& dir, const std::string& extension)
@@ -45,12 +39,11 @@ namespace itl
         glob(dir + "/input/*" + extension, fn, false);
         paths.resize(fn.size());
 
-        auto convert_cvstr_to_str = [](cv::String str)
-                {
-                    return str.operator std::string();
-                };
 
-        std::transform(fn.begin(), fn.end(), paths.begin(), convert_cvstr_to_str);
+        std::transform(fn.begin(), fn.end(), paths.begin(), [](const cv::String& str)
+        {
+            return str.operator std::string();
+        });
 
         std::string output = dir + "/output";
 
@@ -76,7 +69,7 @@ namespace itl
         cv::Mat base(cv::imread(path_to_raw, cv::IMREAD_UNCHANGED));
 
         this->mtx.lock();
-        cv::Mat background(cv::imread("data/textures/blue.png", cv::IMREAD_UNCHANGED));
+        cv::Mat background(cv::imread("data/textures/white.png", cv::IMREAD_UNCHANGED));
         this->mtx.unlock();
 
         if(!base.data || !background.data)
@@ -87,7 +80,7 @@ namespace itl
                << "\n\tBase texture path: "
                << path_to_raw
                << "\n\tBackground texture path: "
-               << "data/textures/white.png";
+               << "../data/textures/white.png";
             this->logger->log(ss.str(), Logger::STREAM::BOTH, Logger::TYPE::ERROR);
 
             return false;

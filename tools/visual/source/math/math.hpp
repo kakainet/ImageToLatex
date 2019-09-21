@@ -38,4 +38,22 @@ public:
 
       return (float)dis(gen)/accuracy;
     }
+
+    static double fade(double t) noexcept
+    {
+      return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+
+    static double lerp(double t, double a, double b) noexcept
+    {
+      return a + t * (b - a);
+    }
+
+    static double grad(uint8_t hash, double x, double y, double z) noexcept
+    {
+      int h = hash & 15;
+      float u = h < 8 ? x : y;
+      float v = h < 4 ? y : h == 12 || h == 14 ? x : z;
+      return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+    }
 };
