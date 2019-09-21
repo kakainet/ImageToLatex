@@ -6,10 +6,10 @@ namespace itl
         :logger(log)
     {
 
-        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
-                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        this->logger->log(std::string(cst::info::init_module_msg_start) + std::string(typeid(this).name()),
+                          Logger::stream_t::console, Logger::type_t::info);
 
-        for (int i = 0; i < constants::perlin::noises_num; i++)
+        for (int i = 0; i < cst::perlin::noises_num; i++)
         {
             std::stringstream full_path_perlin;
             full_path_perlin << path_to_data
@@ -20,10 +20,10 @@ namespace itl
             if(!boost::filesystem::exists(full_path_perlin.str()))
             {
                 std::stringstream missing_message;
-                missing_message << constants::perlin::missing_noise
+                missing_message << cst::perlin::missing_noise
                                 << std::to_string(i);
 
-                this->logger->log(missing_message.str(), Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+                this->logger->log(missing_message.str(), Logger::stream_t::console, Logger::type_t::info);
                 this->generate_noise_2d(full_path_perlin.str());
             }else
             {
@@ -31,25 +31,25 @@ namespace itl
             }
         }
 
-        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
-                          Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        this->logger->log(std::string(cst::info::init_module_msg_end) + std::string(typeid(this).name()),
+                          Logger::stream_t::console, Logger::type_t::info);
     }
 
     void PerlinNoise::generate_noise_2d(const std::string& dir)
     {
         std::vector<double> noise;
-        std::vector<int> permutation(static_cast<unsigned long>(constants::perlin::permutation_size));
+        std::vector<int> permutation(static_cast<unsigned long>(cst::perlin::permutation_size));
         std::iota(permutation.begin(), permutation.end(), 0);
         std::shuffle(permutation.begin(), permutation.end(),  std::mt19937{std::random_device{}()});
         permutation.insert(permutation.end(), permutation.begin(), permutation.end());
 
-        for(int y = 0; y < constants::perlin::dim; y++)
+        for(int y = 0; y < cst::perlin::dim; y++)
         {
-            for(int x = 0; x < constants::perlin::dim; x++)
+            for(int x = 0; x < cst::perlin::dim; x++)
             {
                 noise.emplace_back(generate_point_noise(
-                        static_cast<float>(x) / constants::perlin::frequency,
-                        static_cast<float>(y) / constants::perlin::frequency,
+                        static_cast<float>(x) / cst::perlin::frequency,
+                        static_cast<float>(y) / cst::perlin::frequency,
                         0.f,
                         permutation));
             }
@@ -63,10 +63,10 @@ namespace itl
     {
         std::ofstream output(dir);
 
-        for (size_t i = 0; i < constants::perlin::size - 1; i++) {
+        for (size_t i = 0; i < cst::perlin::size - 1; i++) {
             output << noise[i];
 
-            if(i != 0 && (i+1) % constants::perlin::dim == 0)
+            if(i != 0 && (i+1) % cst::perlin::dim == 0)
             {
                 output << '\n';
             } else
@@ -75,7 +75,7 @@ namespace itl
             }
 
         }
-        output << noise[constants::perlin::size - 1]
+        output << noise[cst::perlin::size - 1]
                << '\n';
 
     }
@@ -120,7 +120,7 @@ namespace itl
         const std::int32_t BA = p[B] + Z;
         const std::int32_t BB = p[B + 1] + Z;
 
-        return std::clamp(constants::perlin::lower_bound+ constants::perlin::start_delta+Math::lerp(w, Math::lerp(v, Math::lerp(u, Math::grad(p[AA], x, y, z),
+        return std::clamp(cst::perlin::lower_bound+ cst::perlin::start_delta+Math::lerp(w, Math::lerp(v, Math::lerp(u, Math::grad(p[AA], x, y, z),
                                     Math::grad(p[BA], x - 1, y, z)),
                             Math::lerp(u, Math::grad(p[AB], x, y - 1, z),
                                  Math::grad(p[BB], x - 1, y - 1, z))),
@@ -128,6 +128,6 @@ namespace itl
                                  Math::grad(p[BA + 1], x - 1, y, z - 1)),
                          Math::lerp(u, Math::grad(p[AB + 1], x, y - 1, z - 1),
                               Math::grad(p[BB + 1], x - 1, y - 1, z - 1)))),
-                          constants::perlin::lower_bound, constants::perlin::upper_bound);
+                          cst::perlin::lower_bound, cst::perlin::upper_bound);
     }
 }

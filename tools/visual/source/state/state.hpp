@@ -18,7 +18,7 @@ namespace itl
     class State
     {
     public:
-        int run(const std::string& path_to_pictures, const std::string& extension, const std::string& path_to_data);
+        int run(const std::string& path_to_data, const std::string& extension);
 
         explicit State(const std::string& title, const std::shared_ptr<Logger>& log,
                 const std::shared_ptr<itl::FlagManager>& flag_manager);
@@ -26,7 +26,7 @@ namespace itl
     private:
         bool generate_images(const std::string& dir, const std::string& extension);
         bool process_line(const std::string& path_to_raw, const std::string& dir_to_save,
-                                 int background_number, const std::string& extension) noexcept;
+                          const std::string& path_to_background, int background_idx, const std::string& extension) noexcept;
 
         std::shared_ptr<FlagManager> flag_manager;
         std::shared_ptr<Logger> logger;
