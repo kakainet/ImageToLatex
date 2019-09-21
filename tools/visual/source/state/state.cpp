@@ -2,7 +2,7 @@
 
 namespace itl
 {
-    State::State(const std::string& title, const std::shared_ptr<Logger>& log,
+    State::State(const std::shared_ptr<Logger>& log,
                  const std::shared_ptr<itl::FlagManager>& flag_manager)
         : flag_manager(flag_manager),
           logger(log),
@@ -61,7 +61,7 @@ namespace itl
         std::string output = dir + cst::file::output;
 
         std::vector<std::future<bool>> results;
-        for(int i = 0; i < paths_background.size(); i++)
+        for(size_t i = 0; i < paths_background.size(); i++)
         {
             for(auto& var : paths_pic)
             {
@@ -69,7 +69,7 @@ namespace itl
                 std::string cp_ext{extension};
                 results.emplace_back(this->thread_pool->enqueue(
                     &State::process_line, this, var, cp_output,
-                    paths_background[i], i, cp_ext));
+                    paths_background[i], static_cast<int>(i), cp_ext));
             }
         }
 

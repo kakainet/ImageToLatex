@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    itl::State state("ImageToLatex", logger, flag_manager);
+    itl::State state(logger, flag_manager);
     return state.run(argv[flag_number + cst::system::dir_to_data_idx],
                      argv[flag_number + cst::system::extension_idx]);
 }

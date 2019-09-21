@@ -20,8 +20,7 @@ namespace itl
        public:
         int run(const std::string& path_to_data, const std::string& extension);
 
-        explicit State(const std::string& title,
-                       const std::shared_ptr<Logger>& log,
+        explicit State(const std::shared_ptr<Logger>& log,
                        const std::shared_ptr<itl::FlagManager>& flag_manager);
 
        private:
