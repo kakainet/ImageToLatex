@@ -9,7 +9,7 @@ namespace cst
 {
     namespace window
     {
-        const cv::Vec2i size = cv::Vec2i{800, 800};
+        constexpr int dim = 800; // ==> size dim x dim
     }
 
     namespace system

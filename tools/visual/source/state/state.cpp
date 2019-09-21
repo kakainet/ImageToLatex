@@ -92,8 +92,8 @@ namespace itl
         this->mtx.unlock();
 
         if(!base.data || !background.data ||
-           background.rows != cst::window::size.rows ||
-           background.cols != cst::window::size.cols)
+           background.rows != cst::window::dim ||
+           background.cols != cst::window::dim)
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
             std::stringstream ss;
