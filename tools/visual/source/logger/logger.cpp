@@ -2,14 +2,13 @@
 
 namespace itl
 {
-    Logger::Logger(bool all, bool info, bool suggestions, bool errors, bool warnings)
-            : log_all(all), log_info(info), log_suggestions(suggestions), log_errors(errors), log_warnings(warnings)
+    Logger::Logger(bool all, bool info, bool suggestions, bool errors, bool warnings, bool time)
     {
-        this->init(all, info, suggestions, errors, warnings);
+        this->init(all, info, suggestions, errors, warnings, time);
     }
 
     Logger::Logger()
-        : Logger(true, true, true, true, true)
+        : Logger(true, true, true, true, true, true)
     {
     }
 
@@ -21,11 +20,11 @@ namespace itl
         if(type == type_t::error && !this->log_errors) return;
 
         std::string prefix_colored;
-        setPrefix(type, prefix_colored);
-        sendMessage(message, stream, prefix_colored);
+        set_prefix(type, prefix_colored);
+        send_message(message, stream, prefix_colored);
     }
 
-    void Logger::sendMessage(const std::string& message, Logger::stream_t stream, std::string &prefix_colored) noexcept
+    void Logger::send_message(const std::string& message, Logger::stream_t stream, std::string &prefix_colored) noexcept
     {
         std::chrono::time_point<std::chrono::system_clock> date = std::chrono::system_clock::now();
         std::time_t time = std::chrono::system_clock::to_time_t(date);
@@ -34,46 +33,50 @@ namespace itl
         {
             case Logger::stream_t::file:
             {
-                fileMessage(message, prefix_colored, time);
+                file_message(message, prefix_colored, time);
                 break;
             }
 
             case Logger::stream_t::console:
             {
-                consoleMessage(message, prefix_colored, time);
+                console_message(message, prefix_colored, time);
                 break;
             }
 
             case Logger::stream_t::both:
             {
-                consoleMessage(message, prefix_colored, time);
-                fileMessage(message, prefix_colored, time);
+                console_message(message, prefix_colored, time);
+                file_message(message, prefix_colored, time);
                 break;
             }
         }
     }
 
-    void Logger::consoleMessage(const std::string& message, std::string &prefix, std::time_t& time) noexcept
+    void Logger::console_message(const std::string& message, std::string &prefix, std::time_t& time) noexcept
     {
-        std::cout << cst::color::bold_green
-                  << std::ctime(&time)
-                  << prefix
+        if(log_time)
+        {
+            std::cout << cst::color::bold_green
+                      << std::ctime(&time);
+        }
+
+        std::cout << prefix
                   << cst::color::reset
                   << ' '
                   << message
-                  << "\n\n";
+                  << "\n";
     }
 
-    void Logger::fileMessage(const std::string& message, std::string &prefix, std::time_t& time) noexcept
+    void Logger::file_message(const std::string& message, std::string &prefix, std::time_t& time) noexcept
     {
         std::ofstream file("data/log/log.txt",std::ios::app);
 
         file << std::ctime(&time)
              << prefix << ' '
-             << message << "\n\n";
+             << message << "\n";
     }
 
-    void Logger::setPrefix(Logger::type_t type, std::string &prefix) noexcept
+    void Logger::set_prefix(Logger::type_t type, std::string &prefix) noexcept
     {
         std::stringstream prefix_with_color;
         switch (type)
@@ -110,7 +113,7 @@ namespace itl
         prefix = prefix_with_color.str();
     }
 
-    void Logger::init(bool all, bool info, bool suggestions, bool errors, bool warnings)
+    void Logger::init(bool all, bool info, bool suggestions, bool errors, bool warnings, bool time)
     {
         auto set_all_to_val = [=](bool val)
         {
@@ -120,16 +123,10 @@ namespace itl
             this->log_warnings = val;
         };
 
-        if(all && (!info || !suggestions || !errors || !warnings))
-        {
-
-            set_all_to_val(true);
-            this->log(cst::flags::contradiction_flags, Logger::stream_t::both, Logger::type_t::warning);
-        }
-
         if(all)
         {
             set_all_to_val(true);
+            this->log_time = time;
         }else
         {
             this->log_all = false;
@@ -137,6 +134,7 @@ namespace itl
             this->log_suggestions = suggestions;
             this->log_errors = errors;
             this->log_warnings = warnings;
+            this->log_time = time;
         }
     }
 }

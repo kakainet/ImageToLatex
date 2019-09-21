@@ -21,13 +21,14 @@ int main(int argc, char* argv[])
 
     std::shared_ptr<itl::FlagManager> flag_manager = std::make_shared<itl::FlagManager>(argc, argv, logger);
 
-    logger->init(flag_manager->contains_flag(cst::flags::logging_all),
-                 flag_manager->contains_flag(cst::flags::logging_info),
-                 flag_manager->contains_flag(cst::flags::logging_suggestions),
-                 flag_manager->contains_flag(cst::flags::logging_erros),
-                 flag_manager->contains_flag(cst::flags::logging_warnings));
+    logger->init(flag_manager->contains_flag(cst::flag::log_all),
+                 flag_manager->contains_flag(cst::flag::log_info),
+                 flag_manager->contains_flag(cst::flag::log_suggestions),
+                 flag_manager->contains_flag(cst::flag::log_erros),
+                 flag_manager->contains_flag(cst::flag::log_warnings),
+                 flag_manager->contains_flag(cst::flag::log_time));
 
-    if(flag_manager->contains_flag(cst::flags::testing))
+    if(flag_manager->contains_flag(cst::flag::testing))
     {
         testing::InitGoogleTest(&argc, argv);
 

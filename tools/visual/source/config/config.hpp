@@ -62,16 +62,17 @@ namespace cst
         constexpr char const* failed_merging = "Failed during creating roi: out of image boundaries";
     }
 
-    namespace flags
+    namespace flag
     {
         constexpr char const* contradiction_flags = "Flags which were passed to program are contradictory.";
         constexpr char const* testing = "-t";
         constexpr char const* printing_steps = "-p";
-        constexpr char const* logging_erros = "-le";
-        constexpr char const* logging_info = "-li";
-        constexpr char const* logging_suggestions = "-ls";
-        constexpr char const* logging_warnings = "-lw";
-        constexpr char const* logging_all = "-la";
+        constexpr char const* log_erros = "-le";
+        constexpr char const* log_info = "-li";
+        constexpr char const* log_suggestions = "-ls";
+        constexpr char const* log_warnings = "-lw";
+        constexpr char const* log_all = "-la";
+        constexpr char const* log_time = "-lt";
     }
 
     namespace color

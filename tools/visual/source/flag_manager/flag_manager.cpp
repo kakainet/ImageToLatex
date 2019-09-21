@@ -17,8 +17,8 @@ namespace itl
             return false;
         };
 
-        bool print_init = contains_flag_c_ptr(cst::flags::logging_all) ||
-                contains_flag_c_ptr(cst::flags::logging_info);
+        bool print_init = contains_flag_c_ptr(cst::flag::log_all) ||
+                contains_flag_c_ptr(cst::flag::log_info);
 
         if(print_init)
         {
