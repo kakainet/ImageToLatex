@@ -22,14 +22,14 @@ namespace itl
 
     private:
 
-        enum class FUNCTION_T
+        enum class function_t
         {
-            ROTATE,
-            SCALE,
-            PERLIN
+            rotate,
+            scale,
+            perlin
         };
 
-        std::map<FUNCTION_T, std::vector<std::function<void(cv::Mat&)>>> functions;
+        std::map<function_t, std::vector<std::function<void(cv::Mat&)>>> functions;
 
         /**
          * @brief packIndexes[i][j] is index of j'th effect from i'th pack.

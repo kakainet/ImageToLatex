@@ -21,8 +21,8 @@ namespace itl
 
     void EffectManager::load_functions()
     {
-        this->functions[FUNCTION_T::SCALE] = std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
+        this->functions[function_t::scale] = std::vector<std::function<void(cv::Mat&)>>();
+        this->functions[function_t::scale].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto val = Math::random_float(
                                                                     cst::effect::scale_incr_bounds(0),
@@ -31,7 +31,7 @@ namespace itl
                                                             this->transform->scale(sprite, val, val);
                                                         });
 
-        this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
+        this->functions[function_t::scale].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto val = Math::random_float(
                                                                     cst::effect::scale_decr_bounds(0),
@@ -40,7 +40,7 @@ namespace itl
                                                             this->transform->scale(sprite, val, val);
                                                         });
 
-        this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
+        this->functions[function_t::scale].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto rand = [](){return Math::random_float(
                                                                     cst::effect::scale_incr_bounds(0),
@@ -49,7 +49,7 @@ namespace itl
                                                             this->transform->scale(sprite, rand(), rand());
                                                         });
 
-        this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
+        this->functions[function_t::scale].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto rand = [](){return Math::random_float(
                                                                     cst::effect::scale_decr_bounds(0),
@@ -58,8 +58,8 @@ namespace itl
                                                             this->transform->scale(sprite, rand(), rand());
                                                         });
 
-        this->functions[FUNCTION_T::ROTATE] = std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[FUNCTION_T::ROTATE].emplace_back([this](cv::Mat& sprite)
+        this->functions[function_t::rotate] = std::vector<std::function<void(cv::Mat&)>>();
+        this->functions[function_t::rotate].emplace_back([this](cv::Mat& sprite)
                                                          {
                                                              auto val = Math::random_float(
                                                                      0,
@@ -70,7 +70,7 @@ namespace itl
 
                                                          });
 
-        this->functions[FUNCTION_T::ROTATE].emplace_back([this](cv::Mat& sprite)
+        this->functions[function_t::rotate].emplace_back([this](cv::Mat& sprite)
                                                          {
                                                              auto val = Math::random_float(
                                                                      -cst::effect::max_degree,
@@ -103,7 +103,7 @@ namespace itl
             }
 
             int next = n - 1;
-            while (next >= 0 && (indices[next] + 1 >= static_cast<int>(this->functions.at(static_cast<FUNCTION_T>(next)).size())))
+            while (next >= 0 && (indices[next] + 1 >= static_cast<int>(this->functions.at(static_cast<function_t>(next)).size())))
             {
                 next--;
             }
@@ -132,7 +132,7 @@ namespace itl
 
             for(size_t i = 0; i < indexPack.size(); i++)
             {
-                auto fun = static_cast<FUNCTION_T>(i);
+                auto fun = static_cast<function_t>(i);
                 this->functions[fun][indexPack[i]](new_sprite);
             }
 
