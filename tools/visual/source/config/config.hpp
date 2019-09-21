@@ -46,6 +46,9 @@ namespace cst
     {
         constexpr char const* init_module_msg_start = "Initializing module: ";
         constexpr char const* init_module_msg_end = "Initialized module: ";
+        constexpr char const* finished = "Work finished successfully";
+        constexpr char const* failed = "Something went wrong";
+
     }  // namespace info
 
     namespace gtest

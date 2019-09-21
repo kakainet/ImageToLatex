@@ -43,6 +43,12 @@ int main(int argc, char* argv[])
     }
 
     itl::State state(logger, flag_manager);
-    return state.run(argv[flag_number + cst::system::dir_to_data_idx],
-                     argv[flag_number + cst::system::extension_idx]);
+    int result = state.run(argv[flag_number + cst::system::dir_to_data_idx],
+                           argv[flag_number + cst::system::extension_idx]);
+
+    logger->log(result == cst::system::pass_code ? cst::info::finished
+                                                 : cst::info::failed,
+                itl::Logger::stream_t::console, itl::Logger::type_t::info);
+
+    return result;
 }
