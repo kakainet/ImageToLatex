@@ -8,23 +8,31 @@ namespace constants
 {
     namespace window
     {
-        const auto size = cv::Vec2i{800,800};
+        const cv::Vec2i size = cv::Vec2i{800,800};
     }
 
     namespace system
     {
-        constexpr char const* usage = "Usage: \n\t| <optional> flags \n\t| DIR_TO_PICTURES \n\t| EXTENSION_OF_PICTURES \n\t| DIR_TO_DATA";
-        constexpr int8_t dir_to_pics_idx = 1;
+        constexpr char const* usage = "Usage: \n\t| <optional> flags \n\t| path/to/data/ \n\t| extension of pictures";
+        constexpr int8_t dir_to_data_idx = 1;
         constexpr int8_t extension_idx = 2;
-        constexpr int8_t dir_to_data_idx = 3;
-        constexpr int8_t required_command_args_size = 4;
+        constexpr int8_t required_command_args_size = 3;
         constexpr char const* wrong_args_size = "Wrong number of arguments.";
         constexpr char const* empty_path = "Cache can't find resource in empty path.";
         constexpr char const* not_found = "Cache can't find resource in this path.";
         constexpr char const* line_processing_error = "Error occured during line processing.";
-        constexpr char const* latex_path = "../../../latex/latex.sh";
         constexpr int8_t error_code = 1;
         constexpr int8_t pass_code = 0;
+    }
+
+    namespace file
+    {
+        constexpr char const* noise = "noises/";
+        constexpr char const* pic = "pics/";
+        constexpr char const* logger = "log/";
+        constexpr char const* texture = "textures/";
+        constexpr char const* input = "input/";
+        constexpr char const* output = "output/";
     }
 
     namespace info
@@ -55,7 +63,7 @@ namespace constants
 
     namespace flags
     {
-        constexpr char const* contradiction_flags = "FLags which were passed to program are contradictory.";
+        constexpr char const* contradiction_flags = "Flags which were passed to program are contradictory.";
         constexpr char const* testing = "-t";
         constexpr char const* printing_steps = "-p";
         constexpr char const* logging_erros = "-le";
@@ -70,7 +78,7 @@ namespace constants
         constexpr char const* reset = "\033[0m";
         constexpr char const* bold_red = "\033[1;31m";
         constexpr char const* bold_yellow = "\033[1;33m";
-        constexpr auto bold_cyan = "\033[1;36m";
+        constexpr char const* bold_cyan = "\033[1;36m";
         constexpr char const* bold_magenta = "\033[1;37m";
         constexpr char const* bold_green = "\033[1;92m";
     }
