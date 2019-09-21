@@ -6,15 +6,15 @@ namespace itl
                                  const std::string& path_to_data)
         : logger(log)
     {
-        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
-                    Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        this->logger->log(std::string(cst::info::init_module_msg_start) + std::string(typeid(this).name()),
+                    Logger::stream_t::console, Logger::type_t::info);
 
         this->perlin_noise = std::make_unique<PerlinNoise>(logger, path_to_data);
         this->load_functions();
         this->generate_all_effect_packs();
 
-        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
-                    Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        this->logger->log(std::string(cst::info::init_module_msg_end) + std::string(typeid(this).name()),
+                    Logger::stream_t::console, Logger::type_t::info);
     }
 
 
@@ -25,36 +25,36 @@ namespace itl
         this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto val = Math::random_float(
-                                                                    constants::effect::scale_incr_bounds(0),
-                                                                    constants::effect::scale_incr_bounds(1),
-                                                                    constants::effect::accuracy);
+                                                                    cst::effect::scale_incr_bounds(0),
+                                                                    cst::effect::scale_incr_bounds(1),
+                                                                    cst::effect::accuracy);
                                                             this->transform->scale(sprite, val, val);
                                                         });
 
         this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto val = Math::random_float(
-                                                                    constants::effect::scale_decr_bounds(0),
-                                                                    constants::effect::scale_decr_bounds(1),
-                                                                    constants::effect::accuracy);
+                                                                    cst::effect::scale_decr_bounds(0),
+                                                                    cst::effect::scale_decr_bounds(1),
+                                                                    cst::effect::accuracy);
                                                             this->transform->scale(sprite, val, val);
                                                         });
 
         this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto rand = [](){return Math::random_float(
-                                                                    constants::effect::scale_incr_bounds(0),
-                                                                    constants::effect::scale_incr_bounds(1),
-                                                                    constants::effect::accuracy);};
+                                                                    cst::effect::scale_incr_bounds(0),
+                                                                    cst::effect::scale_incr_bounds(1),
+                                                                    cst::effect::accuracy);};
                                                             this->transform->scale(sprite, rand(), rand());
                                                         });
 
         this->functions[FUNCTION_T::SCALE].emplace_back([this](cv::Mat& sprite)
                                                         {
                                                             auto rand = [](){return Math::random_float(
-                                                                    constants::effect::scale_decr_bounds(0),
-                                                                    constants::effect::scale_decr_bounds(1),
-                                                                    constants::effect::accuracy);};
+                                                                    cst::effect::scale_decr_bounds(0),
+                                                                    cst::effect::scale_decr_bounds(1),
+                                                                    cst::effect::accuracy);};
                                                             this->transform->scale(sprite, rand(), rand());
                                                         });
 
@@ -63,8 +63,8 @@ namespace itl
                                                          {
                                                              auto val = Math::random_float(
                                                                      0,
-                                                                     constants::effect::max_degree,
-                                                                     constants::effect::accuracy);
+                                                                     cst::effect::max_degree,
+                                                                     cst::effect::accuracy);
 
                                                              this->transform->rotate(sprite, val);
 
@@ -73,9 +73,9 @@ namespace itl
         this->functions[FUNCTION_T::ROTATE].emplace_back([this](cv::Mat& sprite)
                                                          {
                                                              auto val = Math::random_float(
-                                                                     -constants::effect::max_degree,
+                                                                     -cst::effect::max_degree,
                                                                      0,
-                                                                     constants::effect::accuracy);
+                                                                     cst::effect::accuracy);
 
                                                              this->transform->rotate(sprite, val);
                                                          });

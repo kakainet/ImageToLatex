@@ -6,21 +6,21 @@ namespace itl
                  const std::shared_ptr<itl::FlagManager>& flag_manager)
         : flag_manager(flag_manager), logger(log), hardware_concurrency(std::thread::hardware_concurrency())
     {
-        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
-                         Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        this->logger->log(std::string(cst::info::init_module_msg_start) + std::string(typeid(this).name()),
+                         Logger::stream_t::console, Logger::type_t::info);
         std::stringstream thread_info;
-        thread_info << constants::thread::number_thread_info
+        thread_info << cst::thread::number_thread_info
                     << " "
                     << std::to_string(this->hardware_concurrency);
 
         this->logger->log(thread_info.str(),
-                         Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+                         Logger::stream_t::console, Logger::type_t::info);
 
         this->thread_pool = std::make_unique<ThreadPool>(this->hardware_concurrency);
         this->transform = std::make_unique<Transform>(log);
 
-        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
-                         Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        this->logger->log(std::string(cst::info::init_module_msg_end) + std::string(typeid(this).name()),
+                         Logger::stream_t::console, Logger::type_t::info);
     }
 
     int State::run(const std::string& path_to_data, const std::string& extension)
@@ -28,8 +28,8 @@ namespace itl
         //Effect manager depends on data so it is not created in ctor but there
         this->effect_manager = std::make_unique<EffectManager>(this->logger, path_to_data);
         return
-                this->generate_images(path_to_data + constants::file::pic, extension)
-                ? constants::system::pass_code : constants::system::error_code;
+                this->generate_images(path_to_data + cst::file::pic, extension)
+                ? cst::system::pass_code : cst::system::error_code;
     }
 
     bool State::generate_images(const std::string& dir, const std::string& extension)
@@ -47,10 +47,10 @@ namespace itl
         };
         std::vector<std::string> paths_pic;
         std::vector<std::string> paths_background;
-        glob_to_stdstring(dir + constants::file::input + '*' + extension, paths_pic);
-        glob_to_stdstring(dir + constants::file::output + '*' + extension, paths_background);
+        glob_to_stdstring(dir + cst::file::input + '*' + extension, paths_pic);
+        glob_to_stdstring(dir + "../" + cst::file::texture + '*' + extension, paths_background);
 
-        std::string output = dir + constants::file::output;
+        std::string output = dir + cst::file::output;
 
         std::vector<std::future<bool>> results;
         for(int i = 0; i < paths_background.size(); i++)
@@ -80,12 +80,12 @@ namespace itl
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
             std::stringstream ss;
-            ss << constants::texture::failed_load_texture
+            ss << cst::texture::failed_load_texture
                << "\n\tBase texture path: "
                << path_to_raw
                << "\n\tBackground texture path: "
                << path_to_background;
-            this->logger->log(ss.str(), Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+            this->logger->log(ss.str(), Logger::stream_t::console, Logger::type_t::error);
 
             return false;
         }

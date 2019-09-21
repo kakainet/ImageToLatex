@@ -5,18 +5,18 @@ namespace itl
     Transform::Transform(const std::shared_ptr<Logger>& log)
         : logger(log)
     {
-        this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
-                    Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        this->logger->log(std::string(cst::info::init_module_msg_start) + std::string(typeid(this).name()),
+                    Logger::stream_t::console, Logger::type_t::info);
 
-        this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
-                    Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+        this->logger->log(std::string(cst::info::init_module_msg_end) + std::string(typeid(this).name()),
+                    Logger::stream_t::console, Logger::type_t::info);
     }
 
     void Transform::merge_images(cv::Mat* background, cv::Mat* upcoming, int x, int y)
     {
         auto handle_cv_8uc4 = [=](int i, int j)
         {
-            if(upcoming->at<cv::Vec4b>(j, i)[3] > constants::effect::alpha_trash_hold)
+            if(upcoming->at<cv::Vec4b>(j, i)[3] > cst::effect::alpha_trash_hold)
             {
                 background->at<cv::Vec4b>(y+j, x+i) = upcoming->at<cv::Vec4b>(j, i);
             }
@@ -46,13 +46,13 @@ namespace itl
 
                 switch(upcoming->channels())
                 {
-                    case constants::effect::rgb_channel_idx:
+                    case cst::effect::rgb_channel_idx:
                     {
                         handle_cv_8uc3(i, j);
                         break;
                     }
 
-                    case constants::effect::rgba_channel_idx:
+                    case cst::effect::rgba_channel_idx:
                     {
                         handle_cv_8uc4(i, j);
                         break;
@@ -60,8 +60,8 @@ namespace itl
 
                     default:
                     {
-                        this->logger->log(constants::effect::failed_merging,
-                                         Logger::STREAM::BOTH, Logger::TYPE::ERROR);
+                        this->logger->log(cst::effect::failed_merging,
+                                         Logger::stream_t::console, Logger::type_t::error);
                         return;
                     }
                 }
@@ -90,7 +90,8 @@ namespace itl
 
     void Transform::scale(cv::Mat &sprite, float factor_x, float factor_y)
     {
-        cv::resize(sprite, sprite, cv::Size(sprite.cols * factor_x,sprite.rows * factor_y),
+        cv::resize(sprite, sprite, cv::Size(static_cast<int>(sprite.cols * factor_x),
+                                            static_cast<int>(sprite.rows * factor_y)),
                 0,
                 0,
                 CV_INTER_LINEAR);

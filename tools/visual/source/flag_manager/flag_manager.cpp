@@ -17,24 +17,24 @@ namespace itl
             return false;
         };
 
-        bool print_init = contains_flag_c_ptr(constants::flags::logging_all) ||
-                contains_flag_c_ptr(constants::flags::logging_info);
+        bool print_init = contains_flag_c_ptr(cst::flags::logging_all) ||
+                contains_flag_c_ptr(cst::flags::logging_info);
 
         if(print_init)
         {
-            this->logger->log(std::string(constants::info::init_module_msg_start) + std::string(typeid(this).name()),
-                              Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+            this->logger->log(std::string(cst::info::init_module_msg_start) + std::string(typeid(this).name()),
+                              Logger::stream_t::console, Logger::type_t::info);
         }
 
-        for(int i = 0; i < argc - constants::system::required_command_args_size; i++)
+        for(int i = 0; i < argc - cst::system::required_command_args_size; i++)
         {
             this->flags.emplace_back(std::string(argv[i+1]));
         }
 
         if(print_init)
         {
-            this->logger->log(std::string(constants::info::init_module_msg_end) + std::string(typeid(this).name()),
-                              Logger::STREAM::CONSOLE, Logger::TYPE::INFO);
+            this->logger->log(std::string(cst::info::init_module_msg_end) + std::string(typeid(this).name()),
+                              Logger::stream_t::console, Logger::type_t::info);
         }
     }
 
