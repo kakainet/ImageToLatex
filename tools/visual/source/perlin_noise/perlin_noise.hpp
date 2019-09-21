@@ -18,12 +18,12 @@
 #pragma once
 
 #include <algorithm>
-#include <random>
-#include <vector>
-#include <string>
-#include <memory>
-#include <fstream>
 #include <cmath>
+#include <fstream>
+#include <memory>
+#include <random>
+#include <string>
+#include <vector>
 
 #include <boost/filesystem.hpp>
 
@@ -35,17 +35,20 @@ namespace itl
 {
     class PerlinNoise
     {
-    public:
+       public:
         explicit PerlinNoise(const std::shared_ptr<Logger>& log,
                              const std::string& path_to_data);
         const std::vector<double>& get_random_noise() const;
-    private:
+
+       private:
         void generate_noise_2d(const std::string& dir);
-        double generate_point_noise(double x, double y, double z, const std::vector<int>& permutation) const;
-        void save_to_file(const std::vector<double>& noise, const std::string& dir) const;
+        double generate_point_noise(double x, double y, double z,
+                                    const std::vector<int>& permutation) const;
+        void save_to_file(const std::vector<double>& noise,
+                          const std::string& dir) const;
         void read_from_file(const std::string& dir);
 
         std::vector<std::vector<double>> noises;
         std::shared_ptr<Logger> logger;
     };
-}
+}  // namespace itl
