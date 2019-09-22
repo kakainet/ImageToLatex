@@ -42,21 +42,21 @@ namespace itl
 
         this->functions[function_t::scale] =
             std::vector<std::function<void(cv::Mat&)>>();
-        this->functions[function_t::scale].emplace_back(
-            [this](cv::Mat& sprite) {
-                auto val = Math::random_float(cst::effect::scale_incr_bounds(0),
-                                              cst::effect::scale_incr_bounds(1),
-                                              cst::effect::accuracy);
-                this->transform->scale_clamp(sprite, val, val, 0, cst::window::dim);
-            });
+        this->functions[function_t::scale].emplace_back([this](
+                                                            cv::Mat& sprite) {
+            auto val = Math::random_float(cst::effect::scale_incr_bounds(0),
+                                          cst::effect::scale_incr_bounds(1),
+                                          cst::effect::accuracy);
+            this->transform->scale_clamp(sprite, val, val, 0, cst::window::dim);
+        });
 
-        this->functions[function_t::scale].emplace_back(
-            [this](cv::Mat& sprite) {
-                auto val = Math::random_float(cst::effect::scale_decr_bounds(0),
-                                              cst::effect::scale_decr_bounds(1),
-                                              cst::effect::accuracy);
-                this->transform->scale_clamp(sprite, val, val, 0, cst::window::dim);
-            });
+        this->functions[function_t::scale].emplace_back([this](
+                                                            cv::Mat& sprite) {
+            auto val = Math::random_float(cst::effect::scale_decr_bounds(0),
+                                          cst::effect::scale_decr_bounds(1),
+                                          cst::effect::accuracy);
+            this->transform->scale_clamp(sprite, val, val, 0, cst::window::dim);
+        });
 
         this->functions[function_t::scale].emplace_back(
             [this](cv::Mat& sprite) {
@@ -65,7 +65,8 @@ namespace itl
                                               cst::effect::scale_incr_bounds(1),
                                               cst::effect::accuracy);
                 };
-                this->transform->scale_clamp(sprite, rand(), rand(), 0, cst::window::dim);
+                this->transform->scale_clamp(sprite, rand(), rand(), 0,
+                                             cst::window::dim);
             });
 
         this->functions[function_t::scale].emplace_back(
@@ -75,7 +76,8 @@ namespace itl
                                               cst::effect::scale_decr_bounds(1),
                                               cst::effect::accuracy);
                 };
-                this->transform->scale_clamp(sprite, rand(), rand(), 0, cst::window::dim);
+                this->transform->scale_clamp(sprite, rand(), rand(), 0,
+                                             cst::window::dim);
             });
     }
 
