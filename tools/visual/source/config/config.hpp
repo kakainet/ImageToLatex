@@ -9,7 +9,7 @@ namespace cst
 {
     namespace window
     {
-        constexpr int dim = 800; // ==> size dim x dim
+        constexpr int dim = 800;  // ==> size dim x dim
     }
 
     namespace system

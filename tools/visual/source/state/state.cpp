@@ -120,9 +120,8 @@ namespace itl
         for(auto& spr : sprites)
         {
             std::stringstream path_to_save;
-            path_to_save << dir_to_save << "/" << background_idx << "_"
-                         << file_name << "_" << std::to_string(itr++)
-                         << extension;
+            path_to_save << dir_to_save << "/" << file_name << "_" <<
+                background_idx << "_" << std::to_string(itr++) << extension;
 
             // apply position effect - it is separated due to
             // performance. Using relative position instead
