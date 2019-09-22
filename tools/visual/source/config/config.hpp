@@ -63,7 +63,7 @@ namespace cst
     {
         const cv::Vec2f scale_incr_bounds = {1.05f, 2.f};
         const cv::Vec2f scale_decr_bounds = {0.5f, 0.95f};
-        constexpr float max_degree = 45.f;
+        constexpr float max_degree = 15.f;
         constexpr int accuracy = 100;
         constexpr int8_t rgb_channel_idx = 3;
         constexpr int8_t rgba_channel_idx = 4;
