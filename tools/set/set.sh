@@ -8,9 +8,9 @@ do
     asy transform -noV -render 5 -f png &
     cd ..
 done
-
+mkdir -p output
 wait
-
+idx=0
 for var in "$@"
 do
     cd "${var}_aux"
@@ -18,7 +18,13 @@ do
     wait
     mv $var ../
     rm -f transform.asy
+    for file in *.png
+    do
+        mv "$file" "sample${idx}.png"
+        mv "sample${idx}.png" ../output/
+        ((++idx))
+    done
     cd ..
+    wait
+    rm -rf "${var}_aux"
 done
-
-wait
