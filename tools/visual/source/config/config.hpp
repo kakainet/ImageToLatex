@@ -4,7 +4,9 @@
 
 #include <opencv2/core.hpp>
 
-// constants
+/**
+ * constants
+ */
 namespace cst
 {
     namespace window
