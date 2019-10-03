@@ -1,6 +1,3 @@
-#include <sys/resource.h>
-
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include "flag_manager/flag_manager.hpp"
 #include "logger/logger.hpp"
