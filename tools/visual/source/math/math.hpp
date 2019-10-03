@@ -1,13 +1,13 @@
 #pragma once
 #include <random>
 
-/*
- * @brief class which is used to compute more complex things
+/**
+ * class which is used to compute math things
  */
 class Math
 {
    public:
-    /*
+    /**
      * @brief random value from "from" to "to"
      * @param from [from ...
      * @param to [... to]
@@ -22,7 +22,7 @@ class Math
         return dis(gen);
     }
 
-    /*
+    /**
      * @brief random value from "from" to "to"
      * @param from [from ...
      * @param to [... to]
@@ -40,16 +40,36 @@ class Math
         return (float)dis(gen) / accuracy;
     }
 
+    /**
+     * @brief fade function proposed in https://mrl.nyu.edu/~perlin/paper445.pdf
+     * @param t - value
+     * @return value after fading
+     */
     static double fade(double t) noexcept
     {
         return t * t * t * (t * (t * 6 - 15) + 10);
     }
 
+    /**
+     * @brief linear interpolation
+     * @param t - linear coefficient
+     * @param a - value_0
+     * @param b - value_1
+     * @return lerp value
+     */
     static double lerp(double t, double a, double b) noexcept
     {
         return a + t * (b - a);
     }
 
+    /**
+     * @brief grad function proposed in https://mrl.nyu.edu/~perlin/paper445.pdf
+     * @param hash - value from 0 to 255
+     * @param x - first coordinate
+     * @param y - second coordinate
+     * @param z - third coordinate
+     * @return grad value
+     */
     static double grad(uint8_t hash, double x, double y, double z) noexcept
     {
         int h = hash & 15;

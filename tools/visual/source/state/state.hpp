@@ -15,29 +15,62 @@
 
 namespace itl
 {
+    /**
+     * class designed for managing whole process
+     */
     class State
     {
        public:
-        int run(const std::string& path_to_data, const std::string& extension);
 
+        /**
+         * @brief explicit ctor
+         * @param log - ptr to logger
+         * @param flag_manager - ptr to flag manager
+         */
         explicit State(const std::shared_ptr<Logger>& log,
                        const std::shared_ptr<itl::FlagManager>& flag_manager);
 
-       private:
+        /**
+         * @brief run whole imaging processing
+         * @param path_to_data - path to "data" folder
+         * @param extension - extension of supported images
+         * @return 0 if program finished without problems, 1 otherwise
+         */
+        int run(const std::string& path_to_data, const std::string& extension);
+
+
+    private:
+
+        /**
+         * @brief generates all images using effects
+         * @param dir - path to data folder
+         * @param extension - ext of supported images
+         * @return
+         */
         bool generate_images(const std::string& dir,
                              const std::string& extension);
+
+        /**
+         * @brief process 1 image and produces many modified images
+         * @param path_to_raw - path to raw input image
+         * @param dir_to_save - directory where output should be saved
+         * @param path_to_background - path to background image
+         * @param background_idx - index of background
+         * @param extension - extension of supported images (both background and sprites)
+         * @return true if everything finished correctly
+         */
         bool process_line(const std::string& path_to_raw,
                           const std::string& dir_to_save,
                           const std::string& path_to_background,
                           int background_idx,
                           const std::string& extension) noexcept;
 
-        std::shared_ptr<FlagManager> flag_manager;
-        std::shared_ptr<Logger> logger;
-        std::unique_ptr<EffectManager> effect_manager;
-        std::unique_ptr<ThreadPool> thread_pool;
-        std::unique_ptr<Transform> transform;
-        const int hardware_concurrency;
-        std::mutex mtx;
+        std::shared_ptr<FlagManager> flag_manager; ///< ptr to flag manager
+        std::shared_ptr<Logger> logger; ///< ptr to logger
+        std::unique_ptr<EffectManager> effect_manager; ///< own effect manager
+        std::unique_ptr<ThreadPool> thread_pool; ///< thread pool for workers
+        std::unique_ptr<Transform> transform; ///< transform for images
+        const int hardware_concurrency; ///< numbers of used threads
+        std::mutex mtx; ///< own mutex for avoid race condition
     };
 }  // namespace itl

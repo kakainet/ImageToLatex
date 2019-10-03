@@ -104,9 +104,6 @@ namespace itl
                    0, 0, CV_INTER_LINEAR);
     }
 
-    /*
-     * @brief equivalent of std::clamp for scaling cv::Mat
-     */
     void Transform::scale_clamp(cv::Mat& sprite, float factor_x, float factor_y,
                                 int lo, int hi)
     {

@@ -97,26 +97,27 @@ namespace itl
                              std::time_t& time) noexcept;
 
         /**
-         * @brief
-         * @param prefix
-         * @param time
+         * @brief direct message sender to file
+         * @param message - text to send
+         * @param prefix - prefix of message
+         * @param time - time of log
          */
-        void file_message(const std::string&, std::string& prefix,
+        void file_message(const std::string& message, std::string& prefix,
                           std::time_t& time) noexcept;
 
         /**
-         * @brief
-         * @param type
-         * @param prefix
+         * @brief prepare prefix
+         * @param type - type of message
+         * @param prefix - string of prefix
          */
         void set_prefix(Logger::type_t type, std::string& prefix) noexcept;
 
-        bool log_all;
-        bool log_info;
-        bool log_suggestions;
-        bool log_errors;
-        bool log_warnings;
+        bool log_all;           ///< flag if ALL messages should be supported
+        bool log_info;          ///< flag if [INFO] messages should be supported
+        bool log_suggestions;   ///< flag if [SUGGESTION] messages should be supported
+        bool log_errors;        ///< flag if [ERROR] messages should be supported
+        bool log_warnings;      ///< flag if [WARNING] messages should be supported
 
-        bool log_time;
+        bool log_time;          ///< flag if time should be added to logs
     };
 }  // namespace itl
