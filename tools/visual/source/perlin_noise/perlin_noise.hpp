@@ -19,18 +19,16 @@ namespace itl
  /**
  * Perlin Noise class
  * based on paper:
- * ----------------
+ *
  * Improving Noise
  * Ken Perlin
  * Media Research Laboratory, Dept. of Computer Science, New York University
  * perlin@cat.nyu.edu
  * https://mrl.nyu.edu/~perlin/paper445.pdf
- * ----------------
  * and proposed code related with that paper:
- * ----------------
  * https://mrl.nyu.edu/~perlin/noise/
  * created by KEN PERLIN (2002)
- * ----------------
+ *
  */
     class PerlinNoise
     {
