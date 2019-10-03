@@ -16,7 +16,7 @@
 
 namespace itl
 {
-    /**
+ /**
  * Perlin Noise class
  * based on paper:
  * ----------------

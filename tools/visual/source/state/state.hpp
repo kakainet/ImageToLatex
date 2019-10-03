@@ -13,6 +13,9 @@
 #include "../flag_manager/flag_manager.hpp"
 #include "../transform/transform.hpp"
 
+/**
+ * everything which is direct part of itl/visual
+ */
 namespace itl
 {
     /**
