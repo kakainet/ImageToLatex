@@ -15,7 +15,6 @@ add_executable(visual
         source/config/config.hpp
         source/state/state.cpp
         source/state/state.hpp
-        source/manager/manager.hpp
         source/perlin_noise/perlin_noise.hpp
         source/perlin_noise/perlin_noise.cpp
         source/math/math.hpp
@@ -23,7 +22,6 @@ add_executable(visual
         source/effect/effect_manager.hpp
         source/flag_manager/flag_manager.cpp
         source/flag_manager/flag_manager.hpp
-        source/utils/utils.hpp
         source/transform/transform.cpp
         source/transform/transform.hpp)
 
