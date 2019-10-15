@@ -9,7 +9,7 @@ namespace cst
 {
     namespace window
     {
-        constexpr int dim = 800;  // ==> size dim x dim
+        constexpr int dim = 128;  // ==> size dim x dim
     }
 
     namespace system
@@ -61,8 +61,8 @@ namespace cst
 
     namespace effect
     {
-        const cv::Vec2f scale_incr_bounds = {1.05f, 2.f};
-        const cv::Vec2f scale_decr_bounds = {0.5f, 0.95f};
+        const cv::Vec2f scale_incr_bounds = {1.f, 1.3f};
+        const cv::Vec2f scale_decr_bounds = {0.7f, 1.f};
         constexpr float max_degree = 15.f;
         constexpr int accuracy = 100;
         constexpr int8_t rgb_channel_idx = 3;

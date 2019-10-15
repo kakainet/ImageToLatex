@@ -133,8 +133,8 @@ namespace itl
 
             this->transform->merge_images(&dst, &background, 0, 0);
             this->transform->merge_images(&dst, &*spr,
-                                          dx < 0 ? 0 : Math::random(0, dx),
-                                          dy < 0 ? 0 : Math::random(0, dy));
+                                          dx < 0 ? 0 : dx / 2,
+                                          dy < 0 ? 0 : dy / 2);
             cv::imwrite(path_to_save.str(), dst);
         }
 
