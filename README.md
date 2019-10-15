@@ -44,10 +44,11 @@ In that part there are predefined effects like:
 |non-symetric scaling downward | scales independently x and y downward|
 
 There are also effects applied outside effect manager:
+
 |Type| Brief |
 | :---: |     :---:      | 
 |position| changes position of sprite on background|
-|perlin| applies perlin noise mask |
+|perlin| applies perlin noise mask (in progress) |
 
 Additional effects are:
 
