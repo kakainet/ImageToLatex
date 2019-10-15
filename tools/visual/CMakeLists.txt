@@ -23,7 +23,9 @@ add_executable(visual
         source/flag_manager/flag_manager.cpp
         source/flag_manager/flag_manager.hpp
         source/transform/transform.cpp
-        source/transform/transform.hpp)
+        source/transform/transform.hpp
+
+        source/tests/math_test.cc)
 
 #boost
 set(Boost_USE_STATIC_LIBS OFF)
