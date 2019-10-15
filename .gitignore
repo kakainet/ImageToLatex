@@ -15,12 +15,11 @@ tools/visual/visual
 tools/visual/external
 tools/visual/gtest
 tools/visual/clang_rec.sh
-
+tools/visual/data/noises/*.in
 # graphic
 *.png
 
 #text
-*.in
 *.txt
 
 # jetbrains
