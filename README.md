@@ -12,11 +12,11 @@ matching strict expectations, for training purposes. <br>
 
 Performance:
 
-|Type| Images | Time |
-| :---: |     :---:      |     :---:      |
-|Complex|1.600.000  | 1s  |
-|Standard|~2.000.000  | 1s  |
-|Basic| ~4.000.000  | 1s  |
+|Type| Images/sec |
+| :---: |     :---:      |
+|Complex|~1.600.000  |
+|Standard|~2.000.000  |
+|Basic| ~4.000.000  |
 
 ## Tool/Set
 Script tool which gets several input files with raw LaTeX and convert them into basic .png expressions. This part executes worker for each input file. Using via bash script: `bash set.sh *.in`. <br>
@@ -102,8 +102,7 @@ If you don't want logging, just run program without any flags. <br>
 ## Model
 Model is based on paper:
 ```
-IMAGE TO LATEX VIA NEURAL
-NETWORKS
+IMAGE TO LATEX VIA NEURAL NETWORKS
 Avinash More
 San Jose State University
 ```
