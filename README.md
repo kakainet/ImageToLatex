@@ -22,7 +22,7 @@ Performance:
 Script tool which gets several input files with raw LaTeX and convert them into basic .png expressions. This part executes worker for each input file. Using via bash script: `bash set.sh *.in`. <br>
 It will produce all content inside temporary folders, then it moves all photos to output folder. These images are input for `visual` part. <br>
 
-It gets raw text like (for simplicity): `7+5` and returns: <br>
+It gets raw text like (for simplicity): `7+9` and returns: <br>
 <p align="center">
   <img src="https://i.imgur.com/EaPStPE.png" width="75" height="50" title="hover text">
 </p>
@@ -48,12 +48,8 @@ There are also effects applied outside effect manager:
 |Type| Brief |
 | :---: |     :---:      | 
 |position| changes position of sprite on background|
-|perlin| applies perlin noise mask (in progress) |
-
-Additional effects are:
-
-|position| moves sprite relative to background |
 |background| changes background |
+|perlin| applies perlin noise mask (in progress) |
 
 Each effect is take or not. For each image we apply all possible combinations of effects. Let say that we have effects `e1, e2, e3` and image `p`. Then output will be <br>
 `p ---(!e1,!e2,!e3)---> p0` <br>
@@ -68,7 +64,7 @@ Each effect is take or not. For each image we apply all possible combinations of
 `!e` menas that we don't take `e`.  So for each image the output are `2^k` modified images. <br>
 Example of use:
 ```
-mvxxx@mvxxx:~/programming/source/ai/itl/ImageToLatex/tools/visual/release$ time ./visual -la ../data/ *.png
+$ time ./visual -la ../data/ *.png
 [INFO] Initializing module: PN3itl11FlagManagerE
 [INFO] Initialized module: PN3itl11FlagManagerE
 [INFO] Initializing module: PN3itl5StateE
