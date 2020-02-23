@@ -119,21 +119,22 @@ class StackedSequence(AbstractSequence):
             self._thread_count,
             **self._feature_kwargs
         )
-
-
+#len categ encoder to ile znakow, supported characters to glebokosc
+#sciezka do calego datasetu
 def load(input_path, category_encoder, supported_characters,
         feature_shape, batch_size, thread_count=None):
 
     ungrouped_feature_paths = _list_files(os.path.join(input_path, 'features'))
     unsorted_feature_paths = collections.defaultdict(list)
 
-    for feature_path in ungrouped_feature_paths:
+    for feature_path in ungrouped_feature_paths:#dla danego img wszystkie jego wersje wrzuca do 1 listy, ale zapisuje patha do wersji do tego danego featchera i te numerki jego
         feature_index, *sub_feature_indexes = _parse_indexes(feature_path)
-        unsorted_feature_paths[feature_index].append(((feature_index, *sub_feature_indexes), feature_path)) 
+        unsorted_feature_paths[feature_index].append(((feature_index-1, *sub_feature_indexes), feature_path)) 
 
     feature_paths = [[] for _ in range(len(unsorted_feature_paths))]
-
+#chcemy by byly tutaj sflatowane nizej, wystarczy by było a1a2a4a3b2b1b3b4... itd
     for (feature_index, *_), feature_path in itertools.chain.from_iterable(unsorted_feature_paths.values()):
+        print(feature_index)
         feature_paths[feature_index].append(feature_path)
 
     import functools
@@ -150,7 +151,9 @@ def load(input_path, category_encoder, supported_characters,
     with multiprocessing.pool.ThreadPool(thread_count) as pool:
         for path, lines in pool.imap_unordered(lambda x : (x, _load_lines(x)), label_paths):
             index = next(_parse_indexes(path))
-            
+            #
+            index = index - 1
+            #
             for line in lines:
                 ungrouped_labels[index].append(
                     to_categorical([
