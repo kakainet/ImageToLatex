@@ -13,12 +13,13 @@ import keras.optimizers
 class LayeredModel:
     
     def __init__(self, input_shape, category_encoder, supported_characters):
-        
+
         self.get_layer_model = self.get_first_character_model
 
         self._layer_models = [
             self.get_layer_model(input_shape, len(category_encoder))
-            for _ in range(supported_characters)
+            #for _ in range(supported_characters)
+            for _ in range(1)
         ]
 
     def fit_on_flat(self, train_sequences, test_sequences, epochs, verbose):
@@ -33,7 +34,7 @@ class LayeredModel:
         #print(memory_usage())
 
         #exit(0)
-
+        print(self._layer_models)
         for layer_index, layer_model in enumerate(self._layer_models):
             layer_model.fit_generator(
                 generator=train_sequences[layer_index],
@@ -45,6 +46,7 @@ class LayeredModel:
 
     @staticmethod
     def get_complex_equation_model(input_shape, num_classes):
+        return NotImplementedError()
         model = Sequential()
     
         model.add(Conv2D(64, kernel_size=(5, 5), activation='relu', input_shape=input_shape))
@@ -92,28 +94,30 @@ if __name__ == '__main__':
     from encoding import CategoryEncoder
     from sequence import load_flat
     from string import digits
-
+    print(*digits)
     latex_encoder = CategoryEncoder()
     latex_encoder.extend([
         '+', '-', '/', '^', '{', '}',
         R'\frac', R'\cdot', 'a', 'x',
         *digits
     ])
-    
+
     sequences = load_flat(
         os.path.join(os.getcwd(), 'dataset'),
         latex_encoder,
-        25,
+        len(latex_encoder),
         (128, 128, 1),
         50,
         color_mode='grayscale'
     )
+    print('seq size', len(sequences))
 
-    model = LayeredModel((128, 128, 1), latex_encoder, 25)
+    model = LayeredModel((128, 128, 1), latex_encoder, 1)
     model.fit_on_flat(
         sequences,
         sequences,
         epochs=5,
         verbose=1
     )
-    
+
+

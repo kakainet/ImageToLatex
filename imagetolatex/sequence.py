@@ -19,12 +19,14 @@ def _parse_indexes(path):
     _, name = os.path.split(path)
     return (int(x.group()) for x in re.finditer(r'[0-9]+', name))
 
+
 def _list_files(path):
     return [
         os.path.join(path, x)
-        for x in filter(lambda x : not x.startswith('.'), os.listdir(path))
+        for x in filter(lambda x: not x.startswith('.'), os.listdir(path))
         if os.path.isfile(os.path.join(path, x))
     ]
+
 
 def _load_lines(path):
     with open(path, 'r') as ifs:
@@ -49,50 +51,50 @@ class AbstractSequence(ABC, Sequence):
     @property
     def batch_size(self):
         return self._batch_size
-    
+
     @batch_size.setter
     def batch_size(self, new_batch_size):
         self._batch_size = int(new_batch_size)
-    
+
     def get_slice(self, index):
         return slice(index * self._batch_size, (index + 1) * self._batch_size)
 
     @abstractmethod
     def get_labels(self, index_slice):
         pass
-    
+
     def load_feature(self, feature_path):
         return img_to_array(load_img(feature_path, target_size=self._feature_shape, **self._feature_kwargs))
 
     def get_features(self, index_slice):
         features = np.empty((self._batch_size, *self._feature_shape), dtype='float32')
         with multiprocessing.pool.ThreadPool(self._thread_count) as pool:
-            for feature_index, feature in pool.imap_unordered(lambda x : (x[0], self.load_feature(x[1])),
-                                                                enumerate(self._feature_paths[index_slice])):
+            for feature_index, feature in pool.imap_unordered(lambda x: (x[0], self.load_feature(x[1])),
+                                                              enumerate(self._feature_paths[index_slice])):
                 features[feature_index] = feature
-        
+
         return features
 
     def __getitem__(self, index):
         index_slice = self.get_slice(index)
         return self.get_features(index_slice), self.get_labels(index_slice)
-    
+
     def __len__(self):
         return int(np.ceil(len(self._feature_paths) / self._batch_size))
-    
-    def get_subset(self, iterable): # TODO !!!
+
+    def get_subset(self, iterable):  # TODO !!!
         slice_iterable = [self.get_slice(i) for i in iterable]
         feature_paths = [self._feature_paths[s] for s in slice_iterable]
         labels = [self.get_labels(s) for s in slice_iterable]
-        return feature_paths, np.stack(labels) # TODO check
+        return feature_paths, np.stack(labels)  # TODO check
 
-    @abstractmethod 
+    @abstractmethod
     def subset(self, iterable):
         pass
 
 
 class FlatSequence(AbstractSequence):
-    
+
     def get_labels(self, index_slice):
         return self._labels[index_slice]
 
@@ -107,7 +109,7 @@ class FlatSequence(AbstractSequence):
 
 
 class StackedSequence(AbstractSequence):
-    
+
     def get_labels(self, index_slice):
         return self._labels[:][index_slice]
 
@@ -119,22 +121,22 @@ class StackedSequence(AbstractSequence):
             self._thread_count,
             **self._feature_kwargs
         )
-#len categ encoder to ile znakow, supported characters to glebokosc
-#sciezka do calego datasetu
-def load(input_path, category_encoder, supported_characters,
-        feature_shape, batch_size, thread_count=None):
 
+
+# len categ encoder to ile znakow, supported characters to glebokosc
+# sciezka do calego datasetu
+def load(input_path, category_encoder, supported_characters,
+         feature_shape, batch_size, thread_count=None):
     ungrouped_feature_paths = _list_files(os.path.join(input_path, 'features'))
     unsorted_feature_paths = collections.defaultdict(list)
 
-    for feature_path in ungrouped_feature_paths:#dla danego img wszystkie jego wersje wrzuca do 1 listy, ale zapisuje patha do wersji do tego danego featchera i te numerki jego
+    for feature_path in ungrouped_feature_paths:  # dla danego img wszystkie jego wersje wrzuca do 1 listy, ale zapisuje patha do wersji do tego danego featchera i te numerki jego
         feature_index, *sub_feature_indexes = _parse_indexes(feature_path)
-        unsorted_feature_paths[feature_index].append(((feature_index-1, *sub_feature_indexes), feature_path)) 
+        unsorted_feature_paths[feature_index].append(((feature_index - 1, *sub_feature_indexes), feature_path))
 
     feature_paths = [[] for _ in range(len(unsorted_feature_paths))]
-#chcemy by byly tutaj sflatowane nizej, wystarczy by było a1a2a4a3b2b1b3b4... itd
+    # chcemy by byly tutaj sflatowane nizej, wystarczy by było a1a2a4a3b2b1b3b4... itd
     for (feature_index, *_), feature_path in itertools.chain.from_iterable(unsorted_feature_paths.values()):
-        print(feature_index)
         feature_paths[feature_index].append(feature_path)
 
     import functools
@@ -149,7 +151,7 @@ def load(input_path, category_encoder, supported_characters,
         thread_count = os.cpu_count()
 
     with multiprocessing.pool.ThreadPool(thread_count) as pool:
-        for path, lines in pool.imap_unordered(lambda x : (x, _load_lines(x)), label_paths):
+        for path, lines in pool.imap_unordered(lambda x: (x, _load_lines(x)), label_paths):
             index = next(_parse_indexes(path))
             #
             index = index - 1
@@ -160,7 +162,7 @@ def load(input_path, category_encoder, supported_characters,
                         category_encoder.encode(x)
                         for x in line.split('\t')
                     ], num_classes=len(category_encoder))
-                )        
+                )
 
     grouped_labels = itertools.chain.from_iterable(
         itertools.repeat(x, len(unsorted_feature_paths[i]))
@@ -176,17 +178,16 @@ def load(input_path, category_encoder, supported_characters,
         stacked_labels[label_index][:len(label_parts)][:] = label_parts
 
     stacked_labels = np.reshape(stacked_labels,
-        (supported_characters, len(ungrouped_feature_paths), len(category_encoder))
-    )
+                                (supported_characters, len(ungrouped_feature_paths), len(category_encoder))
+                                )
 
     return stacked_labels, feature_paths
 
 
 def load_flat(input_path, category_encoder, supported_characters,
-            feature_shape, batch_size, thread_count=None, **feature_kwargs):
-    
+              feature_shape, batch_size, thread_count=None, **feature_kwargs):
     stacked_labels, feature_paths = load(input_path, category_encoder, supported_characters,
-                                            feature_shape, batch_size, thread_count)
+                                         feature_shape, batch_size, thread_count)
 
     return [
         FlatSequence(
@@ -195,14 +196,13 @@ def load_flat(input_path, category_encoder, supported_characters,
             **feature_kwargs
         )
         for labels in stacked_labels
-    ]             
+    ]
 
 
 def load_stacked(input_path, category_encoder, supported_characters,
-                feature_shape, batch_size, thread_count=None, **feature_kwargs):
-
+                 feature_shape, batch_size, thread_count=None, **feature_kwargs):
     stacked_labels, feature_paths = load(input_path, category_encoder, supported_characters,
-                                            feature_shape, batch_size, thread_count)
+                                         feature_shape, batch_size, thread_count)
 
     return StackedSequence(
         stacked_labels, feature_paths, feature_shape, batch_size,
@@ -217,4 +217,3 @@ def load_stacked(input_path, category_encoder, supported_characters,
 
 if __name__ == '__main__':
     pass
-

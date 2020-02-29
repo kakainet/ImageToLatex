@@ -22,14 +22,15 @@ class AbstractEncoder(ABC):
 class CategoryEncoder(AbstractEncoder):
 
     def __init__(self):
-        self.__category_to_expression = [None]
-        self.__expression_to_category = { 0 : None }
+        self.__category_to_expression = []
+        self.__expression_to_category = {}
 
     def extend(self, expressions):
         for expression in expressions:
             if expression not in self.__expression_to_category:
                 self.__category_to_expression.append(expression)
                 self.__expression_to_category[expression] = len(self.__category_to_expression) - 1
+        print('updated size: ', len(self.__category_to_expression))
         
     def encode(self, expression):
         try:
