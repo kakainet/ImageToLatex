@@ -132,7 +132,7 @@ def load(input_path, category_encoder, supported_characters,
 
     for feature_path in ungrouped_feature_paths:  # dla danego img wszystkie jego wersje wrzuca do 1 listy, ale zapisuje patha do wersji do tego danego featchera i te numerki jego
         feature_index, *sub_feature_indexes = _parse_indexes(feature_path)
-        unsorted_feature_paths[feature_index].append(((feature_index - 1, *sub_feature_indexes), feature_path))
+        unsorted_feature_paths[feature_index].append(((feature_index, *sub_feature_indexes), feature_path))
 
     feature_paths = [[] for _ in range(len(unsorted_feature_paths))]
     # chcemy by byly tutaj sflatowane nizej, wystarczy by było a1a2a4a3b2b1b3b4... itd
