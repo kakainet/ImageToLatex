@@ -22,8 +22,8 @@ class AbstractEncoder(ABC):
 class CategoryEncoder(AbstractEncoder):
 
     def __init__(self):
-        self.__category_to_expression = []
-        self.__expression_to_category = {}
+        self.__category_to_expression = [None]
+        self.__expression_to_category = { 0 : None }
 
     def extend(self, expressions):
         for expression in expressions:

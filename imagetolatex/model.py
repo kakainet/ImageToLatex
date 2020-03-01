@@ -90,7 +90,12 @@ class LayeredModel:
         return model
 
 if __name__ == '__main__':
-
+    #pierwszy wychodzi na 5 3 - \frac { 9 4 } { 9 6 }
+    #czyli skipnelismy jedno
+    #pierwsze 8 ma 5 3 - \frac { 9 4 } { 9 6 } wiec jakby skipniete o 1
+    #nastepne 8 ma 2 8 - \frac { 2 4 } { 6 8 }
+    #czyli to jest trzeci
+    #wyglada na przesuniete o jeden
     from encoding import CategoryEncoder
     from sequence import load_flat
     from string import digits
@@ -101,6 +106,7 @@ if __name__ == '__main__':
         R'\frac', R'\cdot', 'a', 'x',
         *digits
     ])
+    #0 ---> 11
 
     sequences = load_flat(
         os.path.join(os.getcwd(), 'dataset'),
@@ -111,7 +117,7 @@ if __name__ == '__main__':
         color_mode='grayscale'
     )
     print('seq size', len(sequences))
-
+    #coś jest z tym skopane, że ten size to 20
     model = LayeredModel((128, 128, 1), latex_encoder, 1)
     model.fit_on_flat(
         sequences,
