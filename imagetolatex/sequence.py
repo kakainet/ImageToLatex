@@ -163,7 +163,7 @@ def load(input_path, category_encoder, supported_characters,
                         for x in line.split('\t')
                     ], num_classes=len(category_encoder))
                 )
-
+    #TODO: ungrouped_labels są ok
     grouped_labels = itertools.chain.from_iterable(
         itertools.repeat(x, len(unsorted_feature_paths[i]))
         for i, x in enumerate(itertools.chain.from_iterable(ungrouped_labels))
@@ -173,10 +173,11 @@ def load(input_path, category_encoder, supported_characters,
         (len(ungrouped_feature_paths), supported_characters, len(category_encoder)),
         dtype='float32'
     )
+    #^ Czy po tym jest ok? to robi same zera wiec tak.
 
     for label_index, label_parts in enumerate(grouped_labels):
         stacked_labels[label_index][:len(label_parts)][:] = label_parts
-
+#juz przed reshape zdycha
     stacked_labels = np.reshape(stacked_labels,
                                 (supported_characters, len(ungrouped_feature_paths), len(category_encoder))
                                 )
@@ -186,9 +187,10 @@ def load(input_path, category_encoder, supported_characters,
 
 def load_flat(input_path, category_encoder, supported_characters,
               feature_shape, batch_size, thread_count=None, **feature_kwargs):
+
     stacked_labels, feature_paths = load(input_path, category_encoder, supported_characters,
                                          feature_shape, batch_size, thread_count)
-
+    x=42
     return [
         FlatSequence(
             labels, feature_paths, feature_shape, batch_size,
