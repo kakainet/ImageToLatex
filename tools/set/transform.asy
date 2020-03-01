@@ -1,5 +1,5 @@
 file fin = input("raw_tex.in").line();
-int idx = 1;
+int idx = 0;
 
 while (!eof(fin))
 {

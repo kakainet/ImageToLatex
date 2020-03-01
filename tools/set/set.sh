@@ -10,7 +10,7 @@ do
 done
 mkdir -p output
 wait
-idx=1
+idx=0
 for var in "$@"
 do
     cd "${var}_aux"
