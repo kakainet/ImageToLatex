@@ -169,6 +169,8 @@ def load(input_path, category_encoder, supported_characters,
     #    itertools.repeat(x, len(unsorted_feature_paths[i]))
     #    for i, x in enumerate(itertools.chain.from_iterable(ungrouped_labels))
     #)
+    #
+    # grouped[j] is a one hot encoding for j'th label
     grouped_labels = []
     for iff, f in enumerate(ungrouped_labels):
         for ix, x in enumerate(f):
@@ -180,15 +182,19 @@ def load(input_path, category_encoder, supported_characters,
         (len(ungrouped_feature_paths), supported_characters, len(category_encoder)),
         dtype='float32'
     )
-    #^ Czy po tym jest ok? to robi same zera wiec tak.
 
+    # transforming stacked_labels into structure such that
+    # stacked_labels[j] represents j'th label as a matrix of one hot encodings for each character
+    # so stacked_labels[j][k] is j'th label one hot encoding for k'th character
     for label_index, label_parts in enumerate(grouped_labels):
         stacked_labels[label_index][:len(label_parts)][:] = label_parts
-#juz przed reshape zdycha
-    stacked_labels = np.reshape(stacked_labels,
-                                (supported_characters, len(ungrouped_feature_paths), len(category_encoder))
-                                )
 
+    #reshape wali robote
+    #stacked_labels = np.reshape(stacked_labels,
+    #                            (supported_characters, len(ungrouped_feature_paths), len(category_encoder))
+    #                            )
+
+    # stacked[j][k] is j'th char in k'th label
     return stacked_labels, feature_paths
 
 
@@ -200,11 +206,11 @@ def load_flat(input_path, category_encoder, supported_characters,
     x=42
     return [
         FlatSequence(
-            labels, feature_paths, feature_shape, batch_size,
+            stacked_labels[:][k], feature_paths, feature_shape, batch_size,
             thread_count=thread_count,
             **feature_kwargs
         )
-        for labels in stacked_labels
+        for k in range(supported_characters)
     ]
 
 
