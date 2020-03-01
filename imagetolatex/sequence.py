@@ -154,7 +154,7 @@ def load(input_path, category_encoder, supported_characters,
         for path, lines in pool.imap_unordered(lambda x: (x, _load_lines(x)), label_paths):
             index = next(_parse_indexes(path))
             #
-            index = index - 1
+            #index = index - 1
             #
             for line in lines:
                 ungrouped_labels[index].append(
@@ -164,10 +164,17 @@ def load(input_path, category_encoder, supported_characters,
                     ], num_classes=len(category_encoder))
                 )
     #TODO: ungrouped_labels są ok
-    grouped_labels = itertools.chain.from_iterable(
-        itertools.repeat(x, len(unsorted_feature_paths[i]))
-        for i, x in enumerate(itertools.chain.from_iterable(ungrouped_labels))
-    )
+    #TODO: iter daje snd element (z idx == 1)
+    #grouped_labels = itertools.chain.from_iterable(
+    #    itertools.repeat(x, len(unsorted_feature_paths[i]))
+    #    for i, x in enumerate(itertools.chain.from_iterable(ungrouped_labels))
+    #)
+    grouped_labels = []
+    for iff, f in enumerate(ungrouped_labels):
+        for ix, x in enumerate(f):
+            i = iff * len(ungrouped_labels) + ix
+            for _ in range(len(unsorted_feature_paths[i])):
+                grouped_labels.append(x)
 
     stacked_labels = np.zeros(
         (len(ungrouped_feature_paths), supported_characters, len(category_encoder)),
