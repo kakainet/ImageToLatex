@@ -206,7 +206,7 @@ def load_flat(input_path, category_encoder, supported_characters,
     x=42
     return [
         FlatSequence(
-            stacked_labels[:][k], feature_paths, feature_shape, batch_size,
+            stacked_labels[:, k, :], feature_paths, feature_shape, batch_size,
             thread_count=thread_count,
             **feature_kwargs
         )
