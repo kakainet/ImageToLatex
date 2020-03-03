@@ -11,7 +11,7 @@ namespace cst
 {
     namespace window
     {
-        constexpr int dim = 128;  // ==> size dim x dim
+        constexpr int dim = 32;  // ==> size dim x dim
     }
 
     namespace system

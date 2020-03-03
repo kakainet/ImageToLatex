@@ -90,6 +90,11 @@ class LayeredModel:
         return model
 
 if __name__ == '__main__':
+    print('test')
+    from keras import backend as K
+    K.tensorflow_backend._get_available_gpus()
+    print('test')
+
     #pierwszy wychodzi na 5 3 - \frac { 9 4 } { 9 6 }
     #czyli skipnelismy jedno
     #pierwsze 8 ma 5 3 - \frac { 9 4 } { 9 6 } wiec jakby skipniete o 1
@@ -112,17 +117,17 @@ if __name__ == '__main__':
         os.path.join(os.getcwd(), 'dataset'),
         latex_encoder,
         len(latex_encoder),
-        (128, 128, 1),
+        (32, 32, 1),
         50,
         color_mode='grayscale'
     )
     print('seq size', len(sequences))
     #coś jest z tym skopane, że ten size to 20
-    model = LayeredModel((128, 128, 1), latex_encoder, 1)
+    model = LayeredModel((32, 32, 1), latex_encoder, 1)
     model.fit_on_flat(
         sequences,
         sequences,
-        epochs=5,
+        epochs=20,
         verbose=1
     )
 
