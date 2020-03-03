@@ -11,7 +11,7 @@ namespace cst
 {
     namespace window
     {
-        constexpr int dim = 32;  // ==> size dim x dim
+        constexpr int dim = 64;  // ==> size dim x dim
     }
 
     namespace system
@@ -123,7 +123,7 @@ namespace cst
 
     namespace perlin
     {
-        constexpr int dim = 2048;
+        constexpr int dim = 256;
         constexpr int size = dim * dim;
         constexpr int permutation_size = 256;
         constexpr double lower_bound = 0.6;
