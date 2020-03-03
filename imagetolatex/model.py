@@ -18,30 +18,19 @@ class LayeredModel:
 
         self._layer_models = [
             self.get_layer_model(input_shape, len(category_encoder))
-            #for _ in range(supported_characters)
-            for _ in range(1)
+            for _ in range(supported_characters)
         ]
 
     def fit_on_flat(self, train_sequences, test_sequences, epochs, verbose):
-        #from utils import memory_usage
-
-        #print(memory_usage())
-        #x, y = train_sequences[0][0]
-        #print(memory_usage())
-        
-        #print(memory_usage())
-        #self._layer_models[0].train_on_batch(x, y)
-        #print(memory_usage())
-
-        #exit(0)
         print(self._layer_models)
         for layer_index, layer_model in enumerate(self._layer_models):
+            print('Fitting {0}/{1} layer now'.format(layer_index+1, len(self._layer_models)))
             layer_model.fit_generator(
                 generator=train_sequences[layer_index],
                 validation_data=test_sequences[layer_index],
                 epochs=epochs,
                 verbose=verbose,
-                #workers=0
+                workers=12
             )
 
     @staticmethod
@@ -71,13 +60,15 @@ class LayeredModel:
     def get_first_character_model(input_shape, num_classes):
         model = Sequential()
 
-        model.add(Conv2D(36, kernel_size=(5, 5), activation='relu', input_shape=input_shape))
+        model.add(Conv2D(64, kernel_size=(5, 5), activation='relu', input_shape=input_shape))
         model.add(MaxPooling2D(pool_size=(2, 2)))
-        model.add(Conv2D(64, (5, 5), activation='relu'))
+        model.add(Conv2D(128, (5, 5), activation='relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Conv2D(256, (5, 5), activation='relu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
         model.add(Flatten())
-        model.add(Dense(64, activation='relu'))
+        model.add(Dense(512, activation='relu'))
         model.add(Dropout(0.5))
         model.add(Dense(num_classes, activation='softmax'))
 
@@ -94,13 +85,6 @@ if __name__ == '__main__':
     from keras import backend as K
     K.tensorflow_backend._get_available_gpus()
     print('test')
-
-    #pierwszy wychodzi na 5 3 - \frac { 9 4 } { 9 6 }
-    #czyli skipnelismy jedno
-    #pierwsze 8 ma 5 3 - \frac { 9 4 } { 9 6 } wiec jakby skipniete o 1
-    #nastepne 8 ma 2 8 - \frac { 2 4 } { 6 8 }
-    #czyli to jest trzeci
-    #wyglada na przesuniete o jeden
     from encoding import CategoryEncoder
     from sequence import load_flat
     from string import digits
@@ -117,17 +101,17 @@ if __name__ == '__main__':
         os.path.join(os.getcwd(), 'dataset'),
         latex_encoder,
         len(latex_encoder),
-        (32, 32, 1),
+        (64, 64, 1),
         50,
         color_mode='grayscale'
     )
     print('seq size', len(sequences))
-    #coś jest z tym skopane, że ten size to 20
-    model = LayeredModel((32, 32, 1), latex_encoder, 1)
+    train_size = int(0.8 * len(sequences))
+    model = LayeredModel((64, 64, 1), latex_encoder, 3)
     model.fit_on_flat(
-        sequences,
-        sequences,
-        epochs=20,
+        sequences[:train_size],
+        sequences[train_size:],
+        epochs=10,
         verbose=1
     )
 

@@ -189,11 +189,6 @@ def load(input_path, category_encoder, supported_characters,
     for label_index, label_parts in enumerate(grouped_labels):
         stacked_labels[label_index][:len(label_parts)][:] = label_parts
 
-    #reshape wali robote
-    #stacked_labels = np.reshape(stacked_labels,
-    #                            (supported_characters, len(ungrouped_feature_paths), len(category_encoder))
-    #                            )
-
     # stacked[j][k] is j'th char in k'th label
     return stacked_labels, feature_paths
 
@@ -203,7 +198,6 @@ def load_flat(input_path, category_encoder, supported_characters,
 
     stacked_labels, feature_paths = load(input_path, category_encoder, supported_characters,
                                          feature_shape, batch_size, thread_count)
-    x=42
     return [
         FlatSequence(
             stacked_labels[:, k, :], feature_paths, feature_shape, batch_size,
