@@ -122,20 +122,20 @@ class StackedSequence(AbstractSequence):
             **self._feature_kwargs
         )
 
-
-# len categ encoder to ile znakow, supported characters to glebokosc
-# sciezka do calego datasetu
 def load(input_path, category_encoder, supported_characters,
          feature_shape, batch_size, thread_count=None):
     ungrouped_feature_paths = _list_files(os.path.join(input_path, 'features'))
     unsorted_feature_paths = collections.defaultdict(list)
 
-    for feature_path in ungrouped_feature_paths:  # dla danego img wszystkie jego wersje wrzuca do 1 listy, ale zapisuje patha do wersji do tego danego featchera i te numerki jego
+    # for given image all its versions are pushed to one list.
+    # There are also saved path to its feature versions and also ids
+    for feature_path in ungrouped_feature_paths:
         feature_index, *sub_feature_indexes = _parse_indexes(feature_path)
         unsorted_feature_paths[feature_index].append(((feature_index, *sub_feature_indexes), feature_path))
 
     feature_paths = [[] for _ in range(len(unsorted_feature_paths))]
-    # chcemy by byly tutaj sflatowane nizej, wystarczy by było a1a2a4a3b2b1b3b4... itd
+
+    # Transforming to flatted version i.e. a1a2a4a3b2b1b3b4
     for (feature_index, *_), feature_path in itertools.chain.from_iterable(unsorted_feature_paths.values()):
         feature_paths[feature_index].append(feature_path)
 
@@ -153,9 +153,7 @@ def load(input_path, category_encoder, supported_characters,
     with multiprocessing.pool.ThreadPool(thread_count) as pool:
         for path, lines in pool.imap_unordered(lambda x: (x, _load_lines(x)), label_paths):
             index = next(_parse_indexes(path))
-            #
-            #index = index - 1
-            #
+
             for line in lines:
                 ungrouped_labels[index].append(
                     to_categorical([
@@ -163,20 +161,11 @@ def load(input_path, category_encoder, supported_characters,
                         for x in line.split('\t')
                     ], num_classes=len(category_encoder))
                 )
-    #TODO: ungrouped_labels są ok
-    #TODO: iter daje snd element (z idx == 1)
-    #grouped_labels = itertools.chain.from_iterable(
-    #    itertools.repeat(x, len(unsorted_feature_paths[i]))
-    #    for i, x in enumerate(itertools.chain.from_iterable(ungrouped_labels))
-    #)
-    #
-    # grouped[j] is a one hot encoding for j'th label
-    grouped_labels = []
-    for iff, f in enumerate(ungrouped_labels):
-        for ix, x in enumerate(f):
-            i = iff * len(ungrouped_labels) + ix
-            for _ in range(len(unsorted_feature_paths[i])):
-                grouped_labels.append(x)
+
+    grouped_labels = itertools.chain.from_iterable(
+        itertools.repeat(x, len(unsorted_feature_paths[i]))
+        for i, x in enumerate(itertools.chain.from_iterable(ungrouped_labels))
+    )
 
     stacked_labels = np.zeros(
         (len(ungrouped_feature_paths), supported_characters, len(category_encoder)),

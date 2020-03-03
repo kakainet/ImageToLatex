@@ -9,6 +9,7 @@ _build
 tools/visual/cmake-build-debug/
 tools/visual/.idea/
 tools/visual/release/
+tools/visual/build/
 tools/visual/debug/
 tools/visual/Visual
 tools/visual/visual
@@ -16,6 +17,10 @@ tools/visual/external
 tools/visual/gtest
 tools/visual/clang_rec.sh
 tools/visual/data/noises/*.in
+
+#asy
+tools/set/*.in
+
 # graphic
 *.png
 
@@ -27,3 +32,7 @@ tools/visual/data/noises/*.in
 
 #other
 *.zip
+
+#model
+imagetolatex/__pycache__/
+imagetolatex/dataset/datasets/
