@@ -1,12 +1,38 @@
-# ImageToLatex
-A neural network capable of translating handwritting into latex. Project also provides A-Z tools for generating raw latex, producing images and transformating images as if they were written by human.
+<h1 align="center"> Welcome to ImageToLatex 👋</h1>
+A neural network capable of translating handwriting into latex. The project also provides A-Z tools for generating raw latex, producing images and transforming images as if they were written by a human.
 Project scheme: <br>
+
 `Raw ==> Set ==> Visual ==> Model` <br>
-Where `raw`, `set`, `visual` are tools and model is neural network for recognizing latex.
+Where `raw`, `set`, `visual` are tools and model is a neural network for recognizing latex.
 
+## Model [Python]
+Model is based on paper:
+```
+IMAGE TO LATEX VIA NEURAL NETWORKS
+Avinash More
+San Jose State University
+```
 
-## Tool/Raw
-Functional tool written in OCaml. Random latex expression generators, with various syntactic levels and conspects describing exact behaviour within the level. Create a set of generators capable of supplying the model with properly generated random latex expressions,
+### General Idea
+ITL detects each character separately and merges them into one sequence.
+### Details
+Let `s` be a number of supported characters. ITL uses `s` clones of the same architecture. `J`'th neural network recognises `j`'th character using `one-hot encoding`. The project currently supports the following characters: `+`, `-`, `^`, `{`, `}`,`^`, `\cdot`, `a`, `x`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `0`
+### Dataset
+Input shape=`(64, 64)`. <br>
+Format of input features: `eq_n_b_c`.
+* `n` number of label
+* `b` number of background
+* `c` number of effect pack applied on a given feature. For given `n` and `b` all features `eq_n_b_{0...effects number}` represents the same label.
+
+Link for the dataset used during training will be available soon on `mvxxx.github.io` as `exp.tar.gz`. <br>
+The whole dataset was fully generated in use of `tool/{raw, set, visual}` in kind of pipe. <br> 
+Currently ITL supports constant-length datasets. It will be generalized in `0.1.1`.
+
+## Accuracy
+For training dataset of length `7`, the mean accuracy was `97.428` after `10` epochs of training.
+
+## Tool/Raw [OCaml]
+A functional tool which is written in OCaml. Random latex expression generators, with various syntactic levels and concepts describing exact behavior within the level. Create a set of generators capable of supplying the model with properly generated random latex expressions,
 matching strict expectations, for training purposes. <br>
 
 
@@ -18,20 +44,20 @@ Performance:
 |Standard|~2.000.000  |
 |Basic| ~4.000.000  |
 
-## Tool/Set
-Script tool which gets several input files with raw LaTeX and convert them into basic .png expressions. This part executes worker for each input file. Using via bash script: `bash set.sh *.in`. <br>
-It will produce all content inside temporary folders, then it moves all photos to output folder. These images are input for `visual` part. <br>
+## Tool/Set [Asymptote, Bash]
+Script tool which gets several input files with raw LaTeX and converts them into basic .png expressions. This part executes the worker for each input file (kind of thread pooling). Using via bash script: `bash set.sh *.in`. <br>
+It will produce all content inside temporary folders, then it moves all photos to the output folder. These images are input for `visual` part. All input `*.in` labels are concatenated and stacked into the `labels` file.<br>
 
 It gets raw text like (for simplicity): `7+9` and returns: <br>
 <p align="center">
-  <img src="https://i.imgur.com/EaPStPE.png" width="75" height="50" title="hover text">
+  <img src="https://i.imgur.com/EaPStPE.png" width="100" height="50" title="hover text">
 </p>
 
-## Tool/Visual
-The biggest tool, written in `C++` and using `OpenCV`. It applies a lot of different effects in order to make math as if it was
-written by people. Final result is base of dataset for machine learning.
+## Tool/Visual [C++]
+The biggest tool, written in `C++` and using `OpenCV`, capable of creating millions of written like human math equations. It applies a lot of different effects in order to make math as if it was
+written by people. It can be configured using `config.hpp`. The final result is the base of the dataset for machine learning.
 <br><br>
-In that part there are predefined effects like:
+In that part, there are predefined effects like:
 
 
 |Type| Brief |
@@ -51,7 +77,7 @@ There are also effects applied outside effect manager:
 |background| changes background |
 |perlin| applies perlin noise mask (in progress) |
 
-Each effect is take or not. For each image we apply all possible combinations of effects. Let say that we have effects `e1, e2, e3` and image `p`. Then output will be <br>
+Each effect is taken or not. For each image, we apply all possible combinations of effects. Let say that we have effects `e1, e2, e3` and image `p`. Then the output will be <br>
 `p ---(!e1,!e2,!e3)---> p0` <br>
 `p ---(!e1,!e2,e3)----> p1` <br>
 `p ---(!e1,e2,!e3)----> p2` <br>
@@ -61,7 +87,7 @@ Each effect is take or not. For each image we apply all possible combinations of
 `p ---(e1,!e2,e3)-----> p6` <br>
 `p ---(e1,e2,e3)------> p7` <br>
 
-`!e` menas that we don't take `e`.  So for each image the output are `2^k` modified images. <br>
+`!e` means that we don't take `e`.  So for each image, the output is `2^k` modified images. <br>
 Example of use:
 ```
 $ time ./visual -la ../data/ *.png
@@ -93,14 +119,4 @@ constexpr char const* log_warnings = "-lw";
 constexpr char const* log_all = "-la";
 constexpr char const* log_time = "-lt";
 ```
-If you don't want logging, just run program without any flags. <br>
-
-## Model
-Model is based on paper:
-```
-IMAGE TO LATEX VIA NEURAL NETWORKS
-Avinash More
-San Jose State University
-```
-
-We detecting each character separately and merge them into one sequence.
+If you don't want to log, just run a program without any flags. <br>

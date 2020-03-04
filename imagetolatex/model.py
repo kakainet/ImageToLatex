@@ -33,7 +33,7 @@ class LayeredModel:
                 verbose=verbose,
                 workers=12
             )
-            
+
         if save_weights:
             save_path = 'params/weight_{0}_{1}.ckpt'
             for layer_index, layer_model in enumerate(self._layer_models):
@@ -77,8 +77,8 @@ if __name__ == '__main__':
     print(*digits)
     latex_encoder = CategoryEncoder()
     latex_encoder.extend([
-        '+', '-', '/', '^', '{', '}',
-        R'\frac', R'\cdot', 'a', 'x',
+        '+', '-', '^', '{', '}',
+        '^', R'\cdot', 'a', 'x',
         *digits
     ])
 
@@ -92,11 +92,11 @@ if __name__ == '__main__':
     )
     print('seq size', len(sequences))
     train_size = int(0.8 * len(sequences))
-    model = LayeredModel((64, 64, 1), latex_encoder, 1)
+    model = LayeredModel((64, 64, 1), latex_encoder, 7)
     model.fit_on_flat(
         sequences,
-        sequences,
-        epochs=1,
+        sequences, # validation set will be extracted in 0.1.1
+        epochs=10,
         verbose=1,
         save_weights=True
     )
