@@ -1,6 +1,7 @@
 <h1 align="center"> Welcome to ImageToLatex 👋</h1>
 A neural network capable of translating handwriting into latex. The project also provides A-Z tools for generating raw latex, producing images and transforming images as if they were written by a human.
 Project scheme: <br>
+
 `Raw ==> Set ==> Visual ==> Model` <br>
 Where `raw`, `set`, `visual` are tools and model is a neural network for recognizing latex.
 
