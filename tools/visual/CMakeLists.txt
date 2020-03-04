@@ -35,10 +35,9 @@ find_package(Boost 1.65.1 REQUIRED COMPONENTS filesystem)
 target_link_libraries(visual Boost::filesystem)
 
 #gtest
-add_subdirectory(external/gtest/lib/googletest-master)
-include_directories(external/gtest/lib/googletest-master/googletest/include)
-include_directories(external/gtest/lib/googletest-master/googlemock/include)
-target_link_libraries(visual gtest gtest_main)
+add_subdirectory(external/googletest/googletest)
+include_directories(external/googletest/googletest/include)
+target_link_libraries(visual gtest)
 
 #opencv
 find_package(OpenCV REQUIRED)
