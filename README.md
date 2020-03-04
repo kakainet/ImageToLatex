@@ -1,9 +1,34 @@
-# ImageToLatex
+<h1 align="center"> Welcome to ImageToLatex 👋</h1>
 A neural network capable of translating handwriting into latex. The project also provides A-Z tools for generating raw latex, producing images and transforming images as if they were written by a human.
 Project scheme: <br>
 `Raw ==> Set ==> Visual ==> Model` <br>
 Where `raw`, `set`, `visual` are tools and model is a neural network for recognizing latex.
 
+## Model [Python]
+Model is based on paper:
+```
+IMAGE TO LATEX VIA NEURAL NETWORKS
+Avinash More
+San Jose State University
+```
+
+### General Idea
+ITL detects each character separately and merges them into one sequence.
+### Details
+Let `s` be a number of supported characters. ITL uses `s` clones of the same architecture. `J`'th neural network recognises `j`'th character using `one-hot encoding`. The project currently supports the following characters: `+`, `-`, `^`, `{`, `}`,`^`, `\cdot`, `a`, `x`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `0`
+### Dataset
+Input shape=`(64, 64)`. <br>
+Format of input features: `eq_n_b_c`.
+* `n` number of label
+* `b` number of background
+* `c` number of effect pack applied on a given feature. For given `n` and `b` all features `eq_n_b_{0...effects number}` represents the same label.
+
+Link for the dataset used during training will be available soon on `mvxxx.github.io` as `exp.tar.gz`. <br>
+The whole dataset was fully generated in use of `tool/{raw, set, visual}` in kind of pipe. <br> 
+Currently ITL supports constant-length datasets. It will be generalized in `0.1.1`.
+
+## Accuracy
+For training dataset of length `7`, the mean accuracy was `97.428` after `10` epochs of training.
 
 ## Tool/Raw [OCaml]
 A functional tool which is written in OCaml. Random latex expression generators, with various syntactic levels and concepts describing exact behavior within the level. Create a set of generators capable of supplying the model with properly generated random latex expressions,
@@ -94,13 +119,3 @@ constexpr char const* log_all = "-la";
 constexpr char const* log_time = "-lt";
 ```
 If you don't want to log, just run a program without any flags. <br>
-
-## Model
-Model is based on paper:
-```
-IMAGE TO LATEX VIA NEURAL NETWORKS
-Avinash More
-San Jose State University
-```
-
-We detecting each character separately and merge them into one sequence.
