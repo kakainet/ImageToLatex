@@ -1,6 +1,7 @@
 import os
 import os.path
 import logging
+from datetime import datetime
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
@@ -11,7 +12,7 @@ import keras.optimizers
 
 
 class LayeredModel:
-    
+
     def __init__(self, input_shape, category_encoder, supported_characters):
 
         self.get_layer_model = self.get_complex_equation_model
@@ -21,10 +22,10 @@ class LayeredModel:
             for _ in range(supported_characters)
         ]
 
-    def fit_on_flat(self, train_sequences, test_sequences, epochs, verbose):
+    def fit_on_flat(self, train_sequences, test_sequences, epochs, verbose, save_weights=False):
         print(self._layer_models)
         for layer_index, layer_model in enumerate(self._layer_models):
-            print('Fitting {0}/{1} layer now'.format(layer_index+1, len(self._layer_models)))
+            print('Fitting {0}/{1} layer now'.format(layer_index + 1, len(self._layer_models)))
             layer_model.fit_generator(
                 generator=train_sequences[layer_index],
                 validation_data=test_sequences[layer_index],
@@ -32,6 +33,11 @@ class LayeredModel:
                 verbose=verbose,
                 workers=12
             )
+            
+        if save_weights:
+            save_path = 'params/weight_{0}_{1}.ckpt'
+            for layer_index, layer_model in enumerate(self._layer_models):
+                layer_model.save_weights(save_path.format(layer_index, datetime.now().strftime('%Y-%m-%d-%H:%M:%S')))
 
     @staticmethod
     def get_complex_equation_model(input_shape, num_classes):
@@ -50,21 +56,24 @@ class LayeredModel:
         model.add(Dense(num_classes, activation='softmax'))
 
         model.compile(loss=keras.losses.categorical_crossentropy,
-                    optimizer=keras.optimizers.Adam(),
-                    metrics=['accuracy'])
+                      optimizer=keras.optimizers.Adam(),
+                      metrics=['accuracy'])
 
         model.summary()
 
         return model
 
+
 if __name__ == '__main__':
     print('test')
     from keras import backend as K
+
     K.tensorflow_backend._get_available_gpus()
     print('test')
     from encoding import CategoryEncoder
     from sequence import load_flat
     from string import digits
+
     print(*digits)
     latex_encoder = CategoryEncoder()
     latex_encoder.extend([
@@ -83,12 +92,11 @@ if __name__ == '__main__':
     )
     print('seq size', len(sequences))
     train_size = int(0.8 * len(sequences))
-    model = LayeredModel((64, 64, 1), latex_encoder, 3)
+    model = LayeredModel((64, 64, 1), latex_encoder, 1)
     model.fit_on_flat(
         sequences,
         sequences,
         epochs=1,
-        verbose=1
+        verbose=1,
+        save_weights=True
     )
-
-
