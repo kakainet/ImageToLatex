@@ -1,25 +1,6 @@
-from abc import ABC, abstractmethod
-import logging
-
 import numpy as np
 
-
-class AbstractEncoder(ABC):
-
-    @abstractmethod
-    def encode(self, x):
-        pass
-
-    @abstractmethod
-    def decode(self, x):
-        pass
-
-    @abstractmethod
-    def __len__(self):
-        pass
-
-
-class CategoryEncoder(AbstractEncoder):
+class CategoryEncoder:
 
     def __init__(self):
         self.__category_to_expression = [None]
@@ -30,7 +11,6 @@ class CategoryEncoder(AbstractEncoder):
             if expression not in self.__expression_to_category:
                 self.__category_to_expression.append(expression)
                 self.__expression_to_category[expression] = len(self.__category_to_expression) - 1
-        print('updated size: ', len(self.__category_to_expression))
         
     def encode(self, expression):
         try:

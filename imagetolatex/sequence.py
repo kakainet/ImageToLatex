@@ -7,7 +7,11 @@ import numpy as np
 
 class LayeredSequence:
     
-    def __init__(self, feature_paths, label_layers, feature_shape, label_shape, batch_size, thread_count, **feature_kwargs):
+    def __init__(self, feature_paths, label_layers,
+                 feature_shape, label_shape,
+                 batch_size, thread_count,
+                 **feature_kwargs):
+
         self._feature_paths = feature_paths
         self._label_layers = label_layers
         
@@ -123,7 +127,6 @@ class LayeredSequence:
         )
     
 """
-
 class AbstractSequence(ABC):
 
     def __init__(self, labels, feature_paths, feature_shape, batch_size, thread_count, **feature_kwargs):
@@ -254,7 +257,6 @@ class StackedSequence(AbstractSequence):
             np.stack([labels[index_slice] for index_slice in index_slices])
             for labels in self._labels
         ]
-
 """
 
 if __name__ == '__main__':
