@@ -1,16 +1,17 @@
+from keras.utils import to_categorical
 import numpy as np
 
 class CategoryEncoder:
 
     def __init__(self):
         self.__category_to_expression = [None]
-        self.__expression_to_category = { 0 : None }
+        self.__expression_to_category = {0 : None}
 
     def extend(self, expressions):
         for expression in expressions:
             if expression not in self.__expression_to_category:
                 self.__category_to_expression.append(expression)
-                self.__expression_to_category[expression] = len(self.__category_to_expression) - 1
+                self.__expression_to_category[expression] = len(self) - 1
         
     def encode(self, expression):
         try:
@@ -19,7 +20,7 @@ class CategoryEncoder:
             raise TypeError('Expression is not convertible to str')
 
         try:
-            return self.__expression_to_category[expression]
+            return to_categorical(self.__expression_to_category[expression], num_classes=len(self))
         except KeyError:
             raise ValueError('Expression: %s is not supported' % (expression))
     
