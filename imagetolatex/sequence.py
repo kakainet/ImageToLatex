@@ -85,11 +85,10 @@ class LayeredSequence:
         return features
 
     def _label_slice(self, index_slice):
-        return [label_layer[index_slice] for label_layer in self._label_layers]
+        return self._label_layers[:, index_slice, :]
 
     def load_batch(self, index):
         index_slice = self._index_slice(index)
-
         features, label_layers = self._feature_slice(index_slice), self._label_slice(index_slice)
 
         return features, label_layers
@@ -103,14 +102,11 @@ class LayeredSequence:
         return feature_paths
 
     def _label_subset(self, index_slices):
-        label_layers = [
-            np.empty((self.batch_size * len(index_slices), *self.label_shape), dtype='float32')
-            for _ in range(self.layer_count)
-        ]
+        label_layers = np.empty((self.layer_count, self.batch_size * len(index_slices), *self.label_shape), dtype='float32')
 
         for i, label_layer in enumerate(self._label_layers):
             for j, index_slice in enumerate(index_slices):
-                label_layers[i][self._index_slice(j)] = label_layer[index_slice]
+                label_layers[i, self._index_slice(j)] = label_layer[index_slice]
 
         return label_layers
 
