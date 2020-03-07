@@ -6,13 +6,14 @@ import numpy as np
 
 from .sequence import LayeredSequence
 
-
 def _list_files(path):
-    return [
-        os.path.join(path, x)
-        for x in filter(lambda x: not x.startswith('.'), os.listdir(path))
-        if os.path.isfile(os.path.join(path, x))
-    ]
+    return list(filter(
+        os.path.isfile, map(
+            lambda x : os.path.join(path, x), filter(
+                lambda x : not x.startswith('.'), os.listdir(path)
+            )
+        )
+    ))
 
 def _load_lines(path):
     with open(path, 'r') as ifs:
