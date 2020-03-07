@@ -112,7 +112,7 @@ class LayeredSequence(Sequence):
         return label_layers
 
     def subset(self, batch_indexes):
-        index_slices = [self._index_slice(i) for i in batch_indexes]
+        index_slices = [self._index_slice(i) for i in sorted(batch_indexes)]
         feature_paths, label_layers = self._feature_subset(index_slices), self._label_subset(index_slices)
 
         return LayeredSequence(
@@ -123,6 +123,9 @@ class LayeredSequence(Sequence):
             **self._feature_kwargs
         )
 
+    def split(self, batch_percent):
+        index = int(len(self) * batch_percent)
+        return self.subset(range(0, index)), self.subset(range(index, len(self)))
 
 """
 class AbstractSequence(ABC):
