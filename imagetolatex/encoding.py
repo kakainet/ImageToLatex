@@ -5,7 +5,7 @@ class CategoryEncoder:
 
     def __init__(self):
         self.__category_to_expression = [None]
-        self.__expression_to_category = {0 : None}
+        self.__expression_to_category = {None : 0}
 
     def extend(self, expressions):
         for expression in expressions:
@@ -15,27 +15,20 @@ class CategoryEncoder:
         
     def encode(self, expression):
         try:
-            expression = str(expression)
-        except TypeError:
-            raise TypeError('Expression is not convertible to str')
-
-        try:
             return to_categorical(self.__expression_to_category[expression], num_classes=len(self))
         except KeyError:
             raise ValueError('Expression: %s is not supported' % (expression))
     
     def decode(self, category):
-        try:    
-            if isinstance(category, np.ndarray):
+        if isinstance(category, np.ndarray):
+            try:
                 category = int(np.argmax(category))
-            else:
-                category = int(category)
-        except TypeError:
-            raise TypeError('Category is not convertible to int or a numpy.ndarray of int or float')
+            except TypeError:
+                raise TypeError('Category is not convertible to int or a numpy.ndarray of int or float')
 
         try:
             return self.__category_to_expression[category]
-        except IndexError:
+        except (IndexError, TypeError):
             raise ValueError('Category: %s is not supported' % (category))
 
     def __len__(self):
