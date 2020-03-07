@@ -1,11 +1,12 @@
 import multiprocessing.pool
 import os
 
+from keras.utils import Sequence
 from keras.preprocessing.image import load_img, img_to_array
 import numpy as np
 
 
-class LayeredSequence:
+class LayeredSequence(Sequence):
     
     def __init__(self, feature_paths, label_layers,
                  feature_shape, label_shape,
@@ -121,7 +122,8 @@ class LayeredSequence:
             self.thread_count,
             **self._feature_kwargs
         )
-    
+
+
 """
 class AbstractSequence(ABC):
 
