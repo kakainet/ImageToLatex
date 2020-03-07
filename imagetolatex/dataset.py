@@ -2,7 +2,6 @@ import collections
 import os.path
 import re
 
-from keras.utils import to_categorical
 import numpy as np
 
 from .sequence import LayeredSequence
@@ -35,22 +34,21 @@ def load_layered(input_path, category_encoder, layer_count,
 
     unparsed_labels = _load_lines(os.path.join(input_path, 'labels.txt'))
     label_layers = np.zeros(
-        (len(ungrouped_feature_paths), layer_count, len(category_encoder)),
+        (layer_count, len(ungrouped_feature_paths), len(category_encoder)),
         dtype='float32'
     )
 
     for label_line_index, label_line in enumerate(unparsed_labels):
-        for label_part_index, label_part in enumerate(label_line.split('\t')):
-            encoded_label_part = to_categorical(category_encoder.encode(label_part), num_classes=len(category_encoder))
+        for label_layer_index, label_part in enumerate(label_line.split('\t')):
+            encoded_label_part = category_encoder.encode(label_part)
 
             for feature_variant_index in range(len(grouped_feature_paths[label_line_index])):
-                label_layer_index = label_line_index * len(unparsed_labels) + feature_variant_index
-
-                label_layers[label_layer_index][label_part_index][:] = encoded_label_part
+                label_index = label_line_index * len(unparsed_labels) + feature_variant_index
+                label_layers[label_layer_index, label_index, :] = encoded_label_part
 
     return LayeredSequence(
         feature_paths, label_layers,
-        feature_shape, (layer_count, len(category_encoder)),
+        feature_shape, (len(category_encoder), ),
         batch_size, thread_count,
         **feature_kwargs
     )
