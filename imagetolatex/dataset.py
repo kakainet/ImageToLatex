@@ -17,6 +17,10 @@ def _load_lines(path):
     with open(path, 'r') as ifs:
         return [x.strip() for x in ifs.readlines()]
 
+def _split_line(line, length):
+    parts = line.split('\t')
+    return parts + [None] * (length - len(parts))
+
 def load_layered(input_path, category_encoder, layer_count,
                  feature_shape=(32, 32, 1), batch_size=1024, thread_count=None, **feature_kwargs):
 
@@ -33,13 +37,13 @@ def load_layered(input_path, category_encoder, layer_count,
         feature_paths.extend(grouped_feature_paths[feature_index])
 
     unparsed_labels = _load_lines(os.path.join(input_path, 'labels.txt'))
-    label_layers = np.zeros(
+    label_layers = np.empty(
         (layer_count, len(ungrouped_feature_paths), len(category_encoder)),
         dtype='float32'
     )
 
     for label_line_index, label_line in enumerate(unparsed_labels):
-        for label_layer_index, label_part in enumerate(label_line.split('\t')):
+        for label_layer_index, label_part in enumerate(_split_line(label_line, layer_count)):
             encoded_label_part = category_encoder.encode(label_part)
 
             for feature_variant_index in range(len(grouped_feature_paths[label_line_index])):
