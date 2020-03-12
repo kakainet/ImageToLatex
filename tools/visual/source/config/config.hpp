@@ -14,6 +14,11 @@ namespace cst
         constexpr int dim = 64;  // ==> size dim x dim
     }
 
+    namespace image
+    {
+        constexpr uint64_t img_mgr_reserve = 8;
+    }
+
     namespace system
     {
         constexpr char const* usage =
