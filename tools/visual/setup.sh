@@ -10,6 +10,12 @@ echo -e "${MAG}[INFO]${NC} VISUAL TOOL SETUP STARTS...";
 # remove old files
 rm -rf build external
 
+# boost
+sudo apt install libboost-all-dev
+
+#opencv
+bash ./setup_cv.sh
+
 # threadpool
 mkdir external
 # shellcheck disable=SC2164
