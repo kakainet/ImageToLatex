@@ -101,7 +101,7 @@ namespace itl
         cv::resize(sprite, sprite,
                    cv::Size(static_cast<int>(sprite.cols * factor_x),
                             static_cast<int>(sprite.rows * factor_y)),
-                   0, 0, CV_INTER_LINEAR);
+                   0, 0, cv::INTER_LINEAR);
     }
 
     void Transform::scale_clamp(cv::Mat& sprite, float factor_x, float factor_y,
