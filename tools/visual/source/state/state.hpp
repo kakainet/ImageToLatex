@@ -74,7 +74,7 @@ namespace itl
         std::unique_ptr<EffectManager> effect_manager; ///< own effect manager
         std::unique_ptr<ThreadPool> thread_pool; ///< thread pool for workers
         std::unique_ptr<Transform> transform; ///< transform for images
-        std::unique_ptr<ImageManager> back_manager; ///< manager for backgrounds
+        std::unique_ptr<ImageManager> background_manager; ///< manager for backgrounds
         const int hardware_concurrency; ///< numbers of used threads
         std::mutex mtx; ///< own mutex for avoid race condition
     };

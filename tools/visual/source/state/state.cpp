@@ -45,7 +45,7 @@ namespace itl
         auto glob_to_stdstring = [=](const std::string& where_glob,
                                      std::vector<std::string>& output_paths) {
             std::vector<cv::String> fn;
-            glob(where_glob, fn, false);
+            cv::glob(where_glob, fn, false);
             output_paths.resize(fn.size());
 
             std::transform(fn.begin(), fn.end(), output_paths.begin(),
@@ -71,7 +71,7 @@ namespace itl
                 std::string cp_ext{extension};
                 results.emplace_back(this->thread_pool->enqueue(
                     &State::process_line, this, var, cp_output,
-                    back_manager[i], static_cast<int>(i), cp_ext));
+                    this->background_manager[i], static_cast<int>(i), cp_ext));
             }
         }
 
