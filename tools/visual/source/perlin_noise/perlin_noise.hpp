@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <boost/filesystem.hpp>
 #include <cmath>
 #include <fstream>
 #include <memory>
@@ -8,28 +9,26 @@
 #include <string>
 #include <vector>
 
-#include <boost/filesystem.hpp>
-
 #include "../config/config.hpp"
 #include "../logger/logger.hpp"
 #include "../math/math.hpp"
 
 namespace itl
 {
- /**
- * Perlin Noise class
- * based on paper:
- *
- * Improving Noise
- * Ken Perlin
- * Media Research Laboratory, Dept. of Computer Science, New York University
- * perlin@cat.nyu.edu
- * https://mrl.nyu.edu/~perlin/paper445.pdf
- * and proposed code related with that paper:
- * https://mrl.nyu.edu/~perlin/noise/
- * created by KEN PERLIN (2002)
- *
- */
+    /**
+     * Perlin Noise class
+     * based on paper:
+     *
+     * Improving Noise
+     * Ken Perlin
+     * Media Research Laboratory, Dept. of Computer Science, New York University
+     * perlin@cat.nyu.edu
+     * https://mrl.nyu.edu/~perlin/paper445.pdf
+     * and proposed code related with that paper:
+     * https://mrl.nyu.edu/~perlin/noise/
+     * created by KEN PERLIN (2002)
+     *
+     */
     class PerlinNoise
     {
        public:
@@ -48,7 +47,6 @@ namespace itl
         [[nodiscard]] const std::vector<double>& get_random_noise() const;
 
        private:
-
         /**
          * @brief generates noise 2d and add it to member vector
          * @param dir - directory to save
@@ -63,8 +61,9 @@ namespace itl
          * @param permutation - permutation needed to perlin noise algorithm
          * @return noise in given point
          */
-        [[nodiscard]] double generate_point_noise(double x, double y, double z,
-                                    const std::vector<int>& permutation) const;
+        [[nodiscard]] double generate_point_noise(
+            double x, double y, double z,
+            const std::vector<int>& permutation) const;
 
         /**
          * @brief saves perlin to directory
@@ -80,7 +79,7 @@ namespace itl
          */
         void read_from_file(const std::string& dir);
 
-        std::vector<std::vector<double>> noises; ///< stored noises
-        std::shared_ptr<Logger> logger; ///< ptr to logger
+        std::vector<std::vector<double>> noises;  ///< stored noises
+        std::shared_ptr<Logger> logger;           ///< ptr to logger
     };
 }  // namespace itl

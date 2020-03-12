@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string.h>
+
 #include <algorithm>
 #include <memory>
 #include <numeric>
@@ -35,7 +36,7 @@ namespace itl
         bool contains_flag(const std::string& flag);
 
        private:
-        std::vector<std::string> flags; ///< vector of caught flags
-        std::shared_ptr<Logger> logger; ///< ptr to logger
+        std::vector<std::string> flags;  ///< vector of caught flags
+        std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl

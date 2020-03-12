@@ -1,5 +1,6 @@
-#include <gtest/gtest.h>
 #include "../transform/transform.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(TransformTest, merge_images)
 {
@@ -9,7 +10,8 @@ TEST(TransformTest, merge_images)
 
 TEST(TransformTest, rotate)
 {
-    std::shared_ptr<itl::Logger> log = std::make_shared<itl::Logger>(false, false, false, false, false, false);
+    std::shared_ptr<itl::Logger> log =
+        std::make_shared<itl::Logger>(false, false, false, false, false, false);
     itl::Transform t(log);
 
     cv::Mat fst = cv::Mat::zeros(cv::Size(50, 50), CV_8UC4);
@@ -36,14 +38,16 @@ TEST(TransformTest, rotate)
     t.rotate(snd, 15);
     EXPECT_EQ(snd.rows, 77);
     EXPECT_EQ(snd.cols, 77);
-
 }
 
 TEST(TransformTest, move)
 {
-    std::shared_ptr<itl::Logger> log = std::make_shared<itl::Logger>(false, false, false, false, false, false);
+    std::shared_ptr<itl::Logger> log =
+        std::make_shared<itl::Logger>(false, false, false, false, false, false);
     itl::Transform t(log);
-    auto compare = [](const cv::Mat& a, const cv::Mat& b) -> bool {return cv::countNonZero(a!=b) == 0;};
+    auto compare = [](const cv::Mat& a, const cv::Mat& b) -> bool {
+        return cv::countNonZero(a != b) == 0;
+    };
     cv::Mat fst = cv::Mat::ones(cv::Size(10, 10), CV_8UC4);
     EXPECT_EQ(fst.rows, 10);
     EXPECT_EQ(fst.cols, 10);
@@ -60,20 +64,13 @@ TEST(TransformTest, move)
     EXPECT_TRUE(compare(snd, cv::Mat::ones(cv::Size(2, 2), CV_8UC4)));
     t.move(snd, 1, 0);
     EXPECT_TRUE(!compare(snd, cv::Mat::ones(cv::Size(2, 2), CV_8UC4)));
-    float data[4] = {0,0,1,1};
-    EXPECT_TRUE( compare(snd, cv::Mat(2, 2, CV_8UC4, &data)));
+    float data[4] = {0, 0, 1, 1};
+    EXPECT_TRUE(compare(snd, cv::Mat(2, 2, CV_8UC4, &data)));
     t.move(snd, 0, 1);
-    float data_corner[4] = {0,0,0,1};
-    EXPECT_TRUE( compare(snd, cv::Mat(2, 2, CV_8UC4, &data_corner)));
+    float data_corner[4] = {0, 0, 0, 1};
+    EXPECT_TRUE(compare(snd, cv::Mat(2, 2, CV_8UC4, &data_corner)));
 }
 
-TEST(TransformTest, scale)
-{
+TEST(TransformTest, scale) {}
 
-}
-
-TEST(TransformTest, scale_clamp)
-{
-
-}
-
+TEST(TransformTest, scale_clamp) {}

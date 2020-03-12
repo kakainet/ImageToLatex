@@ -48,10 +48,9 @@ namespace itl
             cv::glob(where_glob, fn, false);
             output_paths.resize(fn.size());
 
-            std::transform(fn.begin(), fn.end(), output_paths.begin(),
-                           [](const cv::String& str) {
-                               return str.operator std::string();
-                           });
+            std::transform(
+                fn.begin(), fn.end(), output_paths.begin(),
+                [](const cv::String& str) { return std::string(str); });
         };
         std::vector<std::string> paths_pic;
         std::vector<std::string> paths_background;
@@ -71,7 +70,8 @@ namespace itl
                 std::string cp_ext{extension};
                 results.emplace_back(this->thread_pool->enqueue(
                     &State::process_line, this, var, cp_output,
-                    this->background_manager[i], static_cast<int>(i), cp_ext));
+                    (*this->background_manager)[i], static_cast<int>(i),
+                    cp_ext));
             }
         }
 
@@ -81,8 +81,7 @@ namespace itl
     }
 
     bool State::process_line(const std::string& path_to_raw,
-                             const std::string& dir_to_save,
-                             cv::Mat background,
+                             const std::string& dir_to_save, cv::Mat background,
                              int background_idx,
                              const std::string& extension) noexcept
     {
@@ -93,7 +92,7 @@ namespace itl
             std::scoped_lock<std::mutex> lck(this->mtx);
             std::stringstream ss;
             ss << cst::texture::failed_load_texture
-               << "\n\tBase texture path: " << path_to_raw
+               << "\n\tBase texture path: " << path_to_raw;
             this->logger->log(ss.str(), Logger::stream_t::console,
                               Logger::type_t::error);
 
@@ -114,8 +113,9 @@ namespace itl
         for(auto& spr : sprites)
         {
             std::stringstream path_to_save;
-            path_to_save << dir_to_save << "/" << file_name << "_" <<
-                background_idx << "_" << std::to_string(itr++) << extension;
+            path_to_save << dir_to_save << "/" << file_name << "_"
+                         << background_idx << "_" << std::to_string(itr++)
+                         << extension;
 
             // apply position effect - it is separated due to
             // performance. Using relative position instead
@@ -126,8 +126,7 @@ namespace itl
             int dy = background.rows - spr->rows;
 
             this->transform->merge_images(&dst, &background, 0, 0);
-            this->transform->merge_images(&dst, &*spr,
-                                          dx < 0 ? 0 : dx / 2,
+            this->transform->merge_images(&dst, &*spr, dx < 0 ? 0 : dx / 2,
                                           dy < 0 ? 0 : dy / 2);
             cv::imwrite(path_to_save.str(), dst);
         }

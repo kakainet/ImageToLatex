@@ -1,8 +1,7 @@
 #pragma once
 
-#include <vector>
-
 #include <opencv2/core.hpp>
+#include <vector>
 
 /**
  * constants
