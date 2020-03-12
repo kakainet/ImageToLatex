@@ -21,9 +21,9 @@ namespace itl
          */
         enum class stream_t
         {
-            console, ///< print to stdout
-            file, ///< print to file
-            both ///< print to both
+            console,  ///< print to stdout
+            file,     ///< print to file
+            both      ///< print to both
         };
 
         /**
@@ -31,10 +31,10 @@ namespace itl
          */
         enum class type_t
         {
-            info, ///< neutral details of program run
-            suggestion, ///< suggestions from authors
-            warning, ///< warns if sth isn't safe
-            error ///< sth went wrong
+            info,        ///< neutral details of program run
+            suggestion,  ///< suggestions from authors
+            warning,     ///< warns if sth isn't safe
+            error        ///< sth went wrong
         };
 
         /**
@@ -78,7 +78,6 @@ namespace itl
                   bool warnings, bool time);
 
        private:
-
         /**
          * @brief message sender
          * @param message - text to send
@@ -112,12 +111,13 @@ namespace itl
          */
         void set_prefix(Logger::type_t type, std::string& prefix) noexcept;
 
-        bool log_all;           ///< flag if ALL messages should be supported
-        bool log_info;          ///< flag if [INFO] messages should be supported
-        bool log_suggestions;   ///< flag if [SUGGESTION] messages should be supported
-        bool log_errors;        ///< flag if [ERROR] messages should be supported
-        bool log_warnings;      ///< flag if [WARNING] messages should be supported
+        bool log_all;          ///< flag if ALL messages should be supported
+        bool log_info;         ///< flag if [INFO] messages should be supported
+        bool log_suggestions;  ///< flag if [SUGGESTION] messages should be
+                               ///< supported
+        bool log_errors;       ///< flag if [ERROR] messages should be supported
+        bool log_warnings;  ///< flag if [WARNING] messages should be supported
 
-        bool log_time;          ///< flag if time should be added to logs
+        bool log_time;  ///< flag if time should be added to logs
     };
 }  // namespace itl

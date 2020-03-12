@@ -1,7 +1,6 @@
 #pragma once
 
 #include <memory>
-
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/utility.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -17,7 +16,6 @@ namespace itl
     class Transform
     {
        public:
-
         /**
          * @brief explicit ctor
          * @param log - ptr to logger
@@ -68,6 +66,6 @@ namespace itl
                          int lower, int upper);
 
        private:
-        std::shared_ptr<Logger> logger; ///< ptr to logger
+        std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl

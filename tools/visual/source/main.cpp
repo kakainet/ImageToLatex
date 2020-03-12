@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
 #include "flag_manager/flag_manager.hpp"
+#include "gtest/gtest.h"
 #include "logger/logger.hpp"
 #include "perlin_noise/perlin_noise.hpp"
 #include "state/state.hpp"

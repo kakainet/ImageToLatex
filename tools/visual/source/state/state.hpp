@@ -1,12 +1,12 @@
 #pragma once
 
+#include <ThreadPool.h>
+
 #include <map>
 #include <memory>
 #include <mutex>
 #include <thread>
 #include <vector>
-
-#include <ThreadPool.h>
 
 #include "../config/config.hpp"
 #include "../effect/effect_manager.hpp"
@@ -25,7 +25,6 @@ namespace itl
     class State
     {
        public:
-
         /**
          * @brief explicit ctor
          * @param log - ptr to logger
@@ -42,9 +41,7 @@ namespace itl
          */
         int run(const std::string& path_to_data, const std::string& extension);
 
-
-    private:
-
+       private:
         /**
          * @brief generates all images using effects
          * @param dir - path to data folder
@@ -60,22 +57,23 @@ namespace itl
          * @param dir_to_save - directory where output should be saved
          * @param background - of latex images
          * @param background_idx - index of background
-         * @param extension - extension of supported images (both background and sprites)
+         * @param extension - extension of supported images (both background and
+         * sprites)
          * @return true if everything finished correctly
          */
         bool process_line(const std::string& path_to_raw,
-                          const std::string& dir_to_save,
-                          cv::Mat background,
+                          const std::string& dir_to_save, cv::Mat background,
                           int background_idx,
                           const std::string& extension) noexcept;
 
-        std::shared_ptr<FlagManager> flag_manager; ///< ptr to flag manager
-        std::shared_ptr<Logger> logger; ///< ptr to logger
-        std::unique_ptr<EffectManager> effect_manager; ///< own effect manager
-        std::unique_ptr<ThreadPool> thread_pool; ///< thread pool for workers
-        std::unique_ptr<Transform> transform; ///< transform for images
-        std::unique_ptr<ImageManager> background_manager; ///< manager for backgrounds
-        const int hardware_concurrency; ///< numbers of used threads
-        std::mutex mtx; ///< own mutex for avoid race condition
+        std::shared_ptr<FlagManager> flag_manager;      ///< ptr to flag manager
+        std::shared_ptr<Logger> logger;                 ///< ptr to logger
+        std::unique_ptr<EffectManager> effect_manager;  ///< own effect manager
+        std::unique_ptr<ThreadPool> thread_pool;  ///< thread pool for workers
+        std::unique_ptr<Transform> transform;     ///< transform for images
+        std::unique_ptr<ImageManager>
+            background_manager;             ///< manager for backgrounds
+        const size_t hardware_concurrency;  ///< numbers of used threads
+        std::mutex mtx;  ///< own mutex for avoid race condition
     };
 }  // namespace itl

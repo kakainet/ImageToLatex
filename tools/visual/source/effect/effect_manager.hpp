@@ -15,8 +15,8 @@
 namespace itl
 {
     /**
-    * class which manages effects
-    */
+     * class which manages effects
+     */
     class EffectManager
     {
        public:
@@ -42,9 +42,9 @@ namespace itl
          */
         enum class function_t
         {
-            rotate,    ///< rotating effect (center)
-            scale,     ///< scaling effect (linear)
-            perlin     ///< noising efffect (perlin)
+            rotate,  ///< rotating effect (center)
+            scale,   ///< scaling effect (linear)
+            perlin   ///< noising efffect (perlin)
         };
 
         /**
@@ -59,15 +59,18 @@ namespace itl
         void generate_all_effect_packs();
 
         std::map<function_t, std::vector<std::function<void(cv::Mat&)>>>
-                functions; ///< map which contains all available functions
+            functions;  ///< map which contains all available functions
         ///< with given keys stored as vector
 
-        std::vector<std::vector<int>> pack_indexes; ///< packIndexes[i][j] is index of j'th effect from i'th pack
+        std::vector<std::vector<int>>
+            pack_indexes;  ///< packIndexes[i][j] is index of j'th effect from
+                           ///< i'th pack
 
-        std::unique_ptr<Transform> transform; ///< ptr to transform object
+        std::unique_ptr<Transform> transform;  ///< ptr to transform object
 
-        std::unique_ptr<PerlinNoise> perlin_noise; ///< ptr to perlin noise generator
+        std::unique_ptr<PerlinNoise>
+            perlin_noise;  ///< ptr to perlin noise generator
 
-        std::shared_ptr<Logger> logger; ///< ptr to logger
+        std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl
