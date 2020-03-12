@@ -17,7 +17,7 @@ namespace itl
 
     bool ImageManager::append(const std::vector<std::string>& paths)
     {
-        return std::accumulate(paths.begin(), paths.end(), false,
+        return std::accumulate(paths.begin(), paths.end(), true,
                                [this](bool acc, const std::string& str) {
                                    return acc && this->append(str);
                                });
