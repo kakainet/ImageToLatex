@@ -22,6 +22,7 @@ namespace itl
             std::make_unique<ThreadPool>(this->hardware_concurrency);
         this->transform = std::make_unique<Transform>(log);
 
+        this->background_manager = std::make_unique<ImageManager>();
         this->logger->log(std::string(cst::info::init_module_msg_end) +
                               std::string(typeid(this).name()),
                           Logger::stream_t::console, Logger::type_t::info);
@@ -61,6 +62,7 @@ namespace itl
         std::string output = dir + cst::file::output;
 
         std::vector<std::future<bool>> results;
+        background_manager->append(paths_background);
         for(size_t i = 0; i < paths_background.size(); i++)
         {
             for(auto& var : paths_pic)
@@ -69,7 +71,7 @@ namespace itl
                 std::string cp_ext{extension};
                 results.emplace_back(this->thread_pool->enqueue(
                     &State::process_line, this, var, cp_output,
-                    paths_background[i], static_cast<int>(i), cp_ext));
+                    back_manager[i], static_cast<int>(i), cp_ext));
             }
         }
 
@@ -80,26 +82,18 @@ namespace itl
 
     bool State::process_line(const std::string& path_to_raw,
                              const std::string& dir_to_save,
-                             const std::string& path_to_background,
+                             cv::Mat background,
                              int background_idx,
                              const std::string& extension) noexcept
     {
         cv::Mat base(cv::imread(path_to_raw, cv::IMREAD_UNCHANGED));
 
-        this->mtx.lock();
-        cv::Mat background(
-            cv::imread(path_to_background, cv::IMREAD_UNCHANGED));
-        this->mtx.unlock();
-
-        if(!base.data || !background.data ||
-           background.rows != cst::window::dim ||
-           background.cols != cst::window::dim)
+        if(!base.data)
         {
             std::scoped_lock<std::mutex> lck(this->mtx);
             std::stringstream ss;
             ss << cst::texture::failed_load_texture
                << "\n\tBase texture path: " << path_to_raw
-               << "\n\tBackground texture path: " << path_to_background;
             this->logger->log(ss.str(), Logger::stream_t::console,
                               Logger::type_t::error);
 
