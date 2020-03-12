@@ -61,16 +61,28 @@ namespace itl
         std::string output = dir + cst::file::output;
 
         std::vector<std::future<bool>> results;
-        background_manager->append(paths_background);
+        if(!background_manager->append(paths_background))
+        {
+            std::stringstream ss;
+            ss << cst::texture::failed_load_texture
+               << " One or more backgrounds were failed during loading.";
+
+            this->logger->log(ss.str(), Logger::stream_t::console,
+                              Logger::type_t::error);
+
+            return false;
+        }
+
         for(size_t i = 0; i < paths_background.size(); i++)
         {
             for(auto& var : paths_pic)
             {
                 std::string cp_output{output};
                 std::string cp_ext{extension};
+                cv::Mat bck = (*this->background_manager)[i];
                 results.emplace_back(this->thread_pool->enqueue(
                     &State::process_line, this, var, cp_output,
-                    (*this->background_manager)[i], static_cast<int>(i),
+                    (*this->background_manager)[i].clone(), static_cast<int>(i),
                     cp_ext));
             }
         }

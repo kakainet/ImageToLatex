@@ -122,7 +122,7 @@ namespace cst
         constexpr char const* fail_distr_worker =
             "Failed during distribution worker - there is no free worker.";
         constexpr char const* number_thread_info =
-            "Program use multithreading. Threads number:";
+            "Program uses multithreading. Threads number:";
     }  // namespace thread
 
     namespace perlin
