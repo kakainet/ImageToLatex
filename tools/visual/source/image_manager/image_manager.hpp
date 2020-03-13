@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITL_IMAGE_MGR_HPP
+#define ITL_IMAGE_MGR_HPP
 
 #include <numeric>
 #include <opencv2/core/core.hpp>
@@ -48,3 +49,5 @@ namespace itl
         std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl
+
+#endif

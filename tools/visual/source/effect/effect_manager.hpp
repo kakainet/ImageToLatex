@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITL_EFFECT_MGR_HPP
+#define ITL_EFFECT_MGR_HPP
 
 #include <cstring>
 #include <functional>
@@ -74,3 +75,5 @@ namespace itl
         std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITL_FLAG_MGR_HPP
+#define ITL_FLAG_MGR_HPP
 
 #include <string.h>
 
@@ -40,3 +41,5 @@ namespace itl
         std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl
+
+#endif

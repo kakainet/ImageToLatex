@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ITL_MATH_HPP
+#define ITL_MATH_HPP
+
 #include <random>
 
 /**
@@ -78,3 +80,5 @@ class Math
         return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
     }
 };
+
+#endif

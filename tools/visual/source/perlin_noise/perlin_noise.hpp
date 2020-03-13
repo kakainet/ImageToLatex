@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITL_PERLIN_HPP
+#define ITL_PERLIN_HPP
 
 #include <algorithm>
 #include <boost/filesystem.hpp>
@@ -83,3 +84,5 @@ namespace itl
         std::shared_ptr<Logger> logger;           ///< ptr to logger
     };
 }  // namespace itl
+
+#endif

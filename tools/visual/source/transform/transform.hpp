@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITL_TRANSFORM_HPP
+#define ITL_TRANSFORM_HPP
 
 #include <memory>
 #include <opencv2/core/core.hpp>
@@ -69,3 +70,5 @@ namespace itl
         std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl
+
+#endif

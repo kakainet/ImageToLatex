@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITL_CONFIG_HPP
+#define ITL_CONFIG_HPP
 
 #include <opencv2/core.hpp>
 #include <vector>
@@ -139,3 +140,5 @@ namespace cst
         constexpr int noises_num = 2;
     }  // namespace perlin
 }  // namespace cst
+
+#endif
