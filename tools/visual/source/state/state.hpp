@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITL_STATE_HPP
+#define ITL_STATE_HPP
 
 #include <ThreadPool.h>
 
@@ -77,3 +78,5 @@ namespace itl
         std::mutex mtx;  ///< own mutex for avoid race condition
     };
 }  // namespace itl
+
+#endif

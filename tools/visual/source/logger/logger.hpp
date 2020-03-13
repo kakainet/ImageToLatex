@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITL_LOGGER_HPP
+#define ITL_LOGGER_HPP
 
 #include <chrono>
 #include <ctime>
@@ -121,3 +122,5 @@ namespace itl
         bool log_time;  ///< flag if time should be added to logs
     };
 }  // namespace itl
+
+#endif
