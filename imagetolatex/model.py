@@ -65,22 +65,16 @@ class LayeredModel:
 
 
 if __name__ == '__main__':
-    print('test')
-    from keras import backend as K
-
-    K.tensorflow_backend._get_available_gpus()
-    print('test')
+    # from keras import backend as K
+    # K.tensorflow_backend._get_available_gpus()
     from encoding import CategoryEncoder
     from sequence import load_flat
-    from string import digits
 
-    print(*digits)
+    # from string import digits
+
     latex_encoder = CategoryEncoder()
     latex_encoder.extend([
-        '+', '-', '^', '{', '}',
-        '^', R'\cdot', 'a', 'x',
-        *digits
-    ])
+        '+', '-', '^', R'\cdot', R'\frac', 'NULL'])
 
     sequences = load_flat(
         os.path.join(os.getcwd(), 'dataset'),
@@ -92,11 +86,11 @@ if __name__ == '__main__':
     )
     print('seq size', len(sequences))
     train_size = int(0.8 * len(sequences))
-    model = LayeredModel((64, 64, 1), latex_encoder, 7)
+    model = LayeredModel((64, 64, 1), latex_encoder, 1)
     model.fit_on_flat(
         sequences,
-        sequences, # validation set will be extracted in 0.1.1
-        epochs=10,
+        sequences,  # validation set will be extracted in 0.1.1
+        epochs=4,
         verbose=1,
         save_weights=True
     )

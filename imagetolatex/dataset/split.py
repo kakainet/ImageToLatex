@@ -4,6 +4,13 @@ import os
 
 root_path = os.path.join(os.getcwd(), 'labels')
 
+def fst_char(s_arr):
+    allowed = ['\\frac', '\\cdot', '+', '-']
+    for c in s_arr:
+        if c in allowed:
+            return c
+    return 'NULL'
+
 def _list_files(path):
     return [
         os.path.join(path, x)
@@ -28,7 +35,7 @@ def parse(s, _index):
         index += 1
     print(_index)
     return chars
-
+'''
 for path in _list_files(root_path):
     lines = _load_lines(path)
     print(path, len(lines))
@@ -39,6 +46,22 @@ for path in _list_files(root_path):
 
 
     result = "\n".join(["\t".join(x) for x in result_lines])
+
+    with open(path + '.edit', 'w') as ofs:
+        ofs.write(result)
+        ofs.write('\n')
+'''
+
+for path in _list_files(root_path):
+    lines = _load_lines(path)
+    print(path, len(lines))
+    result_lines = [
+        parse(x.strip(), index) for index, x in enumerate(lines)
+    ]
+    assert len(result_lines) > 0
+
+
+    result = "\n".join([fst_char(x) for x in result_lines])
 
     with open(path + '.edit', 'w') as ofs:
         ofs.write(result)
