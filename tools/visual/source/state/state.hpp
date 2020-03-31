@@ -28,11 +28,9 @@ namespace itl
        public:
         /**
          * @brief explicit ctor
-         * @param log - ptr to logger
          * @param flag_manager - ptr to flag manager
          */
-        explicit State(const std::shared_ptr<Logger>& log,
-                       const std::shared_ptr<itl::FlagManager>& flag_manager);
+        explicit State(const std::shared_ptr<itl::FlagManager>& flag_manager);
 
         /**
          * @brief run whole imaging processing

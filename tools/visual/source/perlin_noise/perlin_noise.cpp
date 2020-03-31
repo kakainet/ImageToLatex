@@ -2,14 +2,8 @@
 
 namespace itl
 {
-    PerlinNoise::PerlinNoise(const std::shared_ptr<Logger>& log,
-                             const std::string& path_to_data)
-        : logger(log)
+    PerlinNoise::PerlinNoise(const std::string& path_to_data)
     {
-        this->logger->log(std::string(cst::info::init_module_msg_start) +
-                              std::string(typeid(this).name()),
-                          Logger::stream_t::console, Logger::type_t::info);
-
         for(int i = 0; i < cst::perlin::noises_num; i++)
         {
             std::stringstream full_path_perlin;
@@ -32,10 +26,6 @@ namespace itl
                 this->read_from_file(full_path_perlin.str());
             }
         }
-
-        this->logger->log(std::string(cst::info::init_module_msg_end) +
-                              std::string(typeid(this).name()),
-                          Logger::stream_t::console, Logger::type_t::info);
     }
 
     void PerlinNoise::generate_noise_2d(const std::string& dir)

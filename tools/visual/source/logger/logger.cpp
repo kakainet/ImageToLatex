@@ -5,22 +5,21 @@ namespace itl
     Logger::Logger(bool all, bool info, bool suggestions, bool errors,
                    bool warnings, bool time)
     {
-        this->init(all, info, suggestions, errors, warnings, time);
+        Logger::init(all, info, suggestions, errors, warnings, time);
     }
-
-    Logger::Logger() : Logger(true, true, true, true, true, false) {}
 
     void Logger::log(const std::string& message, const Logger::stream_t& stream,
                      const Logger::type_t& type) noexcept
     {
-        if(type == type_t::info && !this->log_info) return;
-        if(type == type_t::warning && !this->log_warnings) return;
-        if(type == type_t::suggestion && !this->log_suggestions) return;
-        if(type == type_t::error && !this->log_errors) return;
+        auto& l = Logger::get();
+        if(type == type_t::info && !l->log_info) return;
+        if(type == type_t::warning && !l->log_warnings) return;
+        if(type == type_t::suggestion && !l->log_suggestions) return;
+        if(type == type_t::error && !l->log_errors) return;
 
         std::string prefix_colored;
-        set_prefix(type, prefix_colored);
-        send_message(message, stream, prefix_colored);
+        l->set_prefix(type, prefix_colored);
+        l->send_message(message, stream, prefix_colored);
     }
 
     void Logger::send_message(const std::string& message,
@@ -110,26 +109,33 @@ namespace itl
     void Logger::init(bool all, bool info, bool suggestions, bool errors,
                       bool warnings, bool time)
     {
-        auto set_all_to_val = [=](bool val) {
-            this->log_info = val;
-            this->log_suggestions = val;
-            this->log_errors = val;
-            this->log_warnings = val;
+        auto& l = Logger::get();
+        l.reset(new Logger());
+        auto set_all_to_val = [&l](bool val) {
+            l->log_info = val;
+            l->log_suggestions = val;
+            l->log_errors = val;
+            l->log_warnings = val;
         };
 
         if(all)
         {
             set_all_to_val(true);
-            this->log_time = time;
+            l->log_time = time;
         }
         else
         {
-            this->log_all = false;
-            this->log_info = info;
-            this->log_suggestions = suggestions;
-            this->log_errors = errors;
-            this->log_warnings = warnings;
-            this->log_time = time;
+            l->log_all = false;
+            l->log_info = info;
+            l->log_suggestions = suggestions;
+            l->log_errors = errors;
+            l->log_warnings = warnings;
+            l->log_time = time;
         }
+    }
+
+    std::unique_ptr<Logger>& Logger::get()
+    {
+        return Logger::instance;
     }
 }  // namespace itl

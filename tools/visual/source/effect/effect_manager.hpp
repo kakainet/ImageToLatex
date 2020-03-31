@@ -26,8 +26,7 @@ namespace itl
          * @param log - pointer to logger
          * @param path_to_data - path to data folder
          */
-        explicit EffectManager(const std::shared_ptr<Logger>& log,
-                               const std::string& path_to_data);
+        explicit EffectManager(const std::string& path_to_data);
 
         /**
          * @brief generates all possible sprites in use of defined effects

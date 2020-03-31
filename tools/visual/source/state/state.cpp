@@ -2,15 +2,10 @@
 
 namespace itl
 {
-    State::State(const std::shared_ptr<Logger>& log,
-                 const std::shared_ptr<itl::FlagManager>& flag_manager)
+    State::State(const std::shared_ptr<itl::FlagManager>& flag_manager)
         : flag_manager(flag_manager),
-          logger(log),
           hardware_concurrency(std::thread::hardware_concurrency())
     {
-        this->logger->log(std::string(cst::info::init_module_msg_start) +
-                              std::string(typeid(this).name()),
-                          Logger::stream_t::console, Logger::type_t::info);
         std::stringstream thread_info;
         thread_info << cst::thread::number_thread_info << " "
                     << std::to_string(this->hardware_concurrency);
@@ -20,12 +15,9 @@ namespace itl
 
         this->thread_pool =
             std::make_unique<ThreadPool>(this->hardware_concurrency);
-        this->transform = std::make_unique<Transform>(log);
+        this->transform = std::make_unique<Transform>();
 
         this->background_manager = std::make_unique<ImageManager>();
-        this->logger->log(std::string(cst::info::init_module_msg_end) +
-                              std::string(typeid(this).name()),
-                          Logger::stream_t::console, Logger::type_t::info);
     }
 
     int State::run(const std::string& path_to_data,

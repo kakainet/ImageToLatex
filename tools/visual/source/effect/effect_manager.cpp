@@ -6,18 +6,10 @@ namespace itl
                                  const std::string& path_to_data)
         : logger(log)
     {
-        this->logger->log(std::string(cst::info::init_module_msg_start) +
-                              std::string(typeid(this).name()),
-                          Logger::stream_t::console, Logger::type_t::info);
-
         this->perlin_noise =
             std::make_unique<PerlinNoise>(logger, path_to_data);
         this->load_functions();
         this->generate_all_effect_packs();
-
-        this->logger->log(std::string(cst::info::init_module_msg_end) +
-                              std::string(typeid(this).name()),
-                          Logger::stream_t::console, Logger::type_t::info);
     }
 
     void EffectManager::load_functions()
