@@ -21,7 +21,7 @@ namespace itl
          * @brief explicit ctor
          * @param log - ptr to logger
          */
-        explicit Transform(const std::shared_ptr<Logger>& log);
+        explicit Transform();
 
         /**
          * @brief merges two images and save result in background
@@ -65,9 +65,6 @@ namespace itl
          */
         void scale_clamp(cv::Mat& sprite, float factor_x, float factor_y,
                          int lower, int upper);
-
-       private:
-        std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl
 

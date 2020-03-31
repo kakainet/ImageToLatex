@@ -2,15 +2,8 @@
 
 namespace itl
 {
-    Transform::Transform(const std::shared_ptr<Logger>& log) : logger(log)
+    Transform::Transform()
     {
-        this->logger->log(std::string(cst::info::init_module_msg_start) +
-                              std::string(typeid(this).name()),
-                          Logger::stream_t::console, Logger::type_t::info);
-
-        this->logger->log(std::string(cst::info::init_module_msg_end) +
-                              std::string(typeid(this).name()),
-                          Logger::stream_t::console, Logger::type_t::info);
     }
 
     void Transform::merge_images(cv::Mat* background, cv::Mat* upcoming, int x,
@@ -65,7 +58,7 @@ namespace itl
 
                     default:
                     {
-                        this->logger->log(cst::effect::failed_merging,
+                        Logger::get()->log(cst::effect::failed_merging,
                                           Logger::stream_t::console,
                                           Logger::type_t::error);
                         return;

@@ -7,7 +7,7 @@
 #include <memory>
 #include <numeric>
 #include <string>
-#include <vector>
+#include <unordered_set>
 
 #include "../config/config.hpp"
 #include "../logger/logger.hpp"
@@ -16,6 +16,7 @@ namespace itl
 {
     /**
      * class which manages command-line arguments
+     * @warning dispensed with the obligation to logging during initialization itself
      */
     class FlagManager
     {
@@ -24,10 +25,8 @@ namespace itl
          * @brief explicit ctor
          * @param argc - number of arguments
          * @param argv - arguments
-         * @param log - ptr to logger
          */
-        explicit FlagManager(int argc, char* argv[],
-                             const std::shared_ptr<Logger>& log);
+        explicit FlagManager(int argc, char* argv[]);
 
         /**
          * @brief checks if given flag was passed to program
@@ -37,8 +36,7 @@ namespace itl
         bool contains_flag(const std::string& flag);
 
        private:
-        std::vector<std::string> flags;  ///< vector of caught flags
-        std::shared_ptr<Logger> logger;  ///< ptr to logger
+        std::unordered_set<std::string> flags;  ///< vector of caught flags
     };
 }  // namespace itl
 

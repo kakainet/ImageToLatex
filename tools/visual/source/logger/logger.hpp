@@ -9,10 +9,39 @@
 
 #include "../config/config.hpp"
 
+class S
+{
+public:
+    static S& getInstance()
+    {
+        static S    instance; // Guaranteed to be destroyed.
+        // Instantiated on first use.
+        return instance;
+    }
+private:
+    S() {}                    // Constructor? (the {} brackets) are needed here.
+
+    // C++ 03
+    // ========
+    // Don't forget to declare these two. You want to make sure they
+    // are unacceptable otherwise you may accidentally get copies of
+    // your singleton appearing.
+    S(S const&);              // Don't Implement
+    void operator=(S const&); // Don't implement
+
+    // C++ 11
+    // =======
+    // We can use the better technique of deleting the methods
+    // we don't want.
+public:
+
+};
+
 namespace itl
 {
     /**
      * class for logging messages
+     * @warning dispensed with the obligation to logging during initialization itself
      */
     class Logger
     {
@@ -38,6 +67,42 @@ namespace itl
             error        ///< sth went wrong
         };
 
+        static std::unique_ptr<Logger>& get();
+
+        /**
+         * @brief deleted ctor
+         */
+        Logger(Logger const&)     = delete;
+
+        /**
+         * @brief deleted assignment operator
+         */
+        void operator=(S const&)  = delete;
+
+        /**
+         * @brief prints message
+         * @param message - given text to print
+         * @param stream - where message should be printed
+         * @param type - type of message
+         */
+        static void log(const std::string& message,
+                 const Logger::stream_t& stream = Logger::stream_t::console,
+                 const Logger::type_t& type = Logger::type_t::error) noexcept;
+
+        /**
+         * @brief late initialization of logger
+         * @param all - flag if "-la" was passed
+         * @param info - flag if "-li" was passed
+         * @param suggestions - flag if "-ls" was passed
+         * @param errors - flag if "-le" was passed
+         * @param warnings - flag if "-lw" was passed
+         * @param time - flag if "-lt" was passed
+         */
+        static void init(bool all, bool info, bool suggestions, bool errors,
+                  bool warnings, bool time);
+
+       private:
+
         /**
          * @brief explicit ctor
          * @param all - flag if "-la" was passed
@@ -51,34 +116,10 @@ namespace itl
                         bool warnings, bool time);
 
         /**
-         * @brief explicit ctor, sets all flags on true
-         * without taking into account logging time
-         */
-        explicit Logger();
+        * @brief default ctor
+        */
+        Logger() = default;
 
-        /**
-         * @brief prints message
-         * @param message - given text to print
-         * @param stream - where message should be printed
-         * @param type - type of message
-         */
-        void log(const std::string& message,
-                 const Logger::stream_t& stream = Logger::stream_t::console,
-                 const Logger::type_t& type = Logger::type_t::error) noexcept;
-
-        /**
-         * @brief late initialization of logger
-         * @param all - flag if "-la" was passed
-         * @param info - flag if "-li" was passed
-         * @param suggestions - flag if "-ls" was passed
-         * @param errors - flag if "-le" was passed
-         * @param warnings - flag if "-lw" was passed
-         * @param time - flag if "-lt" was passed
-         */
-        void init(bool all, bool info, bool suggestions, bool errors,
-                  bool warnings, bool time);
-
-       private:
         /**
          * @brief message sender
          * @param message - text to send
@@ -120,6 +161,8 @@ namespace itl
         bool log_warnings;  ///< flag if [WARNING] messages should be supported
 
         bool log_time;  ///< flag if time should be added to logs
+
+        static inline std::unique_ptr<Logger> instance; ///< singleton instance
     };
 }  // namespace itl
 
