@@ -67,8 +67,8 @@ def complex_equation_layer(input_shape, num_classes, verbose=False):
 
 if __name__ == '__main__':
     from string import digits
-    from .encoding import CategoryEncoder
-    from .dataset import load_layered
+    from encoding import CategoryEncoder
+    from dataset import load_layered
 
     latex_encoder = CategoryEncoder()
     latex_encoder.extend([
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     ])
 
     input_shape = (128, 128, 1)
-    layer_count = 64
+    layer_count = 3
 
     sequence = load_layered(
         os.path.join(os.getcwd(), 'dataset'),
@@ -89,11 +89,11 @@ if __name__ == '__main__':
         color_mode='grayscale'
     )
 
-    train_sequence, test_sequence = sequence.split(0.5)
+    train_sequence, test_sequence = sequence.split(0.7)
 
     model = LayeredModel(input_shape, layer_count, latex_encoder, complex_equation_layer)
     model.fit_on_layered(
         train_sequence,
         test_sequence,
-        epochs=10000
+        epochs=10
     )
