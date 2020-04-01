@@ -4,7 +4,7 @@ import re
 
 import numpy as np
 
-from .sequence import LayeredSequence
+from sequence import LayeredSequence
 
 
 def _list_files(path):
@@ -34,7 +34,7 @@ def load_layered(input_path, category_encoder, layer_count,
     grouped_feature_paths = collections.defaultdict(list)
 
     for feature_path in ungrouped_feature_paths:
-        feature_index, *_ = re.findall(r'[0-9]+', feature_path)
+        *_, feature_index, _, _ = re.findall(r'[0-9]+', feature_path)
         grouped_feature_paths[int(feature_index)].append(feature_path)
 
     feature_paths = []
@@ -43,7 +43,6 @@ def load_layered(input_path, category_encoder, layer_count,
         feature_paths.extend(grouped_feature_paths[feature_index])
 
     unparsed_labels = list(_load_lines(os.path.join(input_path, 'labels.txt')))
-
     assert len(unparsed_labels) == len(grouped_feature_paths)
 
     """
