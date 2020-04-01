@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+from functools import wraps
 import multiprocessing.pool
 import os
 
@@ -6,7 +8,65 @@ from keras.preprocessing.image import load_img, img_to_array
 import numpy as np
 
 
-class LayeredSequence(Sequence):
+class PreloadMixin(ABC):
+
+    @abstractmethod
+    def load_batch(self, index):
+        pass
+
+    def preload_batch(self, index):
+        if not hasattr(self, '_preloaded_batches'):
+            self._preloaded_batches = dict()
+        self._preloaded_batches[index] = self.load_batch(index)
+
+    def unload_batch(self, index):
+        if not hasattr(self, '_preloaded_batches'):
+            self._preloaded_batches = dict()
+        del self._preloaded_batches[index]
+
+
+def _lookup_preload_wrapper(function):
+    @wraps(function)
+    def wrapper(self, index, *args, **kwargs):
+        result = self._preloaded_batches.get(index)
+
+        if not result:
+            result = function(self, index, *args, **kwargs)
+
+        return result
+
+    return wrapper
+
+def _store_preload_wrapper(function):
+    # TODO maybe split into store/store_but_update variant, add index validator/limiter
+    pass
+
+def _free_preload_wrapper(function):
+    @wraps(function)
+    def wrapper(self, *args, **kwargs):
+        result = function(self, *args, **kwargs)
+        self._preloaded_batches.clear()
+        return result
+
+    return wrapper
+
+_preload_wrappers = {
+    'lookup' : _lookup_preload_wrapper,
+    'store' : _store_preload_wrapper,
+    'free' : _free_preload_wrapper
+}
+
+def preload(types): # lookup, store, free
+    # TODO consider some safety
+    def wrapper(function):
+        for type in set(types):
+            function = _preload_wrappers[type](function)
+        return function
+
+    return wrapper
+
+# TODO add checks on batch_size setter, add batch_count property also with checks
+class LayeredSequence(PreloadMixin, Sequence):
     
     def __init__(self, feature_paths, label_layers,
                  feature_shape, label_shape,
@@ -30,7 +90,8 @@ class LayeredSequence(Sequence):
     @property
     def feature_shape(self):
         return self._feature_shape
-    
+
+    @preload(types=['free'])
     @feature_shape.setter
     def feature_shape(self, new_feature_shape):
         self._feature_shape = new_feature_shape
@@ -42,7 +103,8 @@ class LayeredSequence(Sequence):
     @property
     def batch_size(self):
         return self._batch_size
-    
+
+    @preload(types=['free'])
     @batch_size.setter
     def batch_size(self, new_batch_size):
         self._batch_size = new_batch_size
@@ -88,6 +150,7 @@ class LayeredSequence(Sequence):
     def _label_slice(self, index_slice):
         return self._label_layers[:, index_slice, :]
 
+    @preload(types=['lookup'])
     def load_batch(self, index):
         index_slice = self._index_slice(index)
         features, label_layers = self._feature_slice(index_slice), self._label_slice(index_slice)
@@ -127,7 +190,7 @@ class LayeredSequence(Sequence):
         )
 
     def split(self, batch_percent):
-        index = int(len(self) * batch_percent)
+        index = np.ceil(len(self) * batch_percent)
         return self.subset(range(0, index)), self.subset(range(index, len(self)))
 
 
