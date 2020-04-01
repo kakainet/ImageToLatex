@@ -1,6 +1,7 @@
 from keras.utils import to_categorical
 import numpy as np
 
+
 class CategoryEncoder:
 
     def __init__(self):
@@ -15,7 +16,11 @@ class CategoryEncoder:
         
     def encode(self, expression):
         try:
-            return to_categorical(self.__expression_to_category[expression], num_classes=len(self))
+            if isinstance(expression, list):
+                category = [self.__expression_to_category[x] for x in expression]
+            else:
+                category = self.__expression_to_category[expression]
+            return to_categorical(category, num_classes=len(self))
         except KeyError:
             raise ValueError('Expression: %s is not supported' % (expression))
     
@@ -34,3 +39,6 @@ class CategoryEncoder:
     def __len__(self):
         return len(self.__category_to_expression)
 
+
+if __name__ == '__main__':
+    pass
