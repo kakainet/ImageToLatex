@@ -10,18 +10,18 @@ import numpy as np
 
 class PreloadMixin(ABC):
 
+    def __init__(self):
+        super().__init__()
+        self._preloaded_batches = dict()
+
     @abstractmethod
     def load_batch(self, index):
         pass
 
     def preload_batch(self, index):
-        if not hasattr(self, '_preloaded_batches'):
-            self._preloaded_batches = dict()
         self._preloaded_batches[index] = self.load_batch(index)
 
     def unload_batch(self, index):
-        if not hasattr(self, '_preloaded_batches'):
-            self._preloaded_batches = dict()
         del self._preloaded_batches[index]
 
 
@@ -73,6 +73,8 @@ class LayeredSequence(PreloadMixin, Sequence):
                  batch_size, thread_count,
                  **feature_kwargs):
 
+        super().__init__()
+
         self._feature_paths = feature_paths
         self._label_layers = label_layers
         
@@ -91,8 +93,8 @@ class LayeredSequence(PreloadMixin, Sequence):
     def feature_shape(self):
         return self._feature_shape
 
-    @preload(types=['free'])
     @feature_shape.setter
+    @preload(types=['free'])
     def feature_shape(self, new_feature_shape):
         self._feature_shape = new_feature_shape
     
@@ -104,8 +106,8 @@ class LayeredSequence(PreloadMixin, Sequence):
     def batch_size(self):
         return self._batch_size
 
-    @preload(types=['free'])
     @batch_size.setter
+    @preload(types=['free'])
     def batch_size(self, new_batch_size):
         self._batch_size = new_batch_size
     
@@ -190,7 +192,7 @@ class LayeredSequence(PreloadMixin, Sequence):
         )
 
     def split(self, batch_percent):
-        index = np.ceil(len(self) * batch_percent)
+        index = int(np.ceil(len(self) * batch_percent))
         return self.subset(range(0, index)), self.subset(range(index, len(self)))
 
 
