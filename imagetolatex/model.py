@@ -1,11 +1,10 @@
-from random import randrange
-import os.path
-
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 import keras.losses
 import keras.optimizers
+
+import numpy as np
 
 # TODO add callbacks, progress handlers, add save to .h5l, add predict, basic interface
 class LayeredModel:
@@ -19,9 +18,9 @@ class LayeredModel:
     # TODO allow for uneven train/test sets
     def fit_on_layered(self, train_sequences, test_sequences, epochs):
         for _ in range(epochs):
-            train_index, test_index = randrange(len(train_sequences)), randrange(len(test_sequences))
+            train_index, test_index = np.random.randint(len(train_sequences)), np.random.randint(len(test_sequences))
             train_features, train_label_layers = train_sequences[train_index]
-            test_features, test_label_layers = test_sequences[test_index]
+            test_features, test_label_layers = test_sequences[train_index]
 
             for (train_labels, test_labels), layer_model in zip(zip(train_label_layers, test_label_layers), self._layer_models):
                 layer_model.train_on_batch(x=train_features, y=train_labels)
@@ -67,8 +66,9 @@ def complex_equation_layer(input_shape, num_classes, verbose=False):
 
 if __name__ == '__main__':
     from string import digits
-    from encoding import CategoryEncoder
-    from dataset import load_layered
+
+    from imagetolatex.encoding import CategoryEncoder
+    from imagetolatex.dataset import load_layered
 
     latex_encoder = CategoryEncoder()
     latex_encoder.extend([
@@ -78,10 +78,10 @@ if __name__ == '__main__':
     ])
 
     input_shape = (128, 128, 1)
-    layer_count = 3
+    layer_count = 25
 
     sequence = load_layered(
-        os.path.join(os.getcwd(), 'dataset'),
+        '/Users/kuba/Downloads/standard',
         latex_encoder,
         layer_count,
         input_shape,
@@ -95,5 +95,5 @@ if __name__ == '__main__':
     model.fit_on_layered(
         train_sequence,
         test_sequence,
-        epochs=10
+        epochs=len(train_sequence) * 3
     )
