@@ -15,7 +15,6 @@ class LayeredModel:
             for _ in range(layer_count)
         ]
 
-    # TODO allow for uneven train/test sets
     def fit_on_layered(self, train_sequences, test_sequences, epochs):
         for _ in range(epochs):
             train_index, test_index = np.random.randint(len(train_sequences)), np.random.randint(len(test_sequences))
@@ -26,7 +25,10 @@ class LayeredModel:
                 layer_model.train_on_batch(x=train_features, y=train_labels)
                 layer_model.test_on_batch(x=test_features, y=test_labels)
 
-        """
+    def _fit_on_layered(self, train_sequences, test_sequences, epochs, verbose, **kwargs):
+        train_sequences = [_Flatten(train_sequences, i) for i in range(train_sequences.layer_count)]
+        test_sequences = [_Flatten(test_sequences, i) for i in range(test_sequences.layer_count)]
+
         for layer_index, layer_model in enumerate(self._layer_models):
             print('Fitting {0}/{1} layer now'.format(layer_index + 1, len(self._layer_models)))
             layer_model.fit_generator(
@@ -36,7 +38,24 @@ class LayeredModel:
                 verbose=verbose,
                 **kwargs
             )
-        """
+
+
+from keras.utils import Sequence
+
+class _Flatten(Sequence):
+
+    def __init__(self, sequence, layer_index):
+        self._sequence = sequence
+        print(sequence.batch_size)
+        self._layer_index = layer_index
+
+    def __getitem__(self, index):
+        x, y = self._sequence[index]
+        return x, y[self._layer_index]
+
+    def __len__(self):
+        return len(self._sequence)
+
 
 def complex_equation_layer(input_shape, num_classes, verbose=False):
     model = Sequential()
@@ -85,15 +104,16 @@ if __name__ == '__main__':
         latex_encoder,
         layer_count,
         input_shape,
-        batch_size=1000,
+        batch_size=50,
         color_mode='grayscale'
     )
 
-    train_sequence, test_sequence = sequence.split(0.7)
+    train_sequence, test_sequence = sequence.split(0.5)
 
     model = LayeredModel(input_shape, layer_count, latex_encoder, complex_equation_layer)
-    model.fit_on_layered(
+    model._fit_on_layered(
         train_sequence,
         test_sequence,
-        epochs=len(train_sequence) * 3
+        epochs=100,
+        verbose=1
     )
