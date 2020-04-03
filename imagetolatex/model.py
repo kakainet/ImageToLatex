@@ -46,7 +46,6 @@ class _Flatten(Sequence):
 
     def __init__(self, sequence, layer_index):
         self._sequence = sequence
-        print(sequence.batch_size)
         self._layer_index = layer_index
 
     def __getitem__(self, index):
@@ -96,7 +95,7 @@ if __name__ == '__main__':
         *digits
     ])
 
-    input_shape = (128, 128, 1)
+    input_shape = (64, 64, 1)
     layer_count = 25
 
     sequence = load_layered(
@@ -108,7 +107,7 @@ if __name__ == '__main__':
         color_mode='grayscale'
     )
 
-    train_sequence, test_sequence = sequence.split(0.5)
+    train_sequence, test_sequence = sequence.split(0.7)
 
     model = LayeredModel(input_shape, layer_count, latex_encoder, complex_equation_layer)
     model._fit_on_layered(
