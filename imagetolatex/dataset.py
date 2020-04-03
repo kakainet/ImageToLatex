@@ -45,7 +45,6 @@ def load_layered(input_path, category_encoder, layer_count,
     unparsed_labels = list(_load_lines(os.path.join(input_path, 'labels.txt')))
     assert len(unparsed_labels) == len(grouped_feature_paths)
 
-    """
     label_layers = np.empty(
         (len(ungrouped_feature_paths), layer_count, len(category_encoder)),
         dtype='float32'
@@ -58,17 +57,17 @@ def load_layered(input_path, category_encoder, layer_count,
         feature_variant_count = len(grouped_feature_paths[label_line_index])
         label_layers[label_index : label_index + feature_variant_count, :, :] = encoded_label_parts
         label_index += feature_variant_count
-        #assert np.array_equal(label_layers[label_line_index], label_layers[label_line_index + 7])
 
     label_layers = np.transpose(label_layers, (1, 0, 2))
-    print(label_layers.shape)
-    _ = input()
-    """
 
+    """
     label_layers = np.empty(
         (layer_count, len(ungrouped_feature_paths), len(category_encoder)),
         dtype='float32'
     )
+
+    print(len(unparsed_labels))
+    _ = input()
 
     for label_line_index, label_line in enumerate(unparsed_labels):
         label_parts = list(_split_line(label_line, layer_count))
@@ -76,8 +75,9 @@ def load_layered(input_path, category_encoder, layer_count,
         feature_variant_count = len(grouped_feature_paths[label_line_index])
 
         for feature_variant_index in range(feature_variant_count):
+            print(label_line_index, feature_variant_index)
             label_layers[:, label_line_index + feature_variant_index, :] = encoded_label_parts
-
+    """
     """
     for label_line_index, label_line in enumerate(unparsed_labels):
         for label_layer_index, label_part in enumerate(_split_line(label_line, layer_count)):
