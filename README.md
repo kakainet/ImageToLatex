@@ -26,10 +26,9 @@ Format of input features: `eq_n_b_c`.
 
 Link for the dataset used during training will be available soon on `mvxxx.github.io` as `exp.tar.gz`. <br>
 The whole dataset was fully generated in use of `tool/{raw, set, visual}` in kind of pipe. <br> 
-Currently ITL supports constant-length datasets. It will be generalized in `0.1.1`.
 
 ## Accuracy
-For training dataset of length `7`, the mean accuracy was `97.428` after `10` epochs of training.
+For training dataset of length `7`, the mean accuracy was (depending on the difficulty of the dataset) ~`0.70-0.95` after `10` epochs of training.
 
 ## Tool/Raw [OCaml]
 A functional tool which is written in OCaml. Random latex expression generators, with various syntactic levels and concepts describing exact behavior within the level. Create a set of generators capable of supplying the model with properly generated random latex expressions,
