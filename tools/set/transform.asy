@@ -5,7 +5,7 @@ while (!eof(fin))
 {
     string s = fin;
     label("$\displaystyle " + s + "$", (0,0));
-    shipout("eq"+string(idx));
+    shipout("e"+string(idx));
     erase();
     ++idx;
 }
