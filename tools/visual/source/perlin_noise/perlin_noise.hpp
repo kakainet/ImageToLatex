@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include "../attributes/reportable.hpp"
 #include "../config/config.hpp"
 #include "../logger/logger.hpp"
 #include "../math/math.hpp"
@@ -30,7 +31,7 @@ namespace itl
      * created by KEN PERLIN (2002)
      *
      */
-    class PerlinNoise
+    class PerlinNoise : public Reportable
     {
        public:
         /**

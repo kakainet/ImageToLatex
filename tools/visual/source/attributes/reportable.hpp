@@ -7,8 +7,17 @@ namespace itl
 {
     class Reportable
     {
-    public:
-        Reportable();
+       public:
+        /**
+         * @brief constructs base and prints module name
+         * @param module_name
+         */
+        Reportable(const std::string& module_name);
+
+        /**
+         * @brief default ctor deleted
+         */
+        Reportable() = delete;
     };
 }  // namespace itl
 

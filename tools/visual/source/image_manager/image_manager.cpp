@@ -2,7 +2,7 @@
 
 namespace itl
 {
-    ImageManager::ImageManager()
+    ImageManager::ImageManager() : Reportable(typeid(this).name())
     {
         this->imgs.reserve(cst::image::img_mgr_reserve);
     }
@@ -26,7 +26,7 @@ namespace itl
             ss << cst::texture::failed_load_texture
                << "\n\tTexture path: " << path;
             Logger::log(ss.str(), Logger::stream_t::console,
-                              Logger::type_t::error);
+                        Logger::type_t::error);
 
             return false;
         }

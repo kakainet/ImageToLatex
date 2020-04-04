@@ -2,7 +2,7 @@
 
 namespace itl
 {
-    Transform::Transform() {}
+    Transform::Transform() : Reportable(typeid(this).name()) {}
 
     void Transform::merge_images(cv::Mat* background, cv::Mat* upcoming, int x,
                                  int y)

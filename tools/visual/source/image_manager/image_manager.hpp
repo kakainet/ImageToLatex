@@ -8,6 +8,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <vector>
 
+#include "../attributes/reportable.hpp"
 #include "../logger/logger.hpp"
 
 namespace itl
@@ -15,7 +16,7 @@ namespace itl
     /**
      * class for storing & managing iamges
      */
-    class ImageManager
+    class ImageManager : public Reportable
     {
        public:
         /**
@@ -45,7 +46,7 @@ namespace itl
         cv::Mat& operator[](int idx);
 
        private:
-        std::vector<cv::Mat> imgs;       ///< vector of cv::Mat
+        std::vector<cv::Mat> imgs;  ///< vector of cv::Mat
     };
 }  // namespace itl
 

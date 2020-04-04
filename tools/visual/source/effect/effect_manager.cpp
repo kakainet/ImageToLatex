@@ -3,6 +3,7 @@
 namespace itl
 {
     EffectManager::EffectManager(const std::string& path_to_data)
+        : Reportable(typeid(this).name())
     {
         this->perlin_noise = std::make_unique<PerlinNoise>(path_to_data);
         this->load_functions();

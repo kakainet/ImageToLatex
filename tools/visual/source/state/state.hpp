@@ -9,6 +9,7 @@
 #include <thread>
 #include <vector>
 
+#include "../attributes/reportable.hpp"
 #include "../config/config.hpp"
 #include "../effect/effect_manager.hpp"
 #include "../flag_manager/flag_manager.hpp"
@@ -23,7 +24,7 @@ namespace itl
     /**
      * class designed for managing whole process
      */
-    class State
+    class State : public Reportable
     {
        public:
         /**

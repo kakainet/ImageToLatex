@@ -52,7 +52,6 @@ namespace cst
     namespace info
     {
         constexpr char const* init_module_msg_start = "Initializing module: ";
-        constexpr char const* init_module_msg_end = "Initialized module: ";
         constexpr char const* finished = "Work finished successfully";
         constexpr char const* failed = "Something went wrong";
 
@@ -78,7 +77,8 @@ namespace cst
             "Failed during recognizing channel of input matrix";
         constexpr float alpha_trash_hold = 10.f;
         constexpr char const* failed_merging =
-            "Failed during creating roi: out of image boundaries";
+            "Failed during creating roi: out of image boundaries.\nCheck "
+            "channels of both input and textures.";
     }  // namespace effect
 
     namespace flag
