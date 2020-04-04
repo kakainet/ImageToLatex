@@ -46,15 +46,18 @@ Performance:
 ## Tool/Set [Asymptote, Bash]
 Script tool which gets several input files with raw LaTeX and converts them into basic .png expressions. This part executes the worker for each input file (kind of thread pooling). Using via bash script: `bash set.sh *.in`. <br>
 It will produce all content inside temporary folders, then it moves all photos to the output folder. These images are input for `visual` part. All input `*.in` labels are concatenated and stacked into the `labels` file.<br>
-
-It gets raw text like (for simplicity): `7+9` and returns: <br>
+It gets raw text like: `3-\frac{100}{88}` and returns: <br>
 <p align="center">
-  <img src="https://i.imgur.com/EaPStPE.png" width="100" height="50" title="hover text">
+  <img src="https://i.imgur.com/9qK9hVc.png" width="100" height="100" title="hover text">
 </p>
 
 ## Tool/Visual [C++]
 The biggest tool, written in `C++` and using `OpenCV`, capable of creating millions of written like human math equations. It applies a lot of different effects in order to make math as if it was
 written by people. It can be configured using `config.hpp`. The final result is the base of the dataset for machine learning.
+It gets raw png like before and returns (in that case only rotate was applied): <br>
+<p align="center">
+  <img src="https://i.imgur.com/LtG8FL4.png" width="100" height="100" title="hover text">
+</p>
 <br><br>
 In that part, there are predefined effects like:
 
