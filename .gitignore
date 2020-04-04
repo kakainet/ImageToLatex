@@ -36,4 +36,4 @@ tools/set/*.in
 #model
 imagetolatex/__pycache__/
 imagetolatex/dataset/datasets/
-imagetolatex/params/*.ckpt
+*.h5

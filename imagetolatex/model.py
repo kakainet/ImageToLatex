@@ -25,7 +25,7 @@ class LayeredModel:
                 layer_model.train_on_batch(x=train_features, y=train_labels)
                 layer_model.test_on_batch(x=test_features, y=test_labels)
 
-    def _fit_on_layered(self, train_sequences, test_sequences, epochs, verbose, **kwargs):
+    def _fit_on_layered(self, train_sequences, test_sequences, save=None, epochs=10, verbose=True, **kwargs):
         train_sequences = [_Flatten(train_sequences, i) for i in range(train_sequences.layer_count)]
         test_sequences = [_Flatten(test_sequences, i) for i in range(test_sequences.layer_count)]
 
@@ -38,6 +38,12 @@ class LayeredModel:
                 verbose=verbose,
                 **kwargs
             )
+
+        if not save:
+            pass
+
+        for layer_index, layer_model in enumerate(self._layer_models):
+            layer_model.save(save.format(layer_index))
 
 
 from keras.utils import Sequence
@@ -85,8 +91,8 @@ def complex_equation_layer(input_shape, num_classes, verbose=False):
 if __name__ == '__main__':
     from string import digits
 
-    from imagetolatex.encoding import CategoryEncoder
-    from imagetolatex.dataset import load_layered
+    from encoding import CategoryEncoder
+    from dataset import load_layered
 
     latex_encoder = CategoryEncoder()
     latex_encoder.extend([
@@ -96,10 +102,10 @@ if __name__ == '__main__':
     ])
 
     input_shape = (64, 64, 1)
-    layer_count = 25
+    layer_count = 5
 
     sequence = load_layered(
-        '/Users/kuba/Downloads/standard',
+        './dataset/',
         latex_encoder,
         layer_count,
         input_shape,
@@ -113,6 +119,7 @@ if __name__ == '__main__':
     model._fit_on_layered(
         train_sequence,
         test_sequence,
-        epochs=100,
-        verbose=1
+        save='pretrained/itl{0}.h5',
+        epochs=5,
+        verbose=True
     )

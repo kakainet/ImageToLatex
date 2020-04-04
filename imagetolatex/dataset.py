@@ -4,7 +4,7 @@ import re
 
 import numpy as np
 
-from imagetolatex.sequence import LayeredSequence
+from sequence import LayeredSequence
 
 
 def _list_files(path):
