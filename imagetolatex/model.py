@@ -24,7 +24,11 @@ class LayeredModel:
                 layer_model.train_on_batch(x=train_features, y=train_labels)
                 layer_model.test_on_batch(x=test_features, y=test_labels)
 
-    def _fit_on_layered(self, train_sequences, test_sequences, save=None, epochs=10, verbose=True, **kwargs):
+    def save(self, path):
+        for layer_index, layer_model in enumerate(self._layer_models):
+            layer_model.save(path.format(layer_index))
+
+    def _fit_on_layered(self, train_sequences, test_sequences, epochs, verbose, **kwargs):
         train_sequences = [_Flatten(train_sequences, i) for i in range(train_sequences.layer_count)]
         test_sequences = [_Flatten(test_sequences, i) for i in range(test_sequences.layer_count)]
 
@@ -37,12 +41,6 @@ class LayeredModel:
                 verbose=verbose,
                 **kwargs
             )
-
-        if not save:
-            pass
-
-        for layer_index, layer_model in enumerate(self._layer_models):
-            layer_model.save(save.format(layer_index))
 
 
 from keras.utils import Sequence
@@ -117,7 +115,8 @@ if __name__ == '__main__':
     model._fit_on_layered(
         train_sequence,
         test_sequence,
-        save='pretrained/itl{0}.h5',
-        epochs=5,
+        epochs=10,
         verbose=True
     )
+
+    model.save('pretrained/itl{0}.h5')
