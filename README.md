@@ -54,7 +54,7 @@ It gets raw text like: `3-\frac{100}{88}` and returns: <br>
 ## Tool/Visual [C++]
 The biggest tool, written in `C++` and using `OpenCV`, capable of creating millions of written like human math equations. It applies a lot of different effects in order to make math as if it was
 written by people. It can be configured using `config.hpp`. The final result is the base of the dataset for machine learning.
-It gets raw png like before and returns (in that case only rotate was applied): <br>
+It gets raw png like before and returns (in that case, only rotate was applied): <br>
 <p align="center">
   <img src="https://i.imgur.com/LtG8FL4.png" width="100" height="100" title="hover text">
 </p>
@@ -92,25 +92,17 @@ Each effect is taken or not. For each image, we apply all possible combinations 
 `!e` means that we don't take `e`.  So for each image, the output is `2^k` modified images. <br>
 Example of use:
 ```
-$ time ./visual -la ../data/ *.png
-[INFO] Initializing module: PN3itl11FlagManagerE
-[INFO] Initialized module: PN3itl11FlagManagerE
+$ /usr/bin/time -f %e ./visual -la ../data/ .png
 [INFO] Initializing module: PN3itl5StateE
-[INFO] Program use multithreading. Threads number: 12
+[INFO] Program uses multithreading. Threads number: 12
 [INFO] Initializing module: PN3itl9TransformE
-[INFO] Initialized module: PN3itl9TransformE
-[INFO] Initialized module: PN3itl5StateE
+[INFO] Initializing module: PN3itl12ImageManagerE
 [INFO] Initializing module: PN3itl13EffectManagerE
 [INFO] Initializing module: PN3itl11PerlinNoiseE
-[INFO] Initialized module: PN3itl11PerlinNoiseE
-[INFO] Initialized module: PN3itl13EffectManagerE
 [INFO] Work finished successfully
-
-real	0m6.629s
-user	0m48.500s
-sys	0m3.654s
+3.82
 ```
-for 80.000 produced images `128x128`. Speed is about `12.000/s` on `AMD RYZEN 5 2600`. As you can see, there are multiple flags:
+for 80.000 produced images `64x64`. Speed is about `25.000/s` on `AMD RYZEN 5 2600`. As you can see, there are available multiple flags:
 ```
 constexpr char const* testing = "-t";
 constexpr char const* printing_steps = "-p";
