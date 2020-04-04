@@ -66,7 +66,6 @@ namespace itl
                           const std::string& extension) noexcept;
 
         std::shared_ptr<FlagManager> flag_manager;      ///< ptr to flag manager
-        std::shared_ptr<Logger> logger;                 ///< ptr to logger
         std::unique_ptr<EffectManager> effect_manager;  ///< own effect manager
         std::unique_ptr<ThreadPool> thread_pool;  ///< thread pool for workers
         std::unique_ptr<Transform> transform;     ///< transform for images

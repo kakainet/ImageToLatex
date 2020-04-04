@@ -10,9 +10,10 @@ int main(int argc, char* argv[])
     {
         itl::Logger::init(true, true, true, true, true, false);
         itl::Logger::log(cst::system::wrong_args_size,
-                    itl::Logger::stream_t::console, itl::Logger::type_t::error);
+                         itl::Logger::stream_t::console,
+                         itl::Logger::type_t::error);
         itl::Logger::log(cst::system::usage, itl::Logger::stream_t::console,
-                    itl::Logger::type_t::info);
+                         itl::Logger::type_t::info);
         return cst::system::error_code;
     }
 
@@ -22,11 +23,11 @@ int main(int argc, char* argv[])
         std::make_shared<itl::FlagManager>(argc, argv);
 
     itl::Logger::init(flag_manager->contains_flag(cst::flag::log_all),
-                 flag_manager->contains_flag(cst::flag::log_info),
-                 flag_manager->contains_flag(cst::flag::log_suggestions),
-                 flag_manager->contains_flag(cst::flag::log_erros),
-                 flag_manager->contains_flag(cst::flag::log_warnings),
-                 flag_manager->contains_flag(cst::flag::log_time));
+                      flag_manager->contains_flag(cst::flag::log_info),
+                      flag_manager->contains_flag(cst::flag::log_suggestions),
+                      flag_manager->contains_flag(cst::flag::log_erros),
+                      flag_manager->contains_flag(cst::flag::log_warnings),
+                      flag_manager->contains_flag(cst::flag::log_time));
 
     if(flag_manager->contains_flag(cst::flag::testing))
     {
@@ -34,8 +35,9 @@ int main(int argc, char* argv[])
 
         if(RUN_ALL_TESTS() != cst::gtest::tests_passed)
         {
-            itl::Logger::log(cst::gtest::fail_msg, itl::Logger::stream_t::console,
-                        itl::Logger::type_t::warning);
+            itl::Logger::log(cst::gtest::fail_msg,
+                             itl::Logger::stream_t::console,
+                             itl::Logger::type_t::warning);
         }
     }
 
@@ -44,8 +46,8 @@ int main(int argc, char* argv[])
                            argv[flag_number + cst::system::extension_idx]);
 
     itl::Logger::log(result == cst::system::pass_code ? cst::info::finished
-                                                 : cst::info::failed,
-                itl::Logger::stream_t::console, itl::Logger::type_t::info);
+                                                      : cst::info::failed,
+                     itl::Logger::stream_t::console, itl::Logger::type_t::info);
 
     return result;
 }

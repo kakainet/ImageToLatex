@@ -46,7 +46,6 @@ namespace itl
 
        private:
         std::vector<cv::Mat> imgs;       ///< vector of cv::Mat
-        std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl
 

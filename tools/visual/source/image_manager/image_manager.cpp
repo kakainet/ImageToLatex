@@ -25,7 +25,7 @@ namespace itl
             std::stringstream ss;
             ss << cst::texture::failed_load_texture
                << "\n\tTexture path: " << path;
-            this->logger->log(ss.str(), Logger::stream_t::console,
+            Logger::log(ss.str(), Logger::stream_t::console,
                               Logger::type_t::error);
 
             return false;

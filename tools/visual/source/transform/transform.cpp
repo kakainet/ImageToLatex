@@ -2,9 +2,7 @@
 
 namespace itl
 {
-    Transform::Transform()
-    {
-    }
+    Transform::Transform() {}
 
     void Transform::merge_images(cv::Mat* background, cv::Mat* upcoming, int x,
                                  int y)
@@ -59,8 +57,8 @@ namespace itl
                     default:
                     {
                         Logger::get()->log(cst::effect::failed_merging,
-                                          Logger::stream_t::console,
-                                          Logger::type_t::error);
+                                           Logger::stream_t::console,
+                                           Logger::type_t::error);
                         return;
                     }
                 }
