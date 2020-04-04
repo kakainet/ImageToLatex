@@ -16,7 +16,8 @@ namespace itl
 {
     /**
      * class which manages command-line arguments
-     * @warning dispensed with the obligation to logging during initialization itself
+     * @warning dispensed with the obligation to logging during initialization
+     * itself
      */
     class FlagManager
     {

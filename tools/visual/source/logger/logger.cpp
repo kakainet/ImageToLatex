@@ -134,8 +134,5 @@ namespace itl
         }
     }
 
-    std::unique_ptr<Logger>& Logger::get()
-    {
-        return Logger::instance;
-    }
+    std::unique_ptr<Logger>& Logger::get() { return Logger::instance; }
 }  // namespace itl

@@ -11,37 +11,38 @@
 
 class S
 {
-public:
+   public:
     static S& getInstance()
     {
-        static S    instance; // Guaranteed to be destroyed.
+        static S instance;  // Guaranteed to be destroyed.
         // Instantiated on first use.
         return instance;
     }
-private:
-    S() {}                    // Constructor? (the {} brackets) are needed here.
+
+   private:
+    S() {}  // Constructor? (the {} brackets) are needed here.
 
     // C++ 03
     // ========
     // Don't forget to declare these two. You want to make sure they
     // are unacceptable otherwise you may accidentally get copies of
     // your singleton appearing.
-    S(S const&);              // Don't Implement
-    void operator=(S const&); // Don't implement
+    S(S const&);               // Don't Implement
+    void operator=(S const&);  // Don't implement
 
     // C++ 11
     // =======
     // We can use the better technique of deleting the methods
     // we don't want.
-public:
-
+   public:
 };
 
 namespace itl
 {
     /**
      * class for logging messages
-     * @warning dispensed with the obligation to logging during initialization itself
+     * @warning dispensed with the obligation to logging during initialization
+     * itself
      */
     class Logger
     {
@@ -72,12 +73,12 @@ namespace itl
         /**
          * @brief deleted ctor
          */
-        Logger(Logger const&)     = delete;
+        Logger(Logger const&) = delete;
 
         /**
          * @brief deleted assignment operator
          */
-        void operator=(S const&)  = delete;
+        void operator=(S const&) = delete;
 
         /**
          * @brief prints message
@@ -85,9 +86,10 @@ namespace itl
          * @param stream - where message should be printed
          * @param type - type of message
          */
-        static void log(const std::string& message,
-                 const Logger::stream_t& stream = Logger::stream_t::console,
-                 const Logger::type_t& type = Logger::type_t::error) noexcept;
+        static void log(
+            const std::string& message,
+            const Logger::stream_t& stream = Logger::stream_t::console,
+            const Logger::type_t& type = Logger::type_t::error) noexcept;
 
         /**
          * @brief late initialization of logger
@@ -99,10 +101,9 @@ namespace itl
          * @param time - flag if "-lt" was passed
          */
         static void init(bool all, bool info, bool suggestions, bool errors,
-                  bool warnings, bool time);
+                         bool warnings, bool time);
 
        private:
-
         /**
          * @brief explicit ctor
          * @param all - flag if "-la" was passed
@@ -116,8 +117,8 @@ namespace itl
                         bool warnings, bool time);
 
         /**
-        * @brief default ctor
-        */
+         * @brief default ctor
+         */
         Logger() = default;
 
         /**
@@ -162,7 +163,7 @@ namespace itl
 
         bool log_time;  ///< flag if time should be added to logs
 
-        static inline std::unique_ptr<Logger> instance; ///< singleton instance
+        static inline std::unique_ptr<Logger> instance;  ///< singleton instance
     };
 }  // namespace itl
 

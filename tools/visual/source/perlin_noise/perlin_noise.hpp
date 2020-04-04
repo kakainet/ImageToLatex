@@ -35,11 +35,9 @@ namespace itl
        public:
         /**
          * @brief explicit ctor
-         * @param log - ptr to log
          * @param path_to_data - path to data folder
          */
-        explicit PerlinNoise(const std::shared_ptr<Logger>& log,
-                             const std::string& path_to_data);
+        explicit PerlinNoise(const std::string& path_to_data);
 
         /**
          * @brief takes 1 from predefined noises mask
@@ -81,7 +79,6 @@ namespace itl
         void read_from_file(const std::string& dir);
 
         std::vector<std::vector<double>> noises;  ///< stored noises
-        std::shared_ptr<Logger> logger;           ///< ptr to logger
     };
 }  // namespace itl
 

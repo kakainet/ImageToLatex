@@ -10,9 +10,7 @@ namespace itl
         thread_info << cst::thread::number_thread_info << " "
                     << std::to_string(this->hardware_concurrency);
 
-        this->logger->log(thread_info.str(), Logger::stream_t::console,
-                          Logger::type_t::info);
-
+        Logger::log(thread_info.str(), Logger::stream_t::console, Logger::type_t::info);
         this->thread_pool =
             std::make_unique<ThreadPool>(this->hardware_concurrency);
         this->transform = std::make_unique<Transform>();
@@ -24,8 +22,7 @@ namespace itl
                    const std::string& extension)
     {
         // Effect manager depends on data so it is not created in ctor but there
-        this->effect_manager =
-            std::make_unique<EffectManager>(this->logger, path_to_data);
+        this->effect_manager = std::make_unique<EffectManager>(path_to_data);
         return this->generate_images(path_to_data + cst::file::pic, extension)
                    ? cst::system::pass_code
                    : cst::system::error_code;
@@ -58,10 +55,7 @@ namespace itl
             std::stringstream ss;
             ss << cst::texture::failed_load_texture
                << " One or more backgrounds were failed during loading.";
-
-            this->logger->log(ss.str(), Logger::stream_t::console,
-                              Logger::type_t::error);
-
+            Logger::log(ss.str());
             return false;
         }
 
@@ -97,9 +91,7 @@ namespace itl
             std::stringstream ss;
             ss << cst::texture::failed_load_texture
                << "\n\tBase texture path: " << path_to_raw;
-            this->logger->log(ss.str(), Logger::stream_t::console,
-                              Logger::type_t::error);
-
+            Logger::log(ss.str());
             return false;
         }
 

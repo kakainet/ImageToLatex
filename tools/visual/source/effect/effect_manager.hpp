@@ -23,7 +23,6 @@ namespace itl
        public:
         /**
          * @brief explicit ctor
-         * @param log - pointer to logger
          * @param path_to_data - path to data folder
          */
         explicit EffectManager(const std::string& path_to_data);
@@ -70,8 +69,6 @@ namespace itl
 
         std::unique_ptr<PerlinNoise>
             perlin_noise;  ///< ptr to perlin noise generator
-
-        std::shared_ptr<Logger> logger;  ///< ptr to logger
     };
 }  // namespace itl
 

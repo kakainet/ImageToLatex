@@ -17,6 +17,7 @@ add_executable(visual
         source/flag_manager/flag_manager.cpp
         source/transform/transform.cpp
         source/image_manager/image_manager.cpp
+        source/attributes/reportable.cpp
         source/tests/math_test.cc)
 
 #boost
