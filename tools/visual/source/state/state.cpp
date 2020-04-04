@@ -3,14 +3,16 @@
 namespace itl
 {
     State::State(const std::shared_ptr<itl::FlagManager>& flag_manager)
-        : flag_manager(flag_manager),
+        : Reportable(typeid(this).name()),
+          flag_manager(flag_manager),
           hardware_concurrency(std::thread::hardware_concurrency())
     {
         std::stringstream thread_info;
         thread_info << cst::thread::number_thread_info << " "
                     << std::to_string(this->hardware_concurrency);
 
-        Logger::log(thread_info.str(), Logger::stream_t::console, Logger::type_t::info);
+        Logger::log(thread_info.str(), Logger::stream_t::console,
+                    Logger::type_t::info);
         this->thread_pool =
             std::make_unique<ThreadPool>(this->hardware_concurrency);
         this->transform = std::make_unique<Transform>();

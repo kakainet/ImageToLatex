@@ -9,34 +9,6 @@
 
 #include "../config/config.hpp"
 
-class S
-{
-   public:
-    static S& getInstance()
-    {
-        static S instance;  // Guaranteed to be destroyed.
-        // Instantiated on first use.
-        return instance;
-    }
-
-   private:
-    S() {}  // Constructor? (the {} brackets) are needed here.
-
-    // C++ 03
-    // ========
-    // Don't forget to declare these two. You want to make sure they
-    // are unacceptable otherwise you may accidentally get copies of
-    // your singleton appearing.
-    S(S const&);               // Don't Implement
-    void operator=(S const&);  // Don't implement
-
-    // C++ 11
-    // =======
-    // We can use the better technique of deleting the methods
-    // we don't want.
-   public:
-};
-
 namespace itl
 {
     /**
@@ -78,7 +50,7 @@ namespace itl
         /**
          * @brief deleted assignment operator
          */
-        void operator=(S const&) = delete;
+        void operator=(Logger const&) = delete;
 
         /**
          * @brief prints message

@@ -3,6 +3,7 @@
 namespace itl
 {
     PerlinNoise::PerlinNoise(const std::string& path_to_data)
+        : Reportable(typeid(this).name())
     {
         for(int i = 0; i < cst::perlin::noises_num; i++)
         {
@@ -16,7 +17,8 @@ namespace itl
                 missing_message << cst::perlin::missing_noise
                                 << std::to_string(i);
 
-                Logger::log(missing_message.str(), Logger::stream_t::console, Logger::type_t::info);
+                Logger::log(missing_message.str(), Logger::stream_t::console,
+                            Logger::type_t::info);
 
                 this->generate_noise_2d(full_path_perlin.str());
             }

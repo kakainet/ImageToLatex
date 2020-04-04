@@ -7,6 +7,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "../attributes/reportable.hpp"
 #include "../logger/logger.hpp"
 
 namespace itl
@@ -14,7 +15,7 @@ namespace itl
     /**
      * class for applying basic transformations of image
      */
-    class Transform
+    class Transform : public Reportable
     {
        public:
         /**

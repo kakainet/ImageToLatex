@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 
+#include "../attributes/reportable.hpp"
 #include "../config/config.hpp"
 #include "../logger/logger.hpp"
 #include "../math/math.hpp"
@@ -18,7 +19,7 @@ namespace itl
     /**
      * class which manages effects
      */
-    class EffectManager
+    class EffectManager : public Reportable
     {
        public:
         /**
