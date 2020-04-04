@@ -6,9 +6,8 @@ import keras.optimizers
 
 import numpy as np
 
-# TODO add callbacks, progress handlers, add save to .h5l, add predict, basic interface
+
 class LayeredModel:
-    
     def __init__(self, input_shape, layer_count, category_encoder, layer_init):
         self._layer_models = [
             layer_init(input_shape, len(category_encoder))

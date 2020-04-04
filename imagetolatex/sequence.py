@@ -37,9 +37,10 @@ def _lookup_preload_wrapper(function):
 
     return wrapper
 
+
 def _store_preload_wrapper(function):
-    # TODO maybe split into store/store_but_update variant, add index validator/limiter
     pass
+
 
 def _free_preload_wrapper(function):
     @wraps(function)
@@ -50,14 +51,15 @@ def _free_preload_wrapper(function):
 
     return wrapper
 
+
 _preload_wrappers = {
     'lookup' : _lookup_preload_wrapper,
     'store' : _store_preload_wrapper,
     'free' : _free_preload_wrapper
 }
 
+
 def preload(types): # lookup, store, free
-    # TODO consider some safety
     def wrapper(function):
         for type in set(types):
             function = _preload_wrappers[type](function)
@@ -65,9 +67,8 @@ def preload(types): # lookup, store, free
 
     return wrapper
 
-# TODO add checks on batch_size setter, add batch_count property also with checks
+
 class LayeredSequence(PreloadMixin, Sequence):
-    
     def __init__(self, feature_paths, label_layers,
                  feature_shape, label_shape,
                  batch_size, thread_count,
