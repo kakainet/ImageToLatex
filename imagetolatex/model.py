@@ -86,7 +86,6 @@ def complex_equation_layer(input_shape, num_classes, verbose=False):
     return model
 
 
-
 if __name__ == '__main__':
     from string import digits
 
@@ -95,8 +94,8 @@ if __name__ == '__main__':
 
     latex_encoder = CategoryEncoder()
     latex_encoder.extend([
-        '+', '-', '^', '{', '}',
-        '^', R'\cdot', 'a', 'x',
+        '+', '-', '/', '^', '{', '}',
+        R'\frac', R'\cdot', 'a', 'x',
         *digits
     ])
 
