@@ -102,7 +102,7 @@ $ /usr/bin/time -f %e ./visual -la ../data/ .png
 [INFO] Work finished successfully
 3.82
 ```
-for 80.000 produced images `64x64`. Speed is about `25.000/s` on `AMD RYZEN 5 2600`. As you can see, there are available multiple flags:
+for 96.000 produced images `64x64`. Speed is about `25.000/s` on `AMD RYZEN 5 2600`. As you can see, there are available multiple flags:
 ```
 constexpr char const* testing = "-t";
 constexpr char const* printing_steps = "-p";
